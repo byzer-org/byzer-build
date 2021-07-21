@@ -17,3 +17,37 @@
 # limitations under the License.
 #
 
+set -u
+set -e
+set -o pipefail
+
+export SPARK_VERSION=${SPARK_VERSION:-2.4.3}
+export MLSQL_VERSION=${MLSQL_VERSION:-2.1.0-SNAPSHOT}
+tag="${SPARK_VERSION}-${MLSQL_VERSION}"
+
+function exit_with_usage {
+  cat << EOF
+push-image.sh <user_name>
+Set the following environment variables:
+SPARK_VERSION - the spark version, 2.4/3.0 default 2.4
+MLSQL_VERSION - MLSQL version              default 2.1.0-SNAPSHOT
+EOF
+  exit 1
+}
+
+if [[ $# -ne 1 ]]
+then
+  exit_with_usage
+fi
+
+user_name=$1
+
+read -p "Enter ${user_name}'s password " pwd
+docker login --username ${user_name}  --password=${pwd}
+
+docker tag mlsql-sandbox:${tag} ${repo}:${tag}
+
+docker images | grep "mlsql-sandbox:${tag}"
+
+echo "Pushing to ${repo}"
+docker push ${repo}:${tag}

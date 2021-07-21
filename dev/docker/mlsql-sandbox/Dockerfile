@@ -8,6 +8,7 @@ FROM mysql-python:8.0-3.6
 
 ## Input arguments
 ARG SPARK_VERSION
+ARG MLSQL_SPARK_VERSION
 ARG SCALA_VERSION
 ARG MLSQL_VERSION
 ARG MLSQL_CONSOLE_VERSION
@@ -38,8 +39,8 @@ COPY conf/log4j.properties ${SPARK_HOME}/conf/
 WORKDIR ${BASE_DIR}
 
 ## mlsql
-ADD lib/"streamingpro_${SCALA_VERSION}_${MLSQL_VERSION}.tgz" ${BASE_DIR}/
-RUN mv "streamingpro_${SCALA_VERSION}_${MLSQL_VERSION}" mlsql
+ADD lib/"mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}.tar.gz" ${BASE_DIR}/
+RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}" mlsql
 COPY lib/ansj_seg-5.1.6.jar ${MLSQL_HOME}/libs/
 COPY lib/nlp-lang-1.7.8.jar ${MLSQL_HOME}/libs/
 

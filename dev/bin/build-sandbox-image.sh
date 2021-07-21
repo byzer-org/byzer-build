@@ -107,15 +107,16 @@ fi
 "${base_dir}"/mlsql/dev/change-scala-version.sh ${scala_version}
 "${base_dir}"/mlsql/dev/package.sh
 
+mlsql_engine_name="mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}.tar.gz"
 ## Check if tgz exists
-if [[ ! -f "${mlsql_path}/streamingpro_${scala_version}_${MLSQL_VERSION}.tgz" ]]
+if [[ ! -f "${mlsql_path}/${mlsql_engine_name}" ]]
 then
   echo "mlsql engine failed to generate the tar ball, exit"
   exit 1
 fi
 
 ## Copy mlsql files to directory: docker/mlsql-sandbox
-cp ${mlsql_path}/streamingpro_${scala_version}_${MLSQL_VERSION}.tgz ${mlsql_sandbox_path}/lib/
+cp ${mlsql_path}/${mlsql_engine_name} ${mlsql_sandbox_path}/lib/
 
 ## Build mlsql-api-console
 mvn -f ${mlsql_console_path}/pom.xml clean compile package -DskipTests
@@ -136,6 +137,7 @@ docker build ./ -t mysql-python:8.0-3.6
 
 cd "${mlsql_sandbox_path}"
 docker build ./ \
+--build-arg MLSQL_SPARK_VERSION=${MLSQL_SPARK_VERSION} \
 --build-arg SPARK_VERSION=${SPARK_VERSION} \
 --build-arg MLSQL_VERSION=${MLSQL_VERSION} \
 --build-arg MLSQL_CONSOLE_VERSION=${MLSQL_CONSOLE_VERSION} \
@@ -146,7 +148,7 @@ echo << EOF mlsql sandbox image build finished, please run
 docker run -d \
 -p 3305:3306 \
 -p 9002:9002 \
--e MYSQL_ROOT_PASSWORD=a123456 \
+-e MYSQL_ROOT_PASSWORD=mlsql \
 --name mlsql-sandbox \
 mlsql-sandbox:${SPARK_VERSION}-${MLSQL_VERSION}
 EOF
