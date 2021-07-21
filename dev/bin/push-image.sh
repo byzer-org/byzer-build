@@ -17,17 +17,3 @@
 # limitations under the License.
 #
 
-set -u
-set -e
-set -o pipefail
-
-## Start mlsql engine
-nohup ${MLSQL_HOME}/bin/start-local.sh 2>&1 > /work/logs/engine.log &
-
-## Start mlsql-api-console
-java -cp ${MLSQL_CONSOLE_HOME}/lib/mlsql-api-console-${MLSQL_CONSOLE_VERSION}.jar tech.mlsql.MLSQLConsole \
--mlsql_engine_url http://127.0.0.1:9003 \
--my_url http://127.0.0.1:9002 \
--user_home /work/user/ \
--enable_auth_center false \
--config ${MLSQL_CONSOLE_HOME}/conf/application.docker.yml

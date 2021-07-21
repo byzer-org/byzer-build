@@ -13,18 +13,23 @@ ARG MLSQL_VERSION
 ARG MLSQL_CONSOLE_VERSION
 
 ## Environment variables
+ENV SPARK_VERSION ${SPARK_VERSION}
 ENV SPARK_HOME /work/spark-${SPARK_VERSION}-bin-hadoop2.7
 ENV BASE_DIR /home/deploy
 ENV MLSQL_HOME ${BASE_DIR}/mlsql
+ENV MLSQL_CONSOLE_VERSION ${MLSQL_CONSOLE_VERSION}
 ENV MLSQL_CONSOLE_HOME ${BASE_DIR}/mlsql-console
-ENV PATH=$PATH:${MLSQL_HOME}/bin:${MLSQL_CONSOLE_HOME}/bin
+ENV PATH=$PATH:${MLSQL_HOME}/bin:${MLSQL_CONSOLE_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin
 
 ## Creates directories
-RUN mkdir /work
+RUN mkdir -p /work/logs
+RUN mkdir -p /work/user
 RUN mkdir -p ${MLSQL_CONSOLE_HOME}/libs
 RUN mkdir -p ${MLSQL_CONSOLE_HOME}/conf
 RUN mkdir -p ${MLSQL_CONSOLE_HOME}/bin
-RUN mkdir -p /tmp/__mlsql__/logs
+
+## README.md
+COPY README.md ${BASE_DIR}/
 
 ## Spark
 ADD lib/spark-${SPARK_VERSION}-bin-hadoop2.7.tgz /work
@@ -40,6 +45,7 @@ COPY lib/nlp-lang-1.7.8.jar ${MLSQL_HOME}/libs/
 
 # mlsql-api-console
 COPY lib/mlsql-api-console-${MLSQL_CONSOLE_VERSION}.jar ${MLSQL_CONSOLE_HOME}/libs/
+COPY conf/application.docker.yml ${MLSQL_CONSOLE_HOME}/conf/
 COPY bin/start-sandbox.sh ${BASE_DIR}/
 
-#ENTRYPOINT "${BASE_DIR}/start-sandbox.sh"
+ENTRYPOINT "${BASE_DIR}/start-sandbox.sh"

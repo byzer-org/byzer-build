@@ -1,4 +1,4 @@
-# mlsql-build
+# MLSQL Sandbox 
 
 ## Environment Variables
 ````shell

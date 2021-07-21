@@ -26,17 +26,9 @@
 ##
 ##########################################################################
 
-function exit_with_usage {
-  cat << EOF
-Usage: build-sandbox-image.sh
-Arguments are specified with the following environment variable:
-MLSQL_SPARK_VERSION    - the spark version, 2.3/2.4/3.0 default 2.4
-SPARK_VERSION          - Spark full version, 2.4.3/   default 2.4.3
-MLSQL_VERSION          - mlsql version  default 2.1.0-SNAPSHOT
-MLSQL_CONSOLE_VERSION  - mlsql api console version default 2.1.0-SNAPSHOT
-EOF
-  exit 1
-}
+set -u
+set -e
+set -o pipefail
 
 ## Environment variables used to build mlsql
 export DISTRIBUTION=true
@@ -50,6 +42,18 @@ export MLSQL_SPARK_VERSION=${MLSQL_SPARK_VERSION:-2.4}
 export SPARK_VERSION=${SPARK_VERSION:-2.4.3}
 export MLSQL_VERSION=${MLSQL_VERSION:-2.1.0-SNAPSHOT}
 export MLSQL_CONSOLE_VERSION=${MLSQL_CONSOLE_VERSION:-2.1.0-SNAPSHOT}
+
+function exit_with_usage {
+  cat << EOF
+Usage: build-sandbox-image.sh
+Arguments are specified with the following environment variable:
+MLSQL_SPARK_VERSION    - the spark version, 2.3/2.4/3.0 default 2.4
+SPARK_VERSION          - Spark full version, 2.4.3/   default 2.4.3
+MLSQL_VERSION          - mlsql version  default 2.1.0-SNAPSHOT
+MLSQL_CONSOLE_VERSION  - mlsql api console version default 2.1.0-SNAPSHOT
+EOF
+  exit 1
+}
 
 SELF=$(cd $(dirname $0) && pwd)
 base_dir="${SELF}"/../..
