@@ -42,6 +42,6 @@ docker run -d \
 -p 3306:3306 \
 -p 9002:9002 \
 -e MYSQL_ROOT_PASSWORD=mlsql \
---name mlsql-sandbox \
+--name mlsql-sandbox-${SPARK_VERSION}-${MLSQL_VERSION} \
 mlsql-sandbox:${SPARK_VERSION}-${MLSQL_VERSION}
 

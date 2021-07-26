@@ -1,15 +1,8 @@
-## Assuming following packages reside in the ontext
-## spark-${SPARK_VERSION}-bin-hadoop.2.7.tgz
-## streamingpro_${SCALA_VERSION}_${MLSQL_VERSION}.tgz
-## mlsql-api-console-${MLSQL_CONSOLE_VERSION}.jar
-## MySQL root password is mlsql
-
 FROM mysql-python:8.0-3.6
 
 ## Input arguments
 ARG SPARK_VERSION
 ARG MLSQL_SPARK_VERSION
-ARG SCALA_VERSION
 ARG MLSQL_VERSION
 ARG MLSQL_CONSOLE_VERSION
 
@@ -47,6 +40,9 @@ COPY lib/nlp-lang-1.7.8.jar ${MLSQL_HOME}/libs/
 # mlsql-api-console
 COPY lib/mlsql-api-console-${MLSQL_CONSOLE_VERSION}.jar ${MLSQL_CONSOLE_HOME}/libs/
 COPY conf/application.docker.yml ${MLSQL_CONSOLE_HOME}/conf/
-COPY bin/start-sandbox.sh ${BASE_DIR}/
+## Db init script
+COPY bin/db_init.sh $BASE_DIR/
+## Entrypoint script
+COPY bin/start-sandbox.sh $BASE_DIR/
 
-ENTRYPOINT "${BASE_DIR}/start-sandbox.sh"
+ENTRYPOINT $BASE_DIR/start-sandbox.sh

@@ -21,11 +21,16 @@ set -u
 set -e
 set -o pipefail
 
+## Init mysql
+nohup ${BASE_DIR}/db_init.sh mysqld 2>&1 2>&1 > /work/logs/db_init.log &
+sleep 10
+
 ## Start mlsql engine
 nohup ${MLSQL_HOME}/bin/start-local.sh 2>&1 > /work/logs/engine.log &
+sleep 10
 
 ## Start mlsql-api-console
-java -cp ${MLSQL_CONSOLE_HOME}/lib/mlsql-api-console-${MLSQL_CONSOLE_VERSION}.jar:./ tech.mlsql.MLSQLConsole \
+java -cp ${MLSQL_CONSOLE_HOME}/libs/mlsql-api-console-${MLSQL_CONSOLE_VERSION}.jar:./ tech.mlsql.MLSQLConsole \
 -mlsql_engine_url http://127.0.0.1:9003 \
 -my_url http://127.0.0.1:9002 \
 -user_home /work/user/ \

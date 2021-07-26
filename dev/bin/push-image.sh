@@ -27,7 +27,7 @@ tag="${SPARK_VERSION}-${MLSQL_VERSION}"
 
 function exit_with_usage {
   cat << EOF
-push-image.sh <user_name>
+push-image.sh <tag>
 Set the following environment variables:
 SPARK_VERSION - the spark version, 2.4/3.0 default 2.4
 MLSQL_VERSION - MLSQL version              default 2.1.0-SNAPSHOT
@@ -40,14 +40,14 @@ then
   exit_with_usage
 fi
 
-user_name=$1
+tag=${SPARK_VERSION}-${MLSQL_VERSION}
+repo=$1
 
-read -p "Enter ${user_name}'s password " pwd
-docker login --username ${user_name}  --password=${pwd}
+docker login 
 
 docker tag mlsql-sandbox:${tag} ${repo}:${tag}
 
-docker images | grep "mlsql-sandbox:${tag}"
+docker images 
 
 echo "Pushing to ${repo}"
 docker push ${repo}:${tag}
