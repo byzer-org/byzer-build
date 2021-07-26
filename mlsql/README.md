@@ -2,30 +2,68 @@
 
 MLSQL is a Programming Language designed For Big Data and AI, it also has a distributed runtime.
 
-![](http://store.mlsql.tech/upload_images/bb566ae9-65e7-4a98-82a0-827a23161b0e.png)
+```sql
+load hive.`raw.stripe_discounts` as discounts;
+load hive.`raw.stripe_invoice_items` as invoice_items;
+
+select
+        invoice_items.*,
+        case
+            when discounts.discount_type = 'percent'
+                then amount * (1.0 - discounts.discount_value::float / 100)
+            else amount - discounts.discount_value
+        end as discounted_amount
+
+    from invoice_items
+
+    left outer join discounts
+        on invoice_items.customer_id = discounts.customer_id
+        and invoice_items.invoice_date > discounts.discount_start
+        and (invoice_items.invoice_date < discounts.discount_end
+             or discounts.discount_end is null)
+as joined;
+
+
+
+select
+
+        id,
+        invoice_id,
+        customer_id,
+        coalesce(discounted_amount, amount) as discounted_amount,
+        currency,
+        description,
+        created_at,
+        deleted_at
+
+    from joined
+as final;
+
+select * from final as output;
+```
 
 ## Official WebSite
 
-[http://www.mlsql.tech](http://www.mlsql.tech)
+[https://mlsql.ai](https://mlsql.ai)
 
-Find more examples on [our user guide](http://docs.mlsql.tech/en).
+Find more examples on:
 
 1. [中文文档](http://docs.mlsql.tech/mlsql-stack/)
 2. [Video](https://space.bilibili.com/22610047)
 
 ## <a id="Download"></a>Download MLSQL
 * The latest stable version is v2.0.1; snapshot version is 2.1.0-SNAPSHOT
-* You can download from [MLSQL Website](http://download.mlsql.tech/2.0.1/)
+* You can download from [MLSQL Website](http://download.mlsql.tech)
 * Spark 2.4.3/3.1.1 are tested
 
 ***Naming Convention***
 
 mlsql-engine_${spark_major_version}-${mlsql_version}.tgz
 ```shell
-## Pre-built for Spark 2.4.x
+## Pre-built for Spark 2.4.3
 mlsql-engine_2.4-2.1.0-SNAPSHOT.tar.gz 
 
-## Pre-built for Spark 3.0.x           
+## Pre-built for Spark 3.1.1
 mlsql-engine_3.0-2.1.0-SNAPSHOT.tar.gz  
 ```  
 
@@ -41,18 +79,14 @@ mlsql-engine_3.0-2.1.0-SNAPSHOT.tar.gz
 git clone https://github.com/allwefantasy/mlsql.git .
 cd mlsql
 ```
-### Building Spark 2.3.x Bundle
-```shell
-export MLSQL_SPARK_VERSION=2.3
-./dev/make-distribution.sh
-```
-### Building Spark 2.4.x Bundle
+
+### Building Spark 2.4.3 Bundle
 ```shell
 export MLSQL_SPARK_VERSION=2.4
 ./dev/make-distribution.sh
 ```
 
-### Building Spark 3.0.x Bundle
+### Building Spark 3.1.1 Bundle
 ```shell
 export MLSQL_SPARK_VERSION=3.0
 ./dev/make-distribution.sh
@@ -134,5 +168,5 @@ and we are always open to people who want to use this system or contribute to it
 
 扫码添加K小助微信号，添加成功后，发送  mlsql  这5个英文字母进群。
 
-![](http://store.mlsql.tech/upload_images/dc0f4493-570f-4660-ab41-0e487b17a517.png)
+![](https://github.com/allwefantasy/mlsql/blob/master/images/dc0f4493-570f-4660-ab41-0e487b17a517.png)
 
