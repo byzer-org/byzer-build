@@ -77,7 +77,7 @@ then
   cat << EOF
 Spark distribution spark-${SPARK_VERSION}-bin-hadoop2.7.tgz is not exists in 
 directory:${mlsql_sandbox_path}/lib 
-EOF  
+EOF
   exit 1
 fi
 
@@ -94,7 +94,7 @@ then
   cat << EOF
 Please copy ansj_seg-5.1.6.jar and nlp-lang-1.7.8.jar to Docker build directory
 Download url: http://download.mlsql.tech/nlp/
-EOF  
+EOF
   exit 1
 fi
 
