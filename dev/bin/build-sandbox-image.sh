@@ -74,7 +74,10 @@ fi
 ## Check if spark distribution package is in place
 if [[ ! -f "${mlsql_sandbox_path}/lib/spark-${SPARK_VERSION}-bin-hadoop2.7.tgz" ]]
 then
-  echo "Please put spark-${SPARK_VERSION}-bin-hadoop2.7.tgz in place"
+  cat << EOF
+Spark distribution spark-${SPARK_VERSION}-bin-hadoop2.7.tgz is not exists in 
+directory:${mlsql_sandbox_path}/lib 
+EOF  
   exit 1
 fi
 
@@ -88,7 +91,10 @@ fi
 ## Check if jars are in place
 if [[ ! -f "${mlsql_sandbox_path}/lib/ansj_seg-5.1.6.jar" || ! -f "${mlsql_sandbox_path}/lib/nlp-lang-1.7.8.jar" ]]
 then
-  echo "Please copy ansj_seg-5.1.6.jar and nlp-lang-1.7.8.jar to Docker build directory"
+  cat << EOF
+Please copy ansj_seg-5.1.6.jar and nlp-lang-1.7.8.jar to Docker build directory
+Download url: http://download.mlsql.tech/nlp/
+EOF  
   exit 1
 fi
 
