@@ -12,11 +12,7 @@ RUN apt-get -y install openjdk-8-jdk
 
 ENV PATH /opt/conda/bin:$PATH
 
-# RUN apt-get update --fix-missing && \
-#     apt-get install -y openjdk-8-jre-headless wget bzip2 ca-certificates curl git && \
-#     apt-get clean && \
-#     rm -rf /var/lib/apt/lists/*
-
+## Install conda
 RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-4.5.11-Linux-x86_64.sh -O ~/miniconda.sh && \
     /bin/bash ~/miniconda.sh -b -p /opt/conda && \
     rm ~/miniconda.sh && \
@@ -26,15 +22,16 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-4.5.11-Linux-x86
     echo "conda activate base" >> /etc/profile && \
     . /etc/profile
 
-
 RUN mkdir ~/.pip
 RUN echo "[global]\n trusted-host = mirrors.aliyun.com\n index-url = https://mirrors.aliyun.com/pypi/simple" > ~/.pip/pip.conf
 
-RUN conda create --name dev python=3.6 --yes --quiet
-RUN  . /etc/profile && conda activate dev && pip install --no-cache-dir \
-Cython numpy pandas scikit-learn plotly pyarrow==0.10.0 ray==0.8.0 \
-aiohttp psutil setproctitle grpcio \
-watchdog requests click uuid sfcli  pyjava
+## Install python packages
+RUN  . /etc/profile && pip install --upgrade pip && pip install --no-cache-dir \
+Cython numpy pandas scikit-learn plotly ray[default]==1.3.0 \
+watchdog requests click uuid sfcli \
+aiohttp psutil setproctitle grpcio xlsxwriter \
+watchdog requests click uuid sfcli pyjava>=0.2.8.8 \
+pyarrow
 
 ## Copy db init.sql
 COPY db_init.sql /docker-entrypoint-initdb.d/
