@@ -25,6 +25,9 @@ set -o pipefail
 nohup ${BASE_DIR}/db_init.sh mysqld 2>&1 2>&1 > /work/logs/db_init.log &
 sleep 10
 
+## Start Ray
+ray start --head --include-dashboard=true
+
 ## Start mlsql engine
 nohup ${MLSQL_HOME}/bin/start-local.sh 2>&1 > /work/logs/engine.log &
 sleep 10
@@ -36,3 +39,4 @@ java -cp ${MLSQL_CONSOLE_HOME}/libs/mlsql-api-console-${MLSQL_CONSOLE_VERSION}.j
 -user_home /work/user/ \
 -enable_auth_center false \
 -config ${MLSQL_CONSOLE_HOME}/conf/application.docker.yml
+

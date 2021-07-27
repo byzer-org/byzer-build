@@ -66,7 +66,7 @@ export MLSQL_CONSOLE_HOME=/home/deploy/mlsql-sonole
 export PATH=$PATH:${MLSQL_HOME}/bin:${MLSQL_CONSOLE_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin
 ````
 
-##Scripts
+## Scripts
 ```shell
 /home/deploy/start-sandbox.sh
 $MLSQL_HOME/bin/start-local.sh
@@ -89,3 +89,12 @@ $MLSQL_HOME/bin/start-local.sh
             |-- conf/                         
             |-- libs/    
 ```
+
+## Installed software
+- MySQL 8 Community Server
+- OpenJDK 8
+- Python 3.6  
+- PyJava 0.2.8.8
+- Ray 1.3.0
+- Pandas
+- PyArrow
