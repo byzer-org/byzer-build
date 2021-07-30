@@ -1,9 +1,11 @@
 .idea/**
 target/**
 *.iml
+nohup.out
 **/*.tgz
 dev/docker/mlsql-sandbox/lib/*.jar
 dev/docker/mlsql-sandbox/lib/*.tar.gz
 
 mlsql/*.tar.gz
 mlsql/dev/*.jar
+
