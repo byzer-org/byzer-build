@@ -67,10 +67,14 @@ Running MLSQL Sandbox
 export SPARK_VERSION=2.4.3
 export MLSQL_VERSION=2.1.0-SNAPSHOT
 ## Run container
-./dev/bin/run-container.sh
 
+docker run -d \
+-p 3306:3306 \
+-p 9002:9002 \
+-e MYSQL_ROOT_PASSWORD=mlsql \
+--name mlsql-2.4.3-2.1.0-SNAPSHOT \
+chncaesar/mlsql:2.4.3-2.1.0-SNAPSHOT
 ```
-
 
 ## Environment Variables
 ````shell
