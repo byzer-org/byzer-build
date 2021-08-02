@@ -7,13 +7,23 @@ MLSQL Stack contains two projects:
 2.  [MLSQL Console](http://github.com/allwefantasy/mlsql-api-console)
 
 ## Pulling Sandbox Docker Image
+
+For Spark 2.4.3 bundle:
+
 ```shell
-docker pull chncaesar/mlsql:2.4.3-2.1.0-SNAPSHOT
+docker pull techmlsql/mlsql-sandbox:2.4.3-2.1.0-SNAPSHOT
 ```
+
+For Spark 3.1.1 bundle：
+
+```shell
+docker pull techmlsql/mlsql-sandbox:3.1.1-2.1.0-SNAPSHOT
+```
+
 
 ## Building MLSQL Sandbox
 There are some manual steps before building:
-1. Download [Latest Spark distribution](https://mirrors.tuna.tsinghua.edu.cn/apache/spark) or [Spark 2.4.3 Distribution](https://archive.apache.org/dist/spark/spark-2.4.3/)  and put it to dev/docker/mlsql-sandbox/lib
+1. Download [Spark 2.4.3 or 3.1.1 Distribution (hadoop-2.7 based)](https://archive.apache.org/dist/spark/)  and put it to dev/docker/mlsql-sandbox/lib
 2. Download [NLP jars](http://download.mlsql.tech/nlp/) and put them to dev/docker/mlsql-sandbox/lib.
 3. Pull the latest code/branch/tag from mlsql/console upstream. 
 ```shell
