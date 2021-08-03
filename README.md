@@ -53,7 +53,6 @@ REPOSITORY      TAG                    IMAGE ID       CREATED          SIZE
 mlsql-sandbox   2.4.3-2.1.0-SNAPSHOT   ba9013fa4dba   34 minutes ago   3.11GB
 ```
 
-
 ## Pushing Image to Docker hub
 ```shell
 export SPARK_VERSION=2.4.3
@@ -66,14 +65,14 @@ Running MLSQL Sandbox
 ```shell
 export SPARK_VERSION=2.4.3
 export MLSQL_VERSION=2.1.0-SNAPSHOT
-## Run container
 
+## Run container
 docker run -d \
 -p 3306:3306 \
 -p 9002:9002 \
 -e MYSQL_ROOT_PASSWORD=mlsql \
---name mlsql-2.4.3-2.1.0-SNAPSHOT \
-chncaesar/mlsql:2.4.3-2.1.0-SNAPSHOT
+--name mlsql-sandbox-2.4.3-2.1.0-SNAPSHOT \
+techmlsql/mlsql-sandbox:2.4.3-2.1.0-SNAPSHOT
 ```
 
 ## Environment Variables
