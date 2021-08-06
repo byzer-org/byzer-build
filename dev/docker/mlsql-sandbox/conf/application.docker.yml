@@ -1,13 +1,12 @@
-#mode
 mode:
-  development
+  production
 
 ###############datasource config##################
 #mysql,mongodb,redis等数据源配置方式
-development:
+production:
   datasources:
     mysql:
-      host: 127.0.0.1
+      host: 192.168.50.2
       port: 3306
       database: mlsql_console
       username: root
