@@ -66,7 +66,7 @@ ARG MLSQL_SPARK_VERSION=3.0
 ARG MLSQL_VERSION=2.1.0-SNAPSHOT
 
 ## Setup environment variables
-ENV SPARK_HOME /work/spark-${SPARK_VERSION}-bin-hadoop2.7
+ENV SPARK_HOME /work/spark-${SPARK_VERSION}-bin-hadoop3.2
 ENV BASE_DIR /home/deploy
 ENV MLSQL_HOME ${BASE_DIR}/mlsql
 ENV PATH=$PATH:${MLSQL_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin:/opt/conda/bin
@@ -76,13 +76,18 @@ RUN mkdir -p /work/logs
 RUN mkdir -p /work/user
 
 ## Spark
-ADD mlsql-sandbox/lib/spark-${SPARK_VERSION}-bin-hadoop2.7.tgz /work
+ADD mlsql-sandbox/lib/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz /work
 COPY mlsql-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
 
 ##  auxiliary jars
 COPY mlsql-sandbox/lib/juicefs-hadoop-0.15.2-linux-amd64.jar /${MLSQL_HOME}/libs/
 COPY mlsql-sandbox/lib/ansj_seg-5.1.6.jar ${MLSQL_HOME}/libs/
 COPY mlsql-sandbox/lib/nlp-lang-1.7.8.jar ${MLSQL_HOME}/libs/
+
+## copy jars to Spark/home
+COPY mlsql-sandbox/lib/juicefs-hadoop-0.15.2-linux-amd64.jar ${SPARK_HOME}/jars/
+COPY mlsql-sandbox/lib/ansj_seg-5.1.6.jar ${SPARK_HOME}/jars/
+COPY mlsql-sandbox/lib/nlp-lang-1.7.8.jar ${SPARK_HOME}/jars/
 
 WORKDIR ${BASE_DIR}
 
@@ -91,5 +96,4 @@ ADD mlsql-sandbox/lib/"mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}.tar.
 RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}" mlsql
 
 COPY engine/entrypoint.sh ${BASE_DIR}/
-
 ENTRYPOINT [ "/home/deploy/entrypoint.sh" ]
