@@ -28,7 +28,7 @@ set -u
 set -e
 set -o pipefail
 
-MLSQL_SPARK_VERSION=${MLSQL_SPARK_VERSION:-2.4}
+MLSQL_SPARK_VERSION=${MLSQL_SPARK_VERSION:-3.0}
 MLSQL_VERSION=${MLSQL_VERSION:-2.1.0-SNAPSHOT}
 
 if [[ ${MLSQL_SPARK_VERSION} = "2.3" || ${MLSQL_SPARK_VERSION} = "2.4" ]]
@@ -42,7 +42,7 @@ else
   exit 1
 fi
 
-container_lib_path="local:///home/deploy/libs/"
+container_lib_path="local:///home/deploy/mlsql/libs/"
 mlsql_jar="${container_lib_path}/streamingpro-mlsql-spark_${MLSQL_SPARK_VERSION}_${scala_version}-${MLSQL_VERSION}.jar"
 auxiliary_jars="${container_lib_path}/juicefs-hadoop-0.15.2-linux-amd64.jar:${container_lib_path}/ansj_seg-5.1.6.jar:${container_lib_path}/nlp-lang-1.7.8.jar"
 K8S_URL=${K8S_URL:-https://localhost:6443}
