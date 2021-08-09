@@ -26,7 +26,7 @@ nohup ${BASE_DIR}/db_init.sh mysqld 2>&1 2>&1 > /work/logs/db_init.log &
 sleep 10
 
 ## Start Ray
-ray start --head --include-dashboard=true
+ray start --head --include-dashboard=false
 
 ## Start mlsql engine
 nohup ${MLSQL_HOME}/bin/start-local.sh 2>&1 > /work/logs/engine.log &

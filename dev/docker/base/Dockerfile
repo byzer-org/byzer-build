@@ -1,16 +1,19 @@
 FROM ubuntu/mysql:8.0-20.04_beta
 
-RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
-RUN apt-get update && apt-get install -y --no-install-recommends apt-utils build-essential software-properties-common && \
-    curl wget unzip nano git net-tools vim && \
-    add-apt-repository -y ppa:openjdk-r/ppa && \
-    apt-get update && \
-    apt-get -y install openjdk-8-jdk
+RUN apt-get update && apt-get install -y --no-install-recommends locales \
+        apt-utils build-essential software-properties-common  \
+        curl wget unzip nano git net-tools vim && \
+    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
+    rm -rf /var/lib/apt/lists/* && \
+    mkdir -p /work && \
+    wget "https://repo.huaweicloud.com/java/jdk/8u151-b12/jdk-8u151-linux-x64.tar.gz" && \
+    tar -xvf jdk-8u151-linux-x64.tar.gz -C /work/ && \
+    rm jdk-8u151-linux-x64.tar.gz
 
-ENV PATH /opt/conda/bin:$PATH
+ENV JAVA_HOME /work/jdk1.8.0_151
+ENV PATH /opt/conda/bin:$PATH:${JAVA_HOME}/bin
 
 ## Install conda
 RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-4.5.11-Linux-x86_64.sh -O ~/miniconda.sh && \
