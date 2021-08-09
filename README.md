@@ -6,20 +6,15 @@ MLSQL Stack contains two projects:
 1.  [MLSQL Engine](http://github.com/allwefantasy/mlsql)
 2.  [MLSQL Console](http://github.com/allwefantasy/mlsql-api-console)
 
-## Pulling Sandbox Docker Image
-
-For Spark 2.4.3 bundle:
-
+## Running Pre-built Image 
 ```shell
-docker pull techmlsql/mlsql-sandbox:2.4.3-2.1.0-SNAPSHOT
+docker run -d \
+-p 3306:3306 \
+-p 9002:9002 \
+-e MYSQL_ROOT_PASSWORD=mlsql \
+--name mlsql-sandbox-2.4.3-2.1.0-SNAPSHOT \
+techmlsql/mlsql-sandbox:2.4.3-2.1.0-SNAPSHOT
 ```
-
-For Spark 3.1.1 bundle：
-
-```shell
-docker pull techmlsql/mlsql-sandbox:3.1.1-2.1.0-SNAPSHOT
-```
-
 
 ## Building MLSQL Sandbox
 There are some manual steps before building:
@@ -59,20 +54,6 @@ export SPARK_VERSION=2.4.3
 export MLSQL_VERSION=2.1.0-SNAPSHOT
 ## Please enter username & password during execution
 ./dev/bin/push-image.sh <repo>
-```
-
-Running MLSQL Sandbox
-```shell
-export SPARK_VERSION=2.4.3
-export MLSQL_VERSION=2.1.0-SNAPSHOT
-
-## Run container
-docker run -d \
--p 3306:3306 \
--p 9002:9002 \
--e MYSQL_ROOT_PASSWORD=mlsql \
---name mlsql-sandbox-2.4.3-2.1.0-SNAPSHOT \
-techmlsql/mlsql-sandbox:2.4.3-2.1.0-SNAPSHOT
 ```
 
 ## Environment Variables
