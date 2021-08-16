@@ -1,12 +1,12 @@
 # mlsql-build
 
-Project mlsql-build is designed to help people build MLSQL stack docker image easier
+Project mlsql-build comes with tools to build
+- MLSQL sandbox docker image
+- [MLSQL Engine](https://github.com/allwefantasy/mlsql/) K8S image
 
-MLSQL Stack contains two projects:
-1.  [MLSQL Engine](http://github.com/allwefantasy/mlsql)
-2.  [MLSQL Console](http://github.com/allwefantasy/mlsql-api-console)
-
-## Running Pre-built Image 
+## MLSQL Sandbox Docker Image
+With MLSQL Sandbox docker image, users are able to take a quick glance into MLSQL stack.
+### Running sandbox
 ```shell
 docker run -d \
 -p 3306:3306 \
@@ -15,85 +15,17 @@ docker run -d \
 --name mlsql-sandbox-2.4.3-2.1.0-SNAPSHOT \
 techmlsql/mlsql-sandbox:2.4.3-2.1.0-SNAPSHOT
 ```
+### [Building Sandbox](./docs/sandbox.md)
 
-## Building MLSQL Sandbox
-There are some manual steps before building:
-1. Download [Spark 2.4.3 or 3.1.1 Distribution (hadoop-2.7 based)](https://archive.apache.org/dist/spark/)  and put it to dev/docker/mlsql-sandbox/lib
-2. Download [NLP jars](http://download.mlsql.tech/nlp/) and put them to dev/docker/mlsql-sandbox/lib.
-3. Pull the latest code/branch/tag from mlsql/console upstream. 
-```shell
-git subtree pull --prefix mlsql https://github.com/allwefantasy/mlsql master --squash
-git subtree pull --prefix console https://github.com/allwefantasy/mlsql-api-console master --squash
-```   
-4. Start building
-```shell   
-## For Spark 2.4.3 bundle
-export MLSQL_SPARK_VERSION=2.4
-export SPARK_VERSION=2.4.3
-export MLSQL_VERSION=2.1.0-SNAPSHOT
-export MLSQL_CONSOLE_VERSION=2.1.0-SNAPSHOT
-./dev/bin/build-sandbox-image.sh
-
-## For Spark 3.1.1 bundle
-export MLSQL_SPARK_VERSION=3.0
-export SPARK_VERSION=3.1.1
-export MLSQL_VERSION=2.1.0-SNAPSHOT
-export MLSQL_CONSOLE_VERSION=2.1.0-SNAPSHOT
-./dev/bin/build-sandbox-image.sh
+## MLSQL Engine K8S Image
+Pre-built image: 
 ```
-5. Check image
+https://hub.docker.com/repository/docker/chncaesar/mlsql-engine-k8s
+```
+### Building MLSQL Engine K8S Image
 ```shell
-docker images
-REPOSITORY      TAG                    IMAGE ID       CREATED          SIZE
-mlsql-sandbox   2.4.3-2.1.0-SNAPSHOT   ba9013fa4dba   34 minutes ago   3.11GB
+cd dev/docker
+./engine/build-spark3-image.sh
 ```
 
-## Pushing Image to Docker hub
-```shell
-export SPARK_VERSION=2.4.3
-export MLSQL_VERSION=2.1.0-SNAPSHOT
-## Please enter username & password during execution
-./dev/bin/push-image.sh <repo>
-```
-
-## Environment Variables
-````shell
-export SPARK_VERSION=<2.4.3 || 3.1.1>
-export SPARK_HOME=/work/spark-${SPARK_VERSION}-bin-hadoop2.7
-export MLSQL_HOME=/home/deploy/mlsql
-export MLSQL_CONSOLE_HOME=/home/deploy/mlsql-sonole
-export PATH=$PATH:${MLSQL_HOME}/bin:${MLSQL_CONSOLE_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin
-````
-
-## Scripts
-```shell
-/home/deploy/start-sandbox.sh
-$MLSQL_HOME/bin/start-local.sh
-```
-
-## Directory Structure
-```shell
-|-- /work/
-        |-- logs/  
-        |-- users/
-        |-- spark-${SPARK_VERSION}-bin-hadoop2.7/
-|-- /home/deploy/
-        |-- README.md
-        |-- mlsql/
-            |-- bin/                          
-            |-- conf/                         
-            |-- libs/                         
-        |-- mlsql-console/                   
-            |-- bin/                          
-            |-- conf/                         
-            |-- libs/    
-```
-
-## Installed software
-- MySQL 8 Community Server
-- OpenJDK 8
-- Python 3.6  
-- PyJava 0.2.8.8
-- Ray 1.3.0
-- Pandas
-- PyArrow
+Please find a step-by-step guide on K8S deployment from [mlsql-deploy](https://github.com/allwefantasy/mlsql-deploy)
