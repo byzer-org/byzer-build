@@ -1,0 +1,57 @@
+<assembly>
+    <id>bin-${project.version}</id>
+    <formats>
+        <format>tar.gz</format>
+    </formats>
+    <includeBaseDirectory>true</includeBaseDirectory>
+
+    <fileSets>
+        <!-- Executables -->
+        <fileSet>
+            <directory>${project.parent.basedir}/dev/bin/app</directory>
+            <includes>
+                <include>start-mlsql-app.sh</include>
+            </includes>
+            <outputDirectory>bin</outputDirectory>
+        </fileSet>
+
+        <!-- MLSQL main jar -->
+        <fileSet>
+            <directory>${project.parent.basedir}/mlsql/streamingpro-mlsql/target</directory>
+            <includes>
+                <include>streamingpro-mlsql-spark_${spark.bigversion}_${scala.binary.version}-${project.version}.jar</include>
+            </includes>
+            <outputDirectory>main</outputDirectory>
+        </fileSet>
+
+        <!-- Plugins -->
+        <fileSet>
+            <directory>${project.parent.basedir}/dev/docker/mlsql-sandbox/lib</directory>
+            <includes>
+                <!-- Assert plugin -->
+                <include>mlsql-assert-${spark.bigversion}_${scala.binary.version}.jar</include>
+                <include>mlsql-excel-${spark.bigversion}_${scala.binary.version}.jar</include>
+            </includes>
+            <outputDirectory>plugin</outputDirectory>
+        </fileSet>
+
+        <!-- Libs -->
+        <fileSet>
+            <directory>${project.parent.basedir}/dev/docker/mlsql-sandbox/lib</directory>
+            <includes>
+                <include>nlp-lang-1.7.8.jar</include>
+                <include>ansj_seg-5.1.6.jar</include>
+                <include>juicefs-hadoop-0.15.2-linux-amd64.jar</include>
+            </includes>
+            <outputDirectory>libs</outputDirectory>
+        </fileSet>
+        <!-- Spark jars -->
+        <fileSet>
+            <directory>${project.parent.basedir}/dev/bin/app/spark/jars</directory>
+            <includes>
+                <include>*</include>
+            </includes>
+            <outputDirectory>spark</outputDirectory>
+        </fileSet>
+    </fileSets>
+</assembly>

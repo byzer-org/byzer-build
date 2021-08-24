@@ -3,6 +3,7 @@ target/**
 *.iml
 nohup.out
 **/*.tgz
+**/*.tar.gz
 dev/docker/mlsql-sandbox/lib/*.jar
 dev/docker/mlsql-sandbox/lib/*.tar.gz
 
@@ -11,3 +12,4 @@ mlsql/dev/*.jar
 
 dev/docker/engine/metastore_db/
 dev/docker/engine/logs/
+dev/bin/app/spark/**
