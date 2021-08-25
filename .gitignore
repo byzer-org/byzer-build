@@ -7,8 +7,8 @@ nohup.out
 dev/docker/mlsql-sandbox/lib/*.jar
 dev/docker/mlsql-sandbox/lib/*.tar.gz
 
-mlsql/*.tar.gz
-mlsql/dev/*.jar
+mlsql/
+console/
 
 dev/docker/engine/metastore_db/
 dev/docker/engine/logs/
