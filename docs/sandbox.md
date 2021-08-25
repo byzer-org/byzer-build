@@ -5,8 +5,8 @@ There are some manual steps before building:
 2. Download [NLP jars](http://download.mlsql.tech/nlp/) and put them to dev/docker/mlsql-sandbox/lib.
 3. Pull the latest code/branch/tag from mlsql/console upstream.
 ```shell
-git subtree pull --prefix mlsql https://github.com/allwefantasy/mlsql master --squash
-git subtree pull --prefix console https://github.com/allwefantasy/mlsql-api-console master --squash
+./update-console.sh
+./update-mlsql.sh
 ```   
 4. Start building
 ```shell   
