@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-self=$(cd $(dirname $0)&& pwd)
-cd ${self}
+home=$(cd $(dirname $0)/.. && pwd)
+cd ${home}
 
 if [[ ! -d mlsql/.git ]]; then
     echo "cloning mlsql repo..."

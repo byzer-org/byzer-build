@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-self=$(cd $(dirname $0)&& pwd)
-cd ${self}
+home=$(cd $(dirname $0)/.. && pwd)
+cd ${home}
 
 if [[ ! -d console/.git ]]; then
     echo "cloning console repo..."
