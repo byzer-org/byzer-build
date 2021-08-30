@@ -4,6 +4,8 @@ target/**
 nohup.out
 **/*.tgz
 **/*.tar.gz
+dev/lib/*.jar
+dev/lib/*.sh
 dev/docker/mlsql-sandbox/lib/*.jar
 dev/docker/mlsql-sandbox/lib/*.tar.gz
 
