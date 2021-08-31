@@ -25,8 +25,7 @@ https://hub.docker.com/repository/docker/chncaesar/mlsql-engine-k8s
 ```
 ### Building MLSQL Engine K8S Image
 ```shell
-cd dev/docker
-./engine/build-spark3-image.sh
+./dev/bin/build-spark3-image.sh
 ```
 
 Please find a step-by-step guide on K8S deployment from [mlsql-deploy](https://github.com/allwefantasy/mlsql-deploy)
@@ -71,5 +70,4 @@ mlsql-app_2.4-2.1.0-SNAPSHOT/bin/start-mlsql-app.sh
 ## Built with Spark 3.1.1
 tar -xf mlsql-app_2.4-2.1.0-SNAPSHOT.tar.gz 
 mlsql-app_2.4-2.1.0-SNAPSHOT/bin/start-mlsql-app.sh
-
 ```
