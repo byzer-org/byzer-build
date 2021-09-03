@@ -26,7 +26,13 @@ set -o pipefail
 ## Please check if MLSQL_TAG is null before calling this function
 function checkout_tag {
     echo "Checking out mlsql ${MLSQL_TAG}"
-    ( cd mlsql && git checkout "tags/${MLSQL_TAG}" -b "${MLSQL_TAG}-branch" )
+
+    cd mlsql
+    git tag | xargs -I {} git tag -d {}
+    git fetch origin
+    [[ -z "`git branch | grep ${MLSQL_TAG}-branch`" ]] && echo "create new branch" || (echo "remove branch and create new" && git branch -D ${MLSQL_TAG}-branch)
+    git checkout -b ${MLSQL_TAG}-branch ${MLSQL_TAG}
+    echo $?
 }
 
 base=$(cd "$(dirname $0)/../.." && pwd)

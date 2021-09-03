@@ -26,7 +26,12 @@ set -o pipefail
 
 function checkout_tag {
     echo "Checking out ${MLSQL_CONSOLE_TAG}"
-    ( cd console && git checkout "tags/${MLSQL_CONSOLE_TAG}" -b "${MLSQL_CONSOLE_TAG}-branch" )
+
+    cd console
+    git tag | xargs -I {} git tag -d {}
+    git fetch origin
+    [[ -z "`git branch | grep ${MLSQL_CONSOLE_TAG}-branch`" ]] && echo "create new branch" || (echo "remove branch and create new" && git branch -D ${MLSQL_CONSOLE_TAG}-branch)
+    git checkout -b ${MLSQL_CONSOLE_TAG}-branch ${MLSQL_CONSOLE_TAG}
     echo $?
 }
 
