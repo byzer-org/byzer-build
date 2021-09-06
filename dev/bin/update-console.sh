@@ -29,6 +29,7 @@ function checkout_tag {
 
     cd console
     git tag | xargs -I {} git tag -d {}
+    git checkout master
     git fetch origin
     [[ -z "`git branch | grep ${MLSQL_CONSOLE_TAG}-branch`" ]] && echo "create new branch" || (echo "remove branch and create new" && git branch -D ${MLSQL_CONSOLE_TAG}-branch)
     git checkout -b ${MLSQL_CONSOLE_TAG}-branch ${MLSQL_CONSOLE_TAG}
