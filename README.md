@@ -13,15 +13,15 @@ docker run -d \
 -p 3306:3306 \
 -p 9002:9002 \
 -e MYSQL_ROOT_PASSWORD=mlsql \
---name mlsql-sandbox-2.4.3-2.1.0-SNAPSHOT \
-techmlsql/mlsql-sandbox:2.4.3-2.1.0-SNAPSHOT
+--name mlsql-sandbox-2.4.3-2.1.0 \
+techmlsql/mlsql-sandbox:2.4.3-2.1.0
 ```
 ### [Building Sandbox](./docs/sandbox.md)
 
 ## MLSQL Engine K8S Image
 Pre-built image: 
 ```
-https://hub.docker.com/repository/docker/chncaesar/mlsql-engine-k8s
+docker pull techmlsql/mlsql-engine:3.0-2.1.0
 ```
 ### Building MLSQL Engine K8S Image
 ```shell
@@ -64,10 +64,6 @@ Run the command to build
 ### Running MLSQL App
 ```shell 
 ## Built with Spark 2.4.3
-tar -xf mlsql-app_2.4-2.1.0-SNAPSHOT.tar.gz 
-mlsql-app_2.4-2.1.0-SNAPSHOT/bin/start-mlsql-app.sh
-
-## Built with Spark 3.1.1
-tar -xf mlsql-app_2.4-2.1.0-SNAPSHOT.tar.gz 
-mlsql-app_2.4-2.1.0-SNAPSHOT/bin/start-mlsql-app.sh
+tar -xf mlsql-app_2.4-2.1.0-darwin-amd64.tar.gz
+./mlsql-app_2.4-2.1.0-darwin-amd64/bin/start-mlsql-app.sh
 ```

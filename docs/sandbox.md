@@ -8,22 +8,22 @@ There are some manual steps before building:
 ## For Spark 2.4.3 bundle
 export MLSQL_SPARK_VERSION=2.4
 export SPARK_VERSION=2.4.3
-export MLSQL_VERSION=2.1.0-SNAPSHOT
-export MLSQL_CONSOLE_VERSION=2.1.0-SNAPSHOT
+export MLSQL_VERSION=2.2.0-SNAPSHOT
+export MLSQL_CONSOLE_VERSION=2.2.0-SNAPSHOT
 ./dev/bin/build-sandbox-image.sh
 
 ## For Spark 3.1.1 bundle
 export MLSQL_SPARK_VERSION=3.0
 export SPARK_VERSION=3.1.1
-export MLSQL_VERSION=2.1.0-SNAPSHOT
-export MLSQL_CONSOLE_VERSION=2.1.0-SNAPSHOT
+export MLSQL_VERSION=2.2.0-SNAPSHOT
+export MLSQL_CONSOLE_VERSION=2.2.0-SNAPSHOT
 ./dev/bin/build-sandbox-image.sh
 
 ## Build with tag
 export MLSQL_SPARK_VERSION=3.0
 export SPARK_VERSION=3.1.1
-export MLSQL_VERSION=2.1.0-SNAPSHOT
-export MLSQL_CONSOLE_VERSION=2.1.0-SNAPSHOT
+export MLSQL_VERSION=2.2.0-SNAPSHOT
+export MLSQL_CONSOLE_VERSION=2.2.0-SNAPSHOT
 export MLSQL_TAG=v2.1.0-test
 export MLSQL_CONSOLE_TAG=v2.1.0-test
 ./dev/bin/build-sandbox-image.sh
@@ -32,13 +32,13 @@ export MLSQL_CONSOLE_TAG=v2.1.0-test
 ```shell
 docker images
 REPOSITORY      TAG                    IMAGE ID       CREATED          SIZE
-mlsql-sandbox   2.4.3-2.1.0-SNAPSHOT   ba9013fa4dba   34 minutes ago   3.11GB
+mlsql-sandbox   2.4.3-2.2.0-SNAPSHOT   ba9013fa4dba   34 minutes ago   3.11GB
 ```
 
 ## Pushing Image to Docker hub
 ```shell
 export SPARK_VERSION=2.4.3
-export MLSQL_VERSION=2.1.0-SNAPSHOT
+export MLSQL_VERSION=2.2.0-SNAPSHOT
 ## Please enter username & password during execution
 ./dev/bin/push-image.sh <repo>
 ```

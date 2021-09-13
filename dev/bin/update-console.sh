@@ -20,7 +20,7 @@
 # Updates mlsql-api-console code. If MLSQL_CONSOLE_TAG is specified,
 # checkout it as branch ${tag}_branch; checkout & pull master branch
 # otherwise
-set -u
+set +u
 set -e
 set -o pipefail
 
