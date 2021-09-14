@@ -33,8 +33,8 @@ Usage: build-sandbox-image.sh
 Arguments are specified with the following environment variable:
 MLSQL_SPARK_VERSION     - the spark version, 2.3/2.4/3.0  default 2.4
 SPARK_VERSION           - Spark full version, 2.4.3/3.1.1 default 2.4.3
-MLSQL_VERSION           - mlsql version  default 2.1.0-SNAPSHOT
-MLSQL_CONSOLE_VERSION   - mlsql api console version default 2.1.0-SNAPSHOT
+MLSQL_VERSION           - mlsql version  default 2.2.0-SNAPSHOT
+MLSQL_CONSOLE_VERSION   - mlsql api console version default 2.2.0-SNAPSHOT
 MLSQL_TAG               - mlsql git tag to checkout,   no default value
 MLSQL_CONSOLE_TAG       - mlsql-api-console git tag to checkout, no default value
 EOF
@@ -49,8 +49,8 @@ function build_image {
     docker build \
     --build-arg MLSQL_SPARK_VERSION=${MLSQL_SPARK_VERSION:-2.4} \
     --build-arg SPARK_VERSION=${SPARK_VERSION:-2.4.3} \
-    --build-arg MLSQL_VERSION=${MLSQL_VERSION:-2.1.0-SNAPSHOT} \
-    --build-arg MLSQL_CONSOLE_VERSION=${MLSQL_CONSOLE_VERSION:-2.1.0-SNAPSHOT} \
+    --build-arg MLSQL_VERSION=${MLSQL_VERSION:-2.2.0-SNAPSHOT} \
+    --build-arg MLSQL_CONSOLE_VERSION=${MLSQL_CONSOLE_VERSION:-2.2.0-SNAPSHOT} \
     --build-arg SPARK_TGZ_NAME=${SPARK_TGZ_NAME:-spark-${SPARK_VERSION}-bin-hadoop2.7} \
     -t mlsql-sandbox:${SPARK_VERSION}-${MLSQL_VERSION} \
     -f ${mlsql_sandbox_path}/Dockerfile \
