@@ -2,15 +2,23 @@ FROM ubuntu/mysql:8.0-20.04_beta
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
-RUN apt-get update && apt-get install -y --no-install-recommends locales \
-        apt-utils build-essential software-properties-common  \
-        curl wget unzip nano git net-tools vim && \
-    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
-    rm -rf /var/lib/apt/lists/* && \
-    mkdir -p /work && \
-    wget "https://repo.huaweicloud.com/java/jdk/8u151-b12/jdk-8u151-linux-x64.tar.gz" && \
-    tar -xvf jdk-8u151-linux-x64.tar.gz -C /work/ && \
-    rm jdk-8u151-linux-x64.tar.gz
+RUN rm -rf /var/lib/apt/lists/*  \
+    && apt-get clean \
+    && apt-get update -o Acquire::CompressionTypes::Order::=gz \
+    && apt-get update \
+    && apt-get \
+    -o Acquire::BrokenProxy="true" \
+    -o Acquire::http::No-Cache="true" \
+    -o Acquire::http::Pipeline-Depth="0" install \
+    -y --no-install-recommends --fix-missing locales \
+    apt-utils build-essential software-properties-common  \
+    curl wget unzip nano git net-tools vim && \
+   localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
+   rm -rf /var/lib/apt/lists/* && \
+   mkdir -p /work && \
+   wget "https://repo.huaweicloud.com/java/jdk/8u151-b12/jdk-8u151-linux-x64.tar.gz" && \
+   tar -xvf jdk-8u151-linux-x64.tar.gz -C /work/ && \
+   rm jdk-8u151-linux-x64.tar.gz
 
 ENV JAVA_HOME /work/jdk1.8.0_151
 ENV PATH /opt/conda/bin:$PATH:${JAVA_HOME}/bin
@@ -25,16 +33,13 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-4.5.11-Linux-x86
     echo "conda activate base" >> /etc/profile && \
     . /etc/profile
 
-RUN mkdir ~/.pip
-RUN echo "[global]\n trusted-host = mirrors.aliyun.com\n index-url = https://mirrors.aliyun.com/pypi/simple" > ~/.pip/pip.conf
-
 ## Install python packages
-RUN  . /etc/profile && pip install --upgrade pip && pip install --no-cache-dir \
-Cython numpy pandas scikit-learn plotly ray[default]==1.3.0 \
-watchdog requests click uuid sfcli \
-aiohttp psutil setproctitle grpcio xlsxwriter \
-watchdog requests click uuid sfcli pyjava>=0.2.8.8 \
-pyarrow
+RUN  . /etc/profile && pip install --upgrade pip && \
+    pip config set global.trusted-host mirrors.aliyun.com && \
+    pip config set global.index-url http://mirrors.aliyun.com/pypi/simple/ && \
+    pip install --upgrade Cython pytest-runner aioredis==1.3.1 pyarrow==5.0.0 ray==1.3.0 \
+    aiohttp psutil grpcio pandas xlsxwriter watchdog requests click uuid sfcli \
+    pyjava vega_datasets plotly setproctitle
 
 ## Copy db init.sql
 COPY db_init.sql /docker-entrypoint-initdb.d/

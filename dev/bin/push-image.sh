@@ -21,16 +21,16 @@ set -u
 set -e
 set -o pipefail
 
-export SPARK_VERSION=${SPARK_VERSION:-2.4.3}
-export MLSQL_VERSION=${MLSQL_VERSION:-2.1.0-SNAPSHOT}
+export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
+export MLSQL_VERSION=${MLSQL_VERSION:-2.2.0-SNAPSHOT}
 tag="${SPARK_VERSION}-${MLSQL_VERSION}"
 
 function exit_with_usage {
   cat << EOF
 push-image.sh <tag>
 Set the following environment variables:
-SPARK_VERSION - the spark version, 2.4/3.0 default 2.4
-MLSQL_VERSION - MLSQL version              default 2.1.0-SNAPSHOT
+SPARK_VERSION - the spark version, 2.4/3.0 default 3.0
+MLSQL_VERSION - MLSQL version              default 2.2.0-SNAPSHOT
 EOF
   exit 1
 }

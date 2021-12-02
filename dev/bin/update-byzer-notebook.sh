@@ -17,40 +17,40 @@
 # limitations under the License.
 #
 
-# Updates mlsql code. If MLSQL_TAG is specified, checkout it as branch ${tag}_branch;
-# checkout & pull master branch otherwise
-
+# Updates byzer-notebook code. If BYZER_NOTEBOOK_TAG is specified,
+# checkout it as branch ${tag}_branch; checkout & pull main branch
+# otherwise
+set +u
 set -e
 set -o pipefail
 
-## Please check if MLSQL_TAG is null before calling this function
 function checkout_tag {
-    echo "Checking out mlsql ${MLSQL_TAG}"
+    echo "Checking out ${BYZER_NOTEBOOK_TAG}"
 
-    cd mlsql
+    cd byzer-notebook
     git tag | xargs -I {} git tag -d {}
     git reset --hard
-    git checkout master
+    git checkout main
     git fetch origin
-    [[ -z "`git branch | grep ${MLSQL_TAG}-branch`" ]] && echo "create new branch" || (echo "remove branch and create new" && git branch -D ${MLSQL_TAG}-branch)
-    git checkout -b ${MLSQL_TAG}-branch ${MLSQL_TAG}
+    [[ -z "`git branch | grep ${BYZER_NOTEBOOK_TAG}-branch`" ]] && echo "create new branch" || (echo "remove branch and create new" && git branch -D ${BYZER_NOTEBOOK_TAG}-branch)
+    git checkout -b ${BYZER_NOTEBOOK_TAG}-branch ${BYZER_NOTEBOOK_TAG}
     echo $?
 }
 
-base=$(cd "$(dirname $0)/../.." && pwd)
-cd "${base}"
+self=$(cd "$(dirname $0)/../.." && pwd)
+cd "${self}" || exit 1
 
-if [[ ! -d mlsql/.git ]]; then
-    echo "cloning mlsql repo..."
-    git clone https://github.com/allwefantasy/mlsql mlsql
-    if [[ -n ${MLSQL_TAG} ]]; then
+if [[ ! -d byzer-notebook/.git ]]; then
+    echo "cloning byzer-notebook repo..."
+    git clone https://github.com/byzer-org/byzer-notebook.git byzer-notebook
+    if [[ -n ${BYZER_NOTEBOOK_TAG} ]]; then
         checkout_tag
     fi
 else
-    if [[ -n ${MLSQL_TAG} ]]; then
+    if [[ -n ${BYZER_NOTEBOOK_TAG} ]]; then
         checkout_tag
     else
-        echo "update mlsql to latest..."
-        ( cd mlsql && git checkout master && git pull -r origin master )
-    fi
+        echo "update byzer-notebook to latest..."
+        ( cd byzer-notebook && git checkout main && git pull -r origin main )
+    fi    
 fi

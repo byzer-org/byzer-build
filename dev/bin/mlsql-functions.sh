@@ -20,10 +20,13 @@ set -u
 set -e
 set -o pipefail
 
+# ie kolo-build root path
 base_dir=$(cd "$(dirname $0)/../.." && pwd)
-scala_version=2.11
+scala_version=2.12
+kolo_lang_path="${base_dir}/kolo-lang"
 mlsql_path="${base_dir}/mlsql"
 mlsql_console_path="${base_dir}/console"
+byzer_notebook_path="${base_dir}/byzer-notebook"
 base_image_path="${base_dir}/dev/docker/base"
 mlsql_sandbox_path="${base_dir}/dev/docker/mlsql-sandbox"
 lib_path=${base_dir}/dev/lib
@@ -37,11 +40,13 @@ export ENABLE_JYTHON=true
 export ENABLE_CHINESE_ANALYZER=true
 export ENABLE_HIVE_THRIFT_SERVER=true
 # Spark major version, Used by make-distribution.sh
-export MLSQL_SPARK_VERSION=${MLSQL_SPARK_VERSION:-2.4}
+export MLSQL_SPARK_VERSION=${MLSQL_SPARK_VERSION:-3.0}
 # Spark version, Used by make-distribution.sh
-export SPARK_VERSION=${SPARK_VERSION:-2.4.3}
+export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
 export MLSQL_VERSION=${MLSQL_VERSION:-2.2.0-SNAPSHOT}
 export MLSQL_CONSOLE_VERSION=${MLSQL_CONSOLE_VERSION:-2.2.0-SNAPSHOT}
+export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}
+export BYZER_NOTEBOOK_HOME=$byzer_notebook_path
 if [[ ${SPARK_VERSION} == "2.4.3" ]]
 then
     export SPARK_TGZ_NAME="spark-${SPARK_VERSION}-bin-hadoop2.7"
@@ -54,14 +59,25 @@ else
 fi
 
 ## Builds mlsql distribution tar ball
-function build_mlsql_distribution {
+function build_kolo_lang_distribution {
     ## Download jars & packages if needed
     if [[ ! -f "${lib_path}/${SPARK_TGZ_NAME}.tgz" && ${SPARK_VERSION} == "3.1.1" ]]
     then
       (
         echo "Downloading Spark 3.1.1" &&
-        cd "${lib_path}" &&
-        curl -O https://archive.apache.org/dist/spark/spark-3.1.1/spark-3.1.1-bin-hadoop3.2.tgz
+          cd "${lib_path}" &&
+          local times_tried=0
+        while [ $times_tried -le 3 ]; do
+          echo "Downloading $times_tried"
+          if curl -O https://archive.apache.org/dist/spark/spark-3.1.1/spark-3.1.1-bin-hadoop3.2.tgz && tar -zxvf spark-3.1.1-bin-hadoop3.2.tgz; then
+            break
+          fi
+          if [[ $times_tried -ge 3 ]];then
+            echo "Download spark-3.1.1-bin-hadoop3.2 failed!" && exit 1;
+          fi
+          times_tried=$((times_tried + 1))
+          rm -rf spark-3.1.1-bin-hadoop3.2.tgz
+        done
       ) || exit 1
     fi
 
@@ -69,8 +85,19 @@ function build_mlsql_distribution {
     then
         (
           echo "Downloading Spark 2.4.3" &&
-          cd "${lib_path}" &&
-          curl -O https://archive.apache.org/dist/spark/spark-2.4.3/spark-2.4.3-bin-hadoop2.7.tgz
+            cd "${lib_path}" &&
+            local times_tried=1
+          while [ $times_tried -le 3 ]; do
+            echo "Downloading $times_tried"
+            if curl -O https://archive.apache.org/dist/spark/spark-2.4.3/spark-2.4.3-bin-hadoop2.7.tgz && tar -zxvf spark-2.4.3-bin-hadoop2.7.tgz; then
+              break
+            fi
+            if [[ $times_tried -ge 3 ]];then
+              echo "Download spark-2.4.3-bin-hadoop2.7 failed!" && exit 1;
+            fi
+            times_tried=$((times_tried + 1))
+            rm -rf spark-2.4.3-bin-hadoop2.7.tgz
+          done
         ) || exit 1
     fi
 
@@ -84,14 +111,14 @@ function build_mlsql_distribution {
       ( cd "${lib_path}" && curl -O http://download.mlsql.tech/nlp/nlp-lang-1.7.8.jar ) || exit 1
     fi
 
-    "${base_dir}/dev/bin/update-mlsql.sh" || exit 1
+    "${base_dir}/dev/bin/update-kolo-lang.sh" || exit 1
     ## Make a soft link from nlp jars to mlsql/dev
-    mkdir -p ${mlsql_path}/dev
-    ln -f -s ${lib_path}/ansj_seg-5.1.6.jar  ${mlsql_path}/dev/
-    ln -f -s ${lib_path}/nlp-lang-1.7.8.jar  ${mlsql_path}/dev/
+    mkdir -p ${kolo_lang_path}/dev
+    ln -f -s ${lib_path}/ansj_seg-5.1.6.jar  ${kolo_lang_path}/dev/
+    ln -f -s ${lib_path}/nlp-lang-1.7.8.jar  ${kolo_lang_path}/dev/
 
     ## Builds mlsql engine tar ball
-    "${mlsql_path}/dev/make-distribution.sh"
+    "${kolo_lang_path}/dev/make-distribution.sh"
     return_code=$?
     if [[ ${return_code} != 0 ]]
     then
@@ -99,16 +126,16 @@ function build_mlsql_distribution {
     fi
     mlsql_engine_name="mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}.tar.gz"
     ## Check if tgz exists
-    if [[ ! -f "${mlsql_path}/${mlsql_engine_name}" ]]
+    if [[ ! -f "${kolo_lang_path}/${mlsql_engine_name}" ]]
     then
       echo "Failed to generate mlsql engine tar ball, exit"
       exit 1
     fi
 
-    cp ${mlsql_path}/${mlsql_engine_name} ${lib_path}/
+    cp ${kolo_lang_path}/${mlsql_engine_name} ${lib_path}/
 }
 
-## Builds mlsql-api-consol shade jar
+## Builds mlsql-api-console shade jar
 function build_mlsql_api_console {
     ## Build mlsql-api-console
     "${base_dir}/dev/bin/update-console.sh" \
@@ -120,4 +147,19 @@ function build_mlsql_api_console {
     exit 1
     fi
     cp ${mlsql_console_path}/target/mlsql-api-console-${MLSQL_CONSOLE_VERSION}.jar ${lib_path}/
+}
+
+## Builds byzer_notebook shade jar
+function build_byzer_notebook {
+    ## Build byzer-notebook
+    sh "${base_dir}/dev/bin/update-byzer-notebook.sh" \
+    && bash "${byzer_notebook_path}"/build/package.sh skipTar
+
+    ## Check if jar file exists
+    if [[ ! -d "${byzer_notebook_path}/dist/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION}" ]]
+    then
+      echo "Failed to generate byzer-notebook jar file, exit"
+      exit 1
+    fi
+    cp -r "${byzer_notebook_path}/dist/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION}" "${lib_path}/"
 }
