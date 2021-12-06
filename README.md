@@ -2,21 +2,54 @@
 
 Project mlsql-build comes with tools to build
 - MLSQL sandbox docker image
-- [MLSQL Engine](https://github.com/allwefantasy/mlsql/) K8S image
+- [MLSQL Engine](https://github.com/byzer-org/kolo-lang/) K8S image
 - MLSQL app
 
 ## MLSQL Sandbox Docker Image
 With MLSQL Sandbox docker image, users are able to take a quick glance into MLSQL stack.
+
+### Pre-built image
+Based on spark 2.4.3:
+```
+docker pull techmlsql/mlsql-engine:2.4-2.2.0-SNAPSHOT
+```
+
+Based on spark 3.1.1:
+```
+docker pull techmlsql/mlsql-engine:3.0-2.2.0-SNAPSHOT
+```
+
+### Environment Variables
+```
+export SPARK_VERSION=<2.4.3 || 3.1.1>
+export MLSQL_VERSION=2.2.0-SNAPSHOT
+```
+
 ### Running sandbox
 ```shell
+sh ./dev/bin/run-container.sh
+```
+
+We support specifying the mysql root password. For example, if the password is `root`, please pass it to the script as a parameter:
+```shell
+sh ./dev/bin/run-container.sh root
+```
+
+It uses this command to deploy the container internally, as follows:
+
+```
 docker run -d \
 -p 3306:3306 \
 -p 9002:9002 \
--e MYSQL_ROOT_PASSWORD=root \
---name mlsql-sandbox-2.4.3-2.1.0 \
-techmlsql/mlsql-sandbox:2.4.3-2.1.0
+-p 9003:9003 \
+-e MYSQL_ROOT_HOST=% \
+-e MYSQL_ROOT_PASSWORD="${MYSQL_PASSWORD}" \
+--name mlsql-sandbox-${SPARK_VERSION}-${MLSQL_VERSION} \
+mlsql-sandbox:${SPARK_VERSION}-${MLSQL_VERSION}
 ```
-### [Building Sandbox](./docs/sandbox.md)
+
+### Building Sandbox
+[Click for details](./docs/sandbox.md)
 
 ## MLSQL Engine K8S Image
 Pre-built image: 
@@ -28,7 +61,7 @@ docker pull techmlsql/mlsql-engine:3.0-2.1.0
 ./dev/bin/build-spark3-image.sh
 ```
 
-Please find a step-by-step guide on K8S deployment from [mlsql-deploy](https://github.com/allwefantasy/mlsql-deploy)
+Please find a step-by-step guide on K8S deployment from [kolo-k8s](https://github.com/byzer-org/kolo-k8s)
 
 ## MLSQL App
 The mlsql app is pre-built with its dependencies and runs as a local process. 
