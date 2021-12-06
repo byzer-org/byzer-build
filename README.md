@@ -12,7 +12,7 @@ With MLSQL Sandbox docker image, users are able to take a quick glance into MLSQ
 docker run -d \
 -p 3306:3306 \
 -p 9002:9002 \
--e MYSQL_ROOT_PASSWORD=mlsql \
+-e MYSQL_ROOT_PASSWORD=root \
 --name mlsql-sandbox-2.4.3-2.1.0 \
 techmlsql/mlsql-sandbox:2.4.3-2.1.0
 ```

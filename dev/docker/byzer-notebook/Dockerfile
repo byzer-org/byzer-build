@@ -1,4 +1,3 @@
-#!/usr/bin/env bash
 
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
@@ -16,26 +15,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
+# This Dockerfile should be called from dev directory
 
-set -u
-set -e
-set -o pipefail
+FROM ubuntu:focal-20210827
 
-## Init mysql
-nohup ${BASE_DIR}/db_init.sh mysqld 2>&1 2>&1 > /work/logs/db_init.log &
-## Start mlsql engine
-nohup ${KOLO_LANG_HOME}/bin/start-local.sh 2>&1 > /work/logs/engine.log &
-## Start Ray
-ray start --head --include-dashboard=false
-## Wait for kolo lang startup
-sleep 60
-echo 'Waiting for mysql to be available.'
-while ! mysqladmin ping -h"${DB_HOST:-127.0.0.1}" --silent; do
-  echo "mysql health check failed, retrying in 1 seconds."
-  sleep 1
-done
-echo "The mysql initialized successfully."
+## Input arguments
+ARG BYZER_NOTEBOOK_VERSION
 
-## Start byzer-notebook
-"$BYZER_NOTEBOOK_HOME"/startup.sh hangup
+## Environment variables
+ENV BASE_DIR=/home/deploy
+ENV BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION} \
+    BYZER_NOTEBOOK_HOME=${BASE_DIR}/byzer-notebook
 
+WORKDIR ${BASE_DIR}
+
+# byzer-notebook
+COPY lib/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION} ${BYZER_NOTEBOOK_HOME}
+
+ENTRYPOINT "$BYZER_NOTEBOOK_HOME"/startup.sh hangup

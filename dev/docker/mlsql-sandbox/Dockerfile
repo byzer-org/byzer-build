@@ -23,25 +23,22 @@ FROM mysql-python:8.0-3.6
 ARG SPARK_VERSION
 ARG MLSQL_SPARK_VERSION
 ARG MLSQL_VERSION
-ARG MLSQL_CONSOLE_VERSION
+ARG BYZER_NOTEBOOK_VERSION
 ARG SPARK_TGZ_NAME
 
 ## Environment variables
-ENV SPARK_VERSION "${SPARK_VERSION}"
-ENV SPARK_TGZ_NAME "${SPARK_TGZ_NAME}"
-ENV SPARK_HOME "/work/${SPARK_TGZ_NAME}"
-ENV BASE_DIR /home/deploy
-ENV MLSQL_HOME "${BASE_DIR}/mlsql"
-ENV MLSQL_CONSOLE_VERSION ${MLSQL_CONSOLE_VERSION}
-ENV MLSQL_CONSOLE_HOME ${BASE_DIR}/mlsql-console
-ENV PATH=$PATH:${MLSQL_HOME}/bin:${MLSQL_CONSOLE_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin
+ENV BASE_DIR=/home/deploy
+ENV KOLO_LANG_HOME="${BASE_DIR}/kolo-lang" \
+    SPARK_HOME="/work/${SPARK_TGZ_NAME}"
+ENV SPARK_VERSION="${SPARK_VERSION}" \
+    SPARK_TGZ_NAME="${SPARK_TGZ_NAME}" \
+    MLSQL_HOME="${BASE_DIR}/kolo-lang" \
+    BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION} \
+    BYZER_NOTEBOOK_HOME=${BASE_DIR}/byzer-notebook \
+    PATH=$PATH:${KOLO_LANG_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin
 
 ## Creates directories
-RUN mkdir -p /work/logs
-RUN mkdir -p /work/user
-RUN mkdir -p ${MLSQL_CONSOLE_HOME}/libs
-RUN mkdir -p ${MLSQL_CONSOLE_HOME}/conf
-RUN mkdir -p ${MLSQL_CONSOLE_HOME}/bin
+RUN mkdir -p /work/logs /work/user /mlsql/_delta
 
 ## README.md
 COPY docker/mlsql-sandbox/README.md ${BASE_DIR}/
@@ -52,15 +49,15 @@ COPY docker/mlsql-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
 
 WORKDIR ${BASE_DIR}
 
-## mlsql
+## kolo-lang
 ADD lib/"mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}.tar.gz" ${BASE_DIR}/
-RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}" mlsql
-COPY lib/ansj_seg-5.1.6.jar ${MLSQL_HOME}/libs/
-COPY lib/nlp-lang-1.7.8.jar ${MLSQL_HOME}/libs/
+RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}" kolo-lang
+COPY lib/ansj_seg-5.1.6.jar lib/nlp-lang-1.7.8.jar ${KOLO_LANG_HOME}/libs/
 
-# mlsql-api-console
-COPY lib/mlsql-api-console-${MLSQL_CONSOLE_VERSION}.jar ${MLSQL_CONSOLE_HOME}/libs/
-COPY docker/mlsql-sandbox/conf/application.docker.yml ${MLSQL_CONSOLE_HOME}/conf/
+# byzer-notebook
+COPY lib/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION} ${BYZER_NOTEBOOK_HOME}
+COPY docker/byzer-notebook/notebook.docker.properties ${BYZER_NOTEBOOK_HOME}/conf/notebook.properties
+
 ## Db init script
 COPY docker/mlsql-sandbox/bin/db_init.sh $BASE_DIR/
 

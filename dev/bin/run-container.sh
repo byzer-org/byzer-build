@@ -22,8 +22,9 @@ set -u
 set -e
 set -o pipefail
 
-export SPARK_VERSION=${SPARK_VERSION:-2.4.3}
-export MLSQL_VERSION=${MLSQL_VERSION:-2.1.0-SNAPSHOT}
+MYSQL_PASSWORD=${1:-root}
+export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
+export MLSQL_VERSION=${MLSQL_VERSION:-2.2.0-SNAPSHOT}
 
 function exit_with_usage {
   cat << EOF
@@ -41,7 +42,9 @@ fi
 docker run -d \
 -p 3306:3306 \
 -p 9002:9002 \
--e MYSQL_ROOT_PASSWORD=mlsql \
+-p 9003:9003 \
+-e MYSQL_ROOT_HOST=% \
+-e MYSQL_ROOT_PASSWORD="${MYSQL_PASSWORD}" \
 --name mlsql-sandbox-${SPARK_VERSION}-${MLSQL_VERSION} \
 mlsql-sandbox:${SPARK_VERSION}-${MLSQL_VERSION}
 
