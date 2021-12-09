@@ -27,12 +27,12 @@ export MLSQL_VERSION=2.2.0-SNAPSHOT
 
 ### Running sandbox
 ```shell
-sh ./dev/bin/run-container.sh
+sh ./dev/bin/run-sandbox-container.sh
 ```
 
 We support specifying the mysql root password. For example, if the password is `root`, please pass it to the script as a parameter:
 ```shell
-sh ./dev/bin/run-container.sh root
+sh ./dev/bin/run-sandbox-container.sh root
 ```
 
 It uses this command to deploy the container internally, as follows:
@@ -99,4 +99,32 @@ Run the command to build
 ## Built with Spark 2.4.3
 tar -xf mlsql-app_2.4-2.1.0-darwin-amd64.tar.gz
 ./mlsql-app_2.4-2.1.0-darwin-amd64/bin/start-mlsql-app.sh
+```
+
+## Multi-container deployment
+
+We provide scripts to start multiple microservices at once to facilitate us to build and start docker containers flexibly. Each service is deployed in an independent Ubuntu environment, which can isolate resources and environments.
+
+Currently we will deploy these 3 containers: mysql:8.0-20.04_beta, kolo-lang, byzer-notebook.
+
+### parameter settings
+```
+export MYSQL_ROOT_PASSWORD=root
+export MYSQL_PORT=3306
+export KOLO_LANG_PORT=9003
+export BYZER_NOTEBOOK_PORT=9002
+export SPARK_VERSION=3.1.1
+export KOLO_LANG_VERSION=2.2.0-SNAPSHOT
+export BYZER_NOTEBOOK_VERSION=0.0.1-SNAPSHOT
+```
+All the above parameters have default values, which are shown in the above parameters.
+
+### Build images
+```
+sh -x dev/bin/build-images.sh
+```
+
+### Start multiple containers
+```
+sh -x dev/bin/docker-compose-up.sh
 ```

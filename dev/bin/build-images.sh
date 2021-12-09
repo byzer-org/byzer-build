@@ -17,15 +17,12 @@
 # limitations under the License.
 #
 
-##########################################################################
-## Builds a mlsql sandbox docker image; image includes MySQL, mlsql engine
-## and mlsql api console.
-## The script clones mlsql or mlsql-api-console if either repo does not exists
-##########################################################################
-
 set -u
 set -e
 set -o pipefail
+
+self=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
+export KOLO_LANG_VERSION=${KOLO_LANG_VERSION:-2.2.0-SNAPSHOT}
 
 function exit_with_usage {
   cat << EOF
@@ -33,30 +30,26 @@ Usage: build-sandbox-image.sh
 Arguments are specified with the following environment variable:
 MLSQL_SPARK_VERSION     - the spark version, 2.3/2.4/3.0  default 3.0
 SPARK_VERSION           - Spark full version, 2.4.3/3.1.1 default 3.1.1
-MLSQL_VERSION           - mlsql version  default 2.2.0-SNAPSHOT
+KOLO_LANG_VERSION       - mlsql version  default 2.2.0-SNAPSHOT
 BYZER_NOTEBOOK_VERSION  - byzer notebook version default 0.0.1-SNAPSHOT
 MLSQL_TAG               - mlsql git tag to checkout,   no default value
 EOF
   exit 1
 }
 
-
 ## Builds docker image
-function build_image {
-    ## Build docker images
-    docker build -t ubuntu-baseimage -f "${base_dir}"/dev/docker/mysql/Dockerfile "${base_dir}"/dev/docker/mysql &&
-    docker build -t mysql-python:8.0-3.6 -f "${base_image_path}"/Dockerfile ${base_image_path} &&
-    docker build --build-arg SPARK_VERSION=${SPARK_VERSION} \
-    --build-arg MLSQL_SPARK_VERSION=${MLSQL_SPARK_VERSION} \
-    --build-arg MLSQL_VERSION=${MLSQL_VERSION} \
-    --build-arg BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION} \
-    --build-arg SPARK_TGZ_NAME=${SPARK_TGZ_NAME} \
-    -t mlsql-sandbox:${SPARK_VERSION}-${MLSQL_VERSION} \
-    -f "${mlsql_sandbox_path}"/Dockerfile \
-    "${base_dir}"/dev
+function build_images {
+    cd "${base_dir}/dev/docker/compose-resource/base/build"
+    export COMPOSE_PATH="${base_dir}/dev"
+    ## It uses docker-compose.yml to build. option <--no-cache>
+    docker-compose build  --parallel \
+     --build-arg SPARK_VERSION=$SPARK_VERSION \
+     --build-arg MLSQL_SPARK_VERSION=$MLSQL_SPARK_VERSION \
+     --build-arg MLSQL_VERSION=$MLSQL_VERSION \
+     --build-arg SPARK_TGZ_NAME=$SPARK_TGZ_NAME \
+     --build-arg BYZER_NOTEBOOK_VERSION=$BYZER_NOTEBOOK_VERSION
 }
 
-self=$(cd "$(dirname $0)" && pwd)
 source "${self}/mlsql-functions.sh"
 
 if [[ $@ == *"help"* ]]; then
@@ -65,5 +58,5 @@ fi
 
 build_kolo_lang_distribution &&
 build_byzer_notebook &&
-build_image &&
+build_images &&
 exit 0

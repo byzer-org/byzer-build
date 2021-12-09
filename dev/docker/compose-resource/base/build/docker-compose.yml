@@ -1,0 +1,56 @@
+version: "1"
+services:
+  ubuntu-baseimage:
+    build: ./
+    image: ubuntu-baseimage
+    network_mode: "host"
+    restart: always
+
+  mysql:
+    build:
+      context: ${COMPOSE_PATH}/docker/mysql
+      dockerfile: Dockerfile
+    image: "mysql:8.0-20.04_beta"
+    restart: always
+    network_mode: "host"
+    environment:
+      - BASE_DIR=/home/deploy
+
+  python-jdk:
+    build:
+      context: ${COMPOSE_PATH}/docker/base
+      dockerfile: Dockerfile
+    image: "python-jdk:3.6-8"
+    restart: always
+    network_mode: "host"
+    depends_on:
+      - ubuntu-baseimage
+
+  kolo-lang:
+    build:
+      context: ${COMPOSE_PATH}/
+      dockerfile: ./docker/compose-resource/kolo-lang/Dockerfile
+      args:
+        - SPARK_VERSION
+        - MLSQL_SPARK_VERSION
+        - MLSQL_VERSION
+        - SPARK_TGZ_NAME
+        - BUILD_PATH=./docker/compose-resource/kolo-lang
+    image: "kolo-lang:${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-2.2.0-SNAPSHOT}"
+    restart: always
+    network_mode: "host"
+    depends_on:
+      - python-jdk
+
+  byzer-notebook:
+    build:
+      context: ${COMPOSE_PATH}/
+      dockerfile: ./docker/compose-resource/byzer-notebook/Dockerfile
+      args:
+        - BYZER_NOTEBOOK_VERSION
+        - BUILD_PATH=./docker/compose-resource/byzer-notebook
+    image: "byzer-notebook:${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}"
+    restart: always
+    network_mode: "host"
+    depends_on:
+      - python-jdk
