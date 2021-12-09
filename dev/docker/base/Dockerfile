@@ -1,7 +1,6 @@
-FROM ubuntu/mysql:8.0-20.04_beta
+FROM ubuntu-baseimage
 
-ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
-
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 DEBIAN_FRONTEND=noninteractive
 RUN rm -rf /var/lib/apt/lists/*  \
     && apt-get clean \
     && apt-get update -o Acquire::CompressionTypes::Order::=gz \
@@ -40,6 +39,3 @@ RUN  . /etc/profile && pip install --upgrade pip && \
     pip install --upgrade Cython pytest-runner aioredis==1.3.1 pyarrow==5.0.0 ray==1.3.0 \
     aiohttp psutil grpcio pandas xlsxwriter watchdog requests click uuid sfcli \
     pyjava vega_datasets plotly setproctitle
-
-## Copy db init.sql
-COPY db_init.sql /docker-entrypoint-initdb.d/

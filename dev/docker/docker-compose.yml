@@ -1,0 +1,44 @@
+version: "1"
+services:
+  mysql:
+    restart: always
+    image: "mysql:8.0-20.04_beta"
+    container_name: "mysql_8.0-20.04_beta"
+    ports:
+      - 3306:${MYSQL_PORT:-3306}
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
+    network_mode: "host"
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "--silent" ]
+      interval: 2s
+      timeout: 180s
+      retries: 300
+      start_period: 60s
+
+  kolo-lang:
+    image: "kolo-lang:${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-2.2.0-SNAPSHOT}"
+    container_name: "kolo-lang_${SPARK_VERSION:-3.1.1}-${KOLO_LANG_SHORT_VERSION:-2.2.0-SNAPSHOT}"
+    restart: always
+    network_mode: "host"
+    ports:
+      - 9003:${KOLO_LANG_PORT:-9003}
+    healthcheck:
+      test: [ "CMD","curl", "-f", "http://127.0.0.1:9003" ]
+      interval: 2s
+      timeout: 180s
+      retries: 300
+      start_period: 120s
+
+  byzer-notebook:
+    image: "byzer-notebook:${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}"
+    container_name: "byzer-notebook_${BYZER_NOTEBOOK_SHORT_VERSION:-0.0.1-SNAPSHOT}"
+    restart: always
+    network_mode: "host"
+    depends_on:
+      mysql:
+        condition: service_healthy
+      kolo-lang:
+        condition: service_healthy
+    ports:
+      - 9002:${BYZER_NOTEBOOK_PORT:-9002}
