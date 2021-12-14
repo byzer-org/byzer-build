@@ -68,5 +68,5 @@ echo "Project base dir ${base_dir}"
 
 source "${base_dir}/dev/bin/mlsql-functions.sh"
 
-build_mlsql_distribution &&
+build_kolo_lang_distribution &&
 build_image
