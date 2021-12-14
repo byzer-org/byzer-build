@@ -45,12 +45,19 @@ if [[ ! -d kolo-lang/.git ]]; then
     git clone https://github.com/byzer-org/kolo-lang kolo-lang
     if [[ -n ${MLSQL_TAG} ]]; then
         checkout_tag
+    else
+      if [[ -n ${KOLO_LANG_BRANCH} ]]; then
+          branch=${KOLO_LANG_BRANCH}
+          cd kolo-lang && git checkout "$branch" && git pull -r origin "$branch"
+      fi
     fi
+
 else
     if [[ -n ${MLSQL_TAG} ]]; then
         checkout_tag
     else
         echo "update kolo-lang to latest..."
-        ( cd kolo-lang && git checkout master && git pull -r origin master )
+        branch=${KOLO_LANG_BRANCH:-master}
+        ( cd kolo-lang && git checkout $branch && git pull -r origin $branch )
     fi
 fi

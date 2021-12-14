@@ -45,12 +45,18 @@ if [[ ! -d byzer-notebook/.git ]]; then
     git clone https://github.com/byzer-org/byzer-notebook.git byzer-notebook
     if [[ -n ${BYZER_NOTEBOOK_TAG} ]]; then
         checkout_tag
+    else
+        if [[ -n ${BYZER_NOTEBOOK_BRANCH} ]]; then
+            branch=${BYZER_NOTEBOOK_BRANCH}
+            cd byzer-notebook && git checkout "$branch" && git pull -r origin "$branch"
+        fi
     fi
 else
     if [[ -n ${BYZER_NOTEBOOK_TAG} ]]; then
         checkout_tag
     else
         echo "update byzer-notebook to latest..."
-        ( cd byzer-notebook && git checkout main && git pull -r origin main )
+        branch=${BYZER_NOTEBOOK_BRANCH:-main}
+        ( cd byzer-notebook && git checkout "${branch}" && git pull -r origin "${branch}" )
     fi    
 fi
