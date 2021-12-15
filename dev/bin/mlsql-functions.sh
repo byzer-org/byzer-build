@@ -43,7 +43,6 @@ export ENABLE_HIVE_THRIFT_SERVER=true
 export MLSQL_SPARK_VERSION=${MLSQL_SPARK_VERSION:-3.0}
 # Spark version, Used by make-distribution.sh
 export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
-export MLSQL_VERSION=${MLSQL_VERSION:-2.2.0-SNAPSHOT}
 export MLSQL_CONSOLE_VERSION=${MLSQL_CONSOLE_VERSION:-2.2.0-SNAPSHOT}
 export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}
 export BYZER_NOTEBOOK_HOME=$byzer_notebook_path
@@ -60,6 +59,7 @@ fi
 
 ## Builds mlsql distribution tar ball
 function build_kolo_lang_distribution {
+
     ## Download jars & packages if needed
     if [[ ! -f "${lib_path}/${SPARK_TGZ_NAME}.tgz" && ${SPARK_VERSION} == "3.1.1" ]]
     then
@@ -112,6 +112,10 @@ function build_kolo_lang_distribution {
     fi
 
     "${base_dir}/dev/bin/update-kolo-lang.sh" || exit 1
+
+    cd ${kolo_lang_path}
+    local kolo_lang_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+
     ## Make a soft link from nlp jars to mlsql/dev
     mkdir -p ${kolo_lang_path}/dev
     ln -f -s ${lib_path}/ansj_seg-5.1.6.jar  ${kolo_lang_path}/dev/
@@ -124,7 +128,9 @@ function build_kolo_lang_distribution {
     then
       exit ${return_code}
     fi
-    mlsql_engine_name="mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}.tar.gz"
+
+
+    mlsql_engine_name="mlsql-engine_${MLSQL_SPARK_VERSION}-${kolo_lang_version}.tar.gz"
     ## Check if tgz exists
     if [[ ! -f "${kolo_lang_path}/${mlsql_engine_name}" ]]
     then
