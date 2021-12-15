@@ -1,9 +1,15 @@
-# MLSQL Sandbox 
+# Kolo Sandbox 
+
 ## Building MLSQL Sandbox
+
 There are some manual steps before building:
+
 1. Download [Spark 2.4.3(hadoop-2.7 based) or 3.1.1(hadoop-3.2 based) Distribution](https://archive.apache.org/dist/spark/)  and put it to dev/docker/mlsql-sandbox/lib
+
 2. Download [NLP jars](http://download.mlsql.tech/nlp/) and put them to dev/docker/mlsql-sandbox/lib.
+
 3. Start building
+
 ```shell   
 ## For Spark 2.4.3 bundle
 export MLSQL_SPARK_VERSION=2.4
@@ -56,6 +62,25 @@ export PATH=$PATH:${MLSQL_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin
 ```shell
 /home/deploy/start-sandbox.sh
 $MLSQL_HOME/bin/start-local.sh
+```
+
+## Start service
+
+You can start the sandbox service with the following command:
+
+```
+docker run -d --name sandbox-3.1.1-2.2.0 \
+-p9002:9002 \
+-p 9003:9003 \
+-p 3306:3306 \
+-e MYSQL_ROOT_PASSWORD=root \
+allwefantasy/kolo-lang:3.1.1-2.2.0
+```
+
+You can also use the script we provide to start the sandbox service:
+
+```shell
+sh -x dev/bin/run-sandbox-container.sh
 ```
 
 ## Directory Structure

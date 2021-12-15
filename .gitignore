@@ -9,7 +9,9 @@ dev/docker/mlsql-sandbox/lib/*.jar
 dev/docker/mlsql-sandbox/lib/*.tar.gz
 
 mlsql/
+kolo-lang/
 console/
+byzer-notebook/
 
 dev/docker/engine/metastore_db/
 dev/docker/engine/logs/

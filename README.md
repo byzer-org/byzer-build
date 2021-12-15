@@ -11,12 +11,12 @@ With MLSQL Sandbox docker image, users are able to take a quick glance into MLSQ
 ### Pre-built image
 Based on spark 2.4.3:
 ```
-docker pull techmlsql/mlsql-engine:2.4-2.2.0-SNAPSHOT
+docker pull allwefantasy/mlsql-engine:2.4-2.2.0
 ```
 
 Based on spark 3.1.1:
 ```
-docker pull techmlsql/mlsql-engine:3.0-2.2.0-SNAPSHOT
+docker pull allwefantasy/mlsql-engine:3.0-2.2.0
 ```
 
 ### Environment Variables
@@ -25,7 +25,20 @@ export SPARK_VERSION=<2.4.3 || 3.1.1>
 export MLSQL_VERSION=2.2.0-SNAPSHOT
 ```
 
-### Running sandbox
+## Running sandbox
+
+### Pre-built image
+
+Based on spark 2.4.3:
+```
+docker pull allwefantasy/mlsql-sandbox:2.4.3-2.2.0
+```
+
+Based on spark 3.1.1:
+```
+docker pull allwefantasy/mlsql-sandbox:3.1.1-2.2.0
+```
+
 ```shell
 sh ./dev/bin/run-sandbox-container.sh
 ```
@@ -52,10 +65,13 @@ mlsql-sandbox:${SPARK_VERSION}-${MLSQL_VERSION}
 [Click for details](./docs/sandbox.md)
 
 ## MLSQL Engine K8S Image
+
 Pre-built image: 
+
 ```
-docker pull techmlsql/mlsql-engine:3.0-2.1.0
+docker pull allwefantasy/mlsql-engine:3.0-2.2.0
 ```
+
 ### Building MLSQL Engine K8S Image
 ```shell
 ./dev/bin/build-spark3-image.sh
@@ -104,27 +120,3 @@ tar -xf mlsql-app_2.4-2.1.0-darwin-amd64.tar.gz
 ## Multi-container deployment
 
 We provide scripts to start multiple microservices at once to facilitate us to build and start docker containers flexibly. Each service is deployed in an independent Ubuntu environment, which can isolate resources and environments.
-
-Currently we will deploy these 3 containers: mysql:8.0-20.04_beta, kolo-lang, byzer-notebook.
-
-### parameter settings
-```
-export MYSQL_ROOT_PASSWORD=root
-export MYSQL_PORT=3306
-export KOLO_LANG_PORT=9003
-export BYZER_NOTEBOOK_PORT=9002
-export SPARK_VERSION=3.1.1
-export KOLO_LANG_VERSION=2.2.0-SNAPSHOT
-export BYZER_NOTEBOOK_VERSION=0.0.1-SNAPSHOT
-```
-All the above parameters have default values, which are shown in the above parameters.
-
-### Build images
-```
-sh -x dev/bin/build-images.sh
-```
-
-### Start multiple containers
-```
-sh -x dev/bin/docker-compose-up.sh
-```
