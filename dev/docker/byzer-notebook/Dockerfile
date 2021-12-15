@@ -31,5 +31,6 @@ WORKDIR ${BASE_DIR}
 
 # byzer-notebook
 COPY lib/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION} ${BYZER_NOTEBOOK_HOME}
+COPY docker/compose-resource/byzer-notebook/notebook.docker.properties ${BYZER_NOTEBOOK_HOME}/conf/notebook.properties
 
 ENTRYPOINT "$BYZER_NOTEBOOK_HOME"/startup.sh hangup

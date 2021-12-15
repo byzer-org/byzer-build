@@ -22,7 +22,6 @@ set -e
 set -o pipefail
 
 self=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
-export KOLO_LANG_VERSION=${KOLO_LANG_VERSION:-2.2.0-SNAPSHOT}
 
 function exit_with_usage {
   cat << EOF
