@@ -95,6 +95,6 @@ RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}" mlsql
 COPY lib/${JUICE_JAR_NAME} /${MLSQL_HOME}/libs/
 COPY lib/ansj_seg-5.1.6.jar ${MLSQL_HOME}/libs/
 COPY lib/nlp-lang-1.7.8.jar ${MLSQL_HOME}/libs/
-
+COPY docker/engine/start-local.sh ${MLSQL_HOME}/bin/
 COPY docker/engine/entrypoint.sh ${BASE_DIR}/
 ENTRYPOINT [ "/home/deploy/entrypoint.sh" ]

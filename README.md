@@ -1,22 +1,22 @@
-# mlsql-build
+# byzer-build
 
-Project mlsql-build comes with tools to build
-- MLSQL sandbox docker image
-- [MLSQL Engine](https://github.com/byzer-org/kolo-lang/) K8S image
-- MLSQL app
+Project byzer-build comes with tools to build
+- byzer sandbox docker image
+- [byzer Engine](https://github.com/byzer-org/byzer-lang/) K8S image
+- byzer app
 
-## MLSQL Sandbox Docker Image
-With MLSQL Sandbox docker image, users are able to take a quick glance into MLSQL stack.
+## byzer Sandbox Docker Image
+With byzer Sandbox docker image, users are able to take a quick glance into byzer stack.
 
 ### Pre-built image
 Based on spark 2.4.3:
 ```
-docker pull allwefantasy/mlsql-engine:2.4-2.2.0
+docker pull byzer/byzer-lang-k8s:2.4.3-2.2.0-SNAPSHOT
 ```
 
 Based on spark 3.1.1:
 ```
-docker pull allwefantasy/mlsql-engine:3.0-2.2.0
+docker pull byzer/byzer-lang-k8s:3.1.1-2.2.0-SNAPSHOT
 ```
 
 ### Environment Variables
@@ -31,12 +31,12 @@ export MLSQL_VERSION=2.2.0-SNAPSHOT
 
 Based on spark 2.4.3:
 ```
-docker pull allwefantasy/mlsql-sandbox:2.4.3-2.2.0
+docker pull byzer/byzer-sandbox:2.4.3-2.2.0-SNAPSHOT
 ```
 
 Based on spark 3.1.1:
 ```
-docker pull allwefantasy/mlsql-sandbox:3.1.1-2.2.0
+docker pull byzer/byzer-sandbox:3.1.1-2.2.0-SNAPSHOT
 ```
 
 ```shell
@@ -58,32 +58,32 @@ docker run -d \
 -e MYSQL_ROOT_HOST=% \
 -e MYSQL_ROOT_PASSWORD="${MYSQL_PASSWORD}" \
 --name mlsql-sandbox-${SPARK_VERSION}-${MLSQL_VERSION} \
-mlsql-sandbox:${SPARK_VERSION}-${MLSQL_VERSION}
+byzer-sandbox:${SPARK_VERSION}-${MLSQL_VERSION}
 ```
 
 ### Building Sandbox
 [Click for details](./docs/sandbox.md)
 
-## MLSQL Engine K8S Image
+## byzer Engine K8S Image
 
 Pre-built image: 
 
 ```
-docker pull allwefantasy/mlsql-engine:3.0-2.2.0
+docker pull byzer/byzer-lang-k8s:3.1.1-2.2.0-SNAPSHOT
 ```
 
-### Building MLSQL Engine K8S Image
+### Building byzer Engine K8S Image
 ```shell
 ./dev/bin/build-spark3-image.sh
 ```
 
-Please find a step-by-step guide on K8S deployment from [kolo-k8s](https://github.com/byzer-org/kolo-k8s)
+Please find a step-by-step guide on K8S deployment from [byzer-k8s](https://github.com/byzer-org/byzer-k8s)
 
-## MLSQL App
-The mlsql app is pre-built with its dependencies and runs as a local process. 
+## byzer App
+The byzer app is pre-built with its dependencies and runs as a local process. 
 JRE8+ is required to run this app. 
 
-### Building MLSQL App
+### Building byzer App
 #### Building with Spark 3.1.1
 Please download and put the following packages in dev/docker/mlsql-sandbox/lib
 - nlp-lang-1.7.8.jar
@@ -110,7 +110,7 @@ Run the command to build
 ./dev/bin/app/build-mlsql-app.sh 2.4.3
 ```
 
-### Running MLSQL App
+### Running byzer App
 ```shell 
 ## Built with Spark 2.4.3
 tar -xf mlsql-app_2.4-2.1.0-darwin-amd64.tar.gz

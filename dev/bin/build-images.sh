@@ -41,7 +41,8 @@ function build_images {
     cd "${base_dir}/dev/docker/compose-resource/base/build"
     export COMPOSE_PATH="${base_dir}/dev"
     ## It uses docker-compose.yml to build. option <--no-cache>
-    docker-compose build  --parallel \
+#    docker-compose build  --parallel \
+    docker-compose build \
      --build-arg SPARK_VERSION=$SPARK_VERSION \
      --build-arg MLSQL_SPARK_VERSION=$MLSQL_SPARK_VERSION \
      --build-arg MLSQL_VERSION=$MLSQL_VERSION \

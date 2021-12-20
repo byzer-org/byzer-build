@@ -33,6 +33,7 @@ WORKDIR ${BASE_DIR}
 
 # byzer-notebook
 COPY lib/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION} ${BYZER_NOTEBOOK_HOME}
+COPY docker/compose-resource/byzer-notebook/notebook.docker.properties ${BYZER_NOTEBOOK_HOME}/conf/notebook.properties
 COPY ${BUILD_PATH}/entrypoint.sh ${BYZER_NOTEBOOK_HOME}/
 
 ENTRYPOINT ${BYZER_NOTEBOOK_HOME}/entrypoint.sh

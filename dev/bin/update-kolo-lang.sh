@@ -17,7 +17,7 @@
 # limitations under the License.
 #
 
-# Updates kolo-lang code. If MLSQL_TAG is specified, checkout it as branch ${tag}_branch;
+# Updates byzer-lang code. If MLSQL_TAG is specified, checkout it as branch ${tag}_branch;
 # checkout & pull master branch otherwise
 
 set -e
@@ -25,7 +25,7 @@ set -o pipefail
 
 ## Please check if MLSQL_TAG is null before calling this function
 function checkout_tag {
-    echo "Checking out kolo-lang ${MLSQL_TAG}"
+    echo "Checking out byzer-lang ${MLSQL_TAG}"
 
     cd kolo-lang
     git tag | xargs -I {} git tag -d {}
@@ -41,8 +41,8 @@ base=$(cd "$(dirname $0)/../.." && pwd)
 cd "${base}"
 
 if [[ ! -d kolo-lang/.git ]]; then
-    echo "cloning kolo-lang repo..."
-    git clone https://github.com/byzer-org/kolo-lang kolo-lang
+    echo "cloning byzer-lang repo..."
+    git clone https://github.com/byzer-org/byzer-lang kolo-lang
     if [[ -n ${MLSQL_TAG} ]]; then
         checkout_tag
     else
