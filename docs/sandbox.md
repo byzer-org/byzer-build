@@ -1,6 +1,6 @@
-# Kolo Sandbox 
+# Byzer Sandbox
 
-## Building MLSQL Sandbox
+## Building Byzer Sandbox
 
 There are some manual steps before building:
 
@@ -69,12 +69,12 @@ $MLSQL_HOME/bin/start-local.sh
 You can start the sandbox service with the following command:
 
 ```
-docker run -d --name sandbox-3.1.1-2.2.0 \
+docker run -d --name sandbox-3.1.1-2.2.0- \
 -p9002:9002 \
 -p 9003:9003 \
 -p 3306:3306 \
 -e MYSQL_ROOT_PASSWORD=root \
-allwefantasy/mlsql-sandbox:3.1.1-2.2.0
+allwefantasy/kolo-lang:3.1.1-2.2.0
 ```
 
 You can also use the script we provide to start the sandbox service:
