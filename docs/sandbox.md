@@ -74,7 +74,7 @@ docker run -d --name sandbox-3.1.1-2.2.0 \
 -p 9003:9003 \
 -p 3306:3306 \
 -e MYSQL_ROOT_PASSWORD=root \
-allwefantasy/kolo-lang:3.1.1-2.2.0
+allwefantasy/mlsql-sandbox:3.1.1-2.2.0
 ```
 
 You can also use the script we provide to start the sandbox service:
