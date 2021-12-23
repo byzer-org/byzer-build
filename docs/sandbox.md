@@ -38,7 +38,7 @@ export BYZER_NOTEBOOK_TAG=v0.0.1-test
 ```shell
 docker images
 REPOSITORY      TAG                    IMAGE ID       CREATED          SIZE
-mlsql-sandbox   3.1.1-2.2.0-SNAPSHOT   c24583e8fe47   34 minutes ago   2.61GB
+byzer-sandbox   3.1.1-2.2.0-SNAPSHOT   c24583e8fe47   34 minutes ago   2.61GB
 ```
 
 ## Pushing Image to Docker hub
@@ -69,12 +69,12 @@ $MLSQL_HOME/bin/start-local.sh
 You can start the sandbox service with the following command:
 
 ```
-docker run -d --name sandbox-3.1.1-2.2.0- \
+docker run -d --name sandbox-3.1.1-2.2.0-SNAPSHOT \
 -p9002:9002 \
 -p 9003:9003 \
 -p 3306:3306 \
 -e MYSQL_ROOT_PASSWORD=root \
-allwefantasy/kolo-lang:3.1.1-2.2.0
+byzer/byzer-sandbox:3.1.1-2.2.0-SNAPSHOT
 ```
 
 You can also use the script we provide to start the sandbox service:

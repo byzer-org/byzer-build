@@ -40,9 +40,6 @@ ENV SPARK_VERSION="${SPARK_VERSION}" \
 ## Creates directories
 RUN mkdir -p /work/logs /work/user /mlsql/_delta
 
-## README.md
-COPY docker/mlsql-sandbox/README.md ${BASE_DIR}/
-
 ## Spark
 ADD lib/${SPARK_TGZ_NAME}.tgz /work
 COPY docker/mlsql-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
@@ -60,5 +57,5 @@ COPY docker/byzer-notebook/notebook.docker.properties ${BYZER_NOTEBOOK_HOME}/con
 
 ## Entrypoint script
 COPY docker/mlsql-sandbox/bin/start-sandbox.sh $BASE_DIR/
-
+COPY docker/engine/start-local.sh ${KOLO_LANG_HOME}/bin/
 ENTRYPOINT $BASE_DIR/start-sandbox.sh

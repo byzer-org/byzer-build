@@ -2,7 +2,7 @@ version: "3"
 services:
   mysql:
     restart: always
-    image: "mysql:8.0-20.04_beta"
+    image: "byzer/mysql:8.0-20.04_beta"
     container_name: "mysql_8.0-20.04_beta"
     ports:
       - 3306:${MYSQL_PORT:-3306}
@@ -10,7 +10,7 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
       - MYSQL_ROOT_HOST=%
     networks:
-      - kolo-network
+      - byzer-network
     healthcheck:
       test: [ "CMD", "mysqladmin", "ping", "--silent" ]
       interval: 2s
@@ -20,12 +20,12 @@ services:
     security_opt:
       - seccomp:unconfined
 
-  kolo-lang:
-    image: "kolo-lang:${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-2.2.0-SNAPSHOT}"
-    container_name: "kolo-lang_${SPARK_VERSION}-${KOLO_LANG_VERSION}"
+  byzer-lang:
+    image: "byzer/byzer-lang:${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-2.2.0-SNAPSHOT}"
+    container_name: "byzer-lang_${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-2.2.0-SNAPSHOT}"
     restart: always
     networks:
-      - kolo-network
+      - byzer-network
     expose:
       - 9003
     ports:
@@ -38,19 +38,19 @@ services:
       start_period: 120s
 
   byzer-notebook:
-    image: "byzer-notebook:${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}"
-    container_name: "byzer-notebook_${BYZER_NOTEBOOK_VERSION}"
+    image: "byzer/byzer-notebook:${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}"
+    container_name: "byzer-notebook_${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}"
     restart: always
     networks:
-      - kolo-network
+      - byzer-network
     depends_on:
       mysql:
         condition: service_healthy
-      kolo-lang:
+      byzer-lang:
         condition: service_healthy
     ports:
       - 9002:${BYZER_NOTEBOOK_PORT:-9002}
 
 networks:
-  kolo-network:
+  byzer-network:
     driver: bridge

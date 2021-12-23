@@ -1,20 +1,20 @@
-## Kolo Multi-images
-Currently we will deploy these 3 containers: mysql:8.0-20.04_beta, kolo-lang, byzer-notebook.
+## byzer Multi-images
+Currently we will deploy these 3 containers: mysql:8.0-20.04_beta, byzer-lang, byzer-notebook.
 
 ### Pre-built image
 
 Based on spark 2.4.3:
 ```
-docker pull allwefantasy/kolo-lang:2.4.3-2.2.0
-docker pull allwefantasy/mysql:8.0-20.04_beta
-docker pull allwefantasy/byzer-notebook:1.0.0
+docker pull byzer/byzer-lang:2.4.3-2.2.0-SNAPSHOT
+docker pull byzer/mysql:8.0-20.04_beta
+docker pull byzer/byzer-notebook:0.0.1-SNAPSHOT
 ```
 
 Based on spark 3.1.1:
 ```
-docker pull allwefantasy/kolo-lang:3.1.1-2.2.0
-docker pull allwefantasy/mysql:8.0-20.04_beta
-docker pull allwefantasy/byzer-notebook:1.0.0
+docker pull byzer/byzer-lang:3.1.1-2.2.0-SNAPSHOT
+docker pull byzer/mysql:8.0-20.04_beta
+docker pull byzer/byzer-notebook:0.0.1-SNAPSHOT
 ```
 
 ### parameter settings
