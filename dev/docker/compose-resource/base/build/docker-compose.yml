@@ -33,7 +33,7 @@ services:
         - MLSQL_VERSION
         - SPARK_TGZ_NAME
         - BUILD_PATH=./docker/compose-resource/kolo-lang
-    image: "byzer/byzer-lang:${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-2.2.0-SNAPSHOT}"
+    image: "byzer/byzer-lang:${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-latest}"
     restart: always
     depends_on:
       - python-jdk
@@ -45,7 +45,7 @@ services:
       args:
         - BYZER_NOTEBOOK_VERSION
         - BUILD_PATH=./docker/compose-resource/byzer-notebook
-    image: "byzer/byzer-notebook:${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}"
+    image: "byzer/byzer-notebook:${BYZER_NOTEBOOK_VERSION:-latest}"
     restart: always
     depends_on:
       - python-jdk

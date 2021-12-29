@@ -14,23 +14,25 @@ There are some manual steps before building:
 ## For Spark 2.4.3 bundle
 export MLSQL_SPARK_VERSION=2.4
 export SPARK_VERSION=2.4.3
-export MLSQL_VERSION=2.2.0-SNAPSHOT
-export BYZER_NOTEBOOK_VERSION=0.0.1-SNAPSHOT
+export MLSQL_VERSION=latest
+export BYZER_NOTEBOOK_VERSION=latest
 ./dev/bin/build-sandbox-image.sh
 
 ## For Spark 3.1.1 bundle
 export MLSQL_SPARK_VERSION=3.0
 export SPARK_VERSION=3.1.1
-export MLSQL_VERSION=2.2.0-SNAPSHOT
-export BYZER_NOTEBOOK_VERSION=0.0.1-SNAPSHOT
+export MLSQL_VERSION=latest
+export BYZER_NOTEBOOK_VERSION=latest
 ./dev/bin/build-sandbox-image.sh
+
+On the other hand, we support specifying git tag to build image:
 
 ## Build with tag
 export MLSQL_SPARK_VERSION=3.0
 export SPARK_VERSION=3.1.1
-export MLSQL_VERSION=2.2.0-SNAPSHOT
-export BYZER_NOTEBOOK_VERSION=0.0.1-SNAPSHOT
-export MLSQL_TAG=v2.1.0-test
+export MLSQL_VERSION=latest
+export BYZER_NOTEBOOK_VERSION=latest
+export MLSQL_TAG=v2.2.0
 export BYZER_NOTEBOOK_TAG=v0.0.1-test
 ./dev/bin/build-sandbox-image.sh
 ```
@@ -38,13 +40,13 @@ export BYZER_NOTEBOOK_TAG=v0.0.1-test
 ```shell
 docker images
 REPOSITORY      TAG                    IMAGE ID       CREATED          SIZE
-byzer-sandbox   3.1.1-2.2.0-SNAPSHOT   c24583e8fe47   34 minutes ago   2.61GB
+byzer-sandbox   3.1.1-latest           c24583e8fe47   34 minutes ago   2.61GB
 ```
 
 ## Pushing Image to Docker hub
 ```shell
 export SPARK_VERSION=3.1.1
-export MLSQL_VERSION=2.2.0-SNAPSHOT
+export MLSQL_VERSION=latest
 ## Please enter username & password during execution
 ./dev/bin/push-image.sh <repo>
 ```
@@ -69,12 +71,12 @@ $MLSQL_HOME/bin/start-local.sh
 You can start the sandbox service with the following command:
 
 ```
-docker run -d --name sandbox-3.1.1-2.2.0-SNAPSHOT \
+docker run -d --name sandbox-3.1.1-latest \
 -p9002:9002 \
 -p 9003:9003 \
 -p 3306:3306 \
 -e MYSQL_ROOT_PASSWORD=root \
-byzer/byzer-sandbox:3.1.1-2.2.0-SNAPSHOT
+byzer/byzer-sandbox:3.1.1-latest
 ```
 
 You can also use the script we provide to start the sandbox service:

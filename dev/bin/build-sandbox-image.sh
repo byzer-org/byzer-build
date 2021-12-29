@@ -33,8 +33,8 @@ Usage: build-sandbox-image.sh
 Arguments are specified with the following environment variable:
 MLSQL_SPARK_VERSION     - the spark version, 2.3/2.4/3.0  default 3.0
 SPARK_VERSION           - Spark full version, 2.4.3/3.1.1 default 3.1.1
-MLSQL_VERSION           - mlsql version  default 2.2.0-SNAPSHOT
-BYZER_NOTEBOOK_VERSION  - byzer notebook version default 0.0.1-SNAPSHOT
+MLSQL_VERSION           - mlsql version  default latest
+BYZER_NOTEBOOK_VERSION  - byzer notebook version default latest
 MLSQL_TAG               - mlsql git tag to checkout,   no default value
 EOF
   exit 1
@@ -51,7 +51,7 @@ function build_image {
     --build-arg MLSQL_VERSION=${MLSQL_VERSION} \
     --build-arg BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION} \
     --build-arg SPARK_TGZ_NAME=${SPARK_TGZ_NAME} \
-    -t byzer/byzer-sandbox:${SPARK_VERSION}-${MLSQL_VERSION} \
+    -t byzer/byzer-sandbox:${SPARK_VERSION}-${MLSQL_VERSION:-latest} \
     -f "${mlsql_sandbox_path}"/Dockerfile \
     "${base_dir}"/dev
 }

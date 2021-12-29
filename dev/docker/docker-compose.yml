@@ -21,8 +21,8 @@ services:
       - seccomp:unconfined
 
   byzer-lang:
-    image: "byzer/byzer-lang:${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-2.2.0-SNAPSHOT}"
-    container_name: "byzer-lang_${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-2.2.0-SNAPSHOT}"
+    image: "byzer/byzer-lang:${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-latest}"
+    container_name: "byzer-lang_${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-latest}"
     restart: always
     networks:
       - byzer-network
@@ -38,8 +38,8 @@ services:
       start_period: 120s
 
   byzer-notebook:
-    image: "byzer/byzer-notebook:${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}"
-    container_name: "byzer-notebook_${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}"
+    image: "byzer/byzer-notebook:${BYZER_NOTEBOOK_VERSION:-latest}"
+    container_name: "byzer-notebook_${BYZER_NOTEBOOK_VERSION:-latest}"
     restart: always
     networks:
       - byzer-network
