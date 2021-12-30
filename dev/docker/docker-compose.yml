@@ -1,7 +1,7 @@
 version: "3"
 services:
   mysql:
-    restart: always
+    restart: on-failure
     image: "byzer/mysql:8.0-20.04_beta"
     container_name: "mysql_8.0-20.04_beta"
     ports:
@@ -23,7 +23,7 @@ services:
   byzer-lang:
     image: "byzer/byzer-lang:${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-2.2.0-SNAPSHOT}"
     container_name: "byzer-lang_${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-2.2.0-SNAPSHOT}"
-    restart: always
+    restart: on-failure
     networks:
       - byzer-network
     expose:
@@ -40,7 +40,7 @@ services:
   byzer-notebook:
     image: "byzer/byzer-notebook:${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}"
     container_name: "byzer-notebook_${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}"
-    restart: always
+    restart: on-failure
     networks:
       - byzer-network
     depends_on:
