@@ -40,6 +40,7 @@ if [ -z "${MLSQL_HOME}" ]; then
 fi
 
 JARS=$(echo ${MLSQL_HOME}/libs/*.jar | tr ' ' ',')
+EXT_JARS=$(echo ${MLSQL_HOME}/libs/*.jar | tr ' ' ':')
 MAIN_JAR=$(ls ${MLSQL_HOME}/libs|grep 'streamingpro-mlsql')
 export DRIVER_MEMORY=${DRIVER_MEMORY:-2g}
 
@@ -66,6 +67,8 @@ $SPARK_HOME/bin/spark-submit --class streaming.core.StreamingApp \
         --conf "spark.kryoserializer.buffer.max=1024m" \
         --conf "spark.serializer=org.apache.spark.serializer.KryoSerializer" \
         --conf "spark.scheduler.mode=FAIR" \
+        --conf "spark.driver.extraClassPath=${EXT_JARS}" \
+        --conf "spark.executor.extraClassPath=${EXT_JARS}" \
         ${MLSQL_HOME}/libs/${MAIN_JAR}    \
         -streaming.name mlsql    \
         -streaming.platform spark   \
@@ -75,4 +78,3 @@ $SPARK_HOME/bin/spark-submit --class streaming.core.StreamingApp \
         -streaming.thrift false \
         -streaming.enableHiveSupport true \
         -streaming.datalake.path "/mlsql/_delta"
-

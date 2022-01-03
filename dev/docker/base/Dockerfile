@@ -11,7 +11,7 @@ RUN rm -rf /var/lib/apt/lists/*  \
     -o Acquire::http::Pipeline-Depth="0" install \
     -y --no-install-recommends --fix-missing locales \
     apt-utils build-essential software-properties-common  \
-    curl wget unzip nano git net-tools vim && \
+    curl wget unzip nano git net-tools vim lrzsz && \
    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
    rm -rf /var/lib/apt/lists/* && \
    mkdir -p /work && \
