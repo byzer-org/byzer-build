@@ -38,4 +38,4 @@ RUN  . /etc/profile && pip install --upgrade pip && \
     pip config set global.index-url http://mirrors.aliyun.com/pypi/simple/ && \
     pip install --upgrade Cython pytest-runner aioredis==1.3.1 pyarrow==5.0.0 ray==1.3.0 \
     aiohttp psutil grpcio pandas xlsxwriter watchdog requests click uuid sfcli \
-    pyjava vega_datasets plotly setproctitle
+    pyjava vega_datasets plotly setproctitle pyecharts matplotlib seaborn sklearn
