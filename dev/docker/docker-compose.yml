@@ -5,7 +5,7 @@ services:
     image: "byzer/mysql:8.0-20.04_beta"
     container_name: "mysql_8.0-20.04_beta"
     ports:
-      - 3306:${MYSQL_PORT:-3306}
+      - ${MYSQL_PORT:-3306}:3306
     environment:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-root}
       - MYSQL_ROOT_HOST=%
@@ -21,15 +21,18 @@ services:
       - seccomp:unconfined
 
   byzer-lang:
-    image: "byzer/byzer-lang:${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-2.2.0-SNAPSHOT}"
-    container_name: "byzer-lang_${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-2.2.0-SNAPSHOT}"
+    image: "byzer/byzer-lang:${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-latest}"
+    container_name: "byzer-lang_${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-latest}"
     restart: on-failure
     networks:
       - byzer-network
     expose:
       - 9003
     ports:
-      - 9003:${KOLO_LANG_PORT:-9003}
+      - ${KOLO_LANG_PORT:-9003}:9003
+      - ${SPARK_UI_PORT:-14040}:4040
+      - ${YARN_UI_PORT:-18088}:8088
+      - ${RAY_DASHBOARD_PORT:-18265}:8265
     healthcheck:
       test: [ "CMD","curl", "-f", "http://127.0.0.1:9003" ]
       interval: 2s
@@ -38,8 +41,8 @@ services:
       start_period: 120s
 
   byzer-notebook:
-    image: "byzer/byzer-notebook:${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}"
-    container_name: "byzer-notebook_${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}"
+    image: "byzer/byzer-notebook:${BYZER_NOTEBOOK_VERSION:-latest}"
+    container_name: "byzer-notebook_${BYZER_NOTEBOOK_VERSION:-latest}"
     restart: on-failure
     networks:
       - byzer-network
@@ -49,7 +52,7 @@ services:
       byzer-lang:
         condition: service_healthy
     ports:
-      - 9002:${BYZER_NOTEBOOK_PORT:-9002}
+      - ${BYZER_NOTEBOOK_PORT:-9002}:9002
 
 networks:
   byzer-network:

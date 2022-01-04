@@ -11,7 +11,7 @@ RUN rm -rf /var/lib/apt/lists/*  \
     -o Acquire::http::Pipeline-Depth="0" install \
     -y --no-install-recommends --fix-missing locales \
     apt-utils build-essential software-properties-common  \
-    curl wget unzip nano git net-tools vim && \
+    curl wget unzip nano git net-tools vim lrzsz && \
    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
    rm -rf /var/lib/apt/lists/* && \
    mkdir -p /work && \
@@ -37,5 +37,10 @@ RUN  . /etc/profile && pip install --upgrade pip && \
     pip config set global.trusted-host mirrors.aliyun.com && \
     pip config set global.index-url http://mirrors.aliyun.com/pypi/simple/ && \
     pip install --upgrade Cython pytest-runner aioredis==1.3.1 pyarrow==5.0.0 ray==1.3.0 \
-    aiohttp psutil grpcio pandas xlsxwriter watchdog requests click uuid sfcli \
-    pyjava vega_datasets plotly setproctitle pyecharts matplotlib seaborn sklearn
+        aiohttp psutil grpcio pandas xlsxwriter watchdog requests click uuid sfcli \
+        pyjava vega_datasets plotly setproctitle && \
+    conda create -n ray1.8.0 python=3.6.7 && conda activate ray1.8.0 && pip install --upgrade pip && \
+    pip config set global.trusted-host mirrors.aliyun.com && \
+    pip config set global.index-url http://mirrors.aliyun.com/pypi/simple/ && \
+    pip install --upgrade pyarrow==4.0.1 "ray[default]==1.8.0" aiohttp==3.7.4 "pandas>=1.0.5" requests  \
+        "matplotlib~=3.3.4" "uuid~=1.30" pyjava opencv-python pyecharts matplotlib seaborn sklearn

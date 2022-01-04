@@ -3,18 +3,18 @@ Currently we will deploy these 3 containers: mysql:8.0-20.04_beta, byzer-lang, b
 
 ### Pre-built image
 
-Based on spark 2.4.3:
-```
-docker pull byzer/byzer-lang:2.4.3-2.2.0-SNAPSHOT
-docker pull byzer/mysql:8.0-20.04_beta
-docker pull byzer/byzer-notebook:0.0.1-SNAPSHOT
-```
-
 Based on spark 3.1.1:
 ```
-docker pull byzer/byzer-lang:3.1.1-2.2.0-SNAPSHOT
+docker pull byzer/byzer-lang:3.1.1-latest
 docker pull byzer/mysql:8.0-20.04_beta
-docker pull byzer/byzer-notebook:0.0.1-SNAPSHOT
+docker pull byzer/byzer-notebook:latest
+```
+
+Based on spark 2.4.3:
+```
+docker pull byzer/byzer-lang:2.4.3-latest
+docker pull byzer/mysql:8.0-20.04_beta
+docker pull byzer/byzer-notebook:latest
 ```
 
 ### parameter settings
@@ -25,8 +25,8 @@ export MYSQL_PORT=3306
 export KOLO_LANG_PORT=9003
 export BYZER_NOTEBOOK_PORT=9002
 export SPARK_VERSION=3.1.1
-export KOLO_LANG_VERSION=2.2.0-SNAPSHOT
-export BYZER_NOTEBOOK_VERSION=0.0.1-SNAPSHOT
+export KOLO_LANG_VERSION=latest
+export BYZER_NOTEBOOK_VERSION=latest
 ```
 
 All the above parameters have default values, which are shown in the above parameters.
@@ -41,15 +41,17 @@ sh -x dev/bin/build-images.sh
 
 ```
 # Set startup parameters
-export KOLO_LANG_VERSION=${KOLO_LANG_VERSION:-2.2.0}
-export MLSQL_VERSION=${MLSQL_VERSION:-2.2.0}
-export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-1.0.0}
+export KOLO_LANG_VERSION=${KOLO_LANG_VERSION:-latest}
+export MLSQL_VERSION=${MLSQL_VERSION:-latest}
+export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-latest}
 # Build image by specifying branch
-export BYZER_NOTEBOOK_BRANCH=${BYZER_NOTEBOOK_BRANCH:-release-1.0.0}
-export KOLO_LANG_BRANCH="${KOLO_LANG_BRANCH:-}"
+export BYZER_NOTEBOOK_BRANCH=${BYZER_NOTEBOOK_BRANCH:-main}
+# byzer lang branch, default branch is master
+export KOLO_LANG_BRANCH="${KOLO_LANG_BRANCH:-master}"
 # Build image by specifying tag
 export BYZER_NOTEBOOK_TAG="${BYZER_NOTEBOOK_TAG:-}"
-export MLSQL_TAG=${MLSQL_TAG:-v2.2.0}
+# If you need to specify the git tag of byzer-lang, you need to set it.
+export MLSQL_TAG=${MLSQL_TAG:-}
 
 sh -x dev/bin/build-images.sh
 ```

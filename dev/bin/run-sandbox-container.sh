@@ -24,13 +24,13 @@ set -o pipefail
 
 MYSQL_PASSWORD=${1:-root}
 export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
-export MLSQL_VERSION=${MLSQL_VERSION:-2.2.0-SNAPSHOT}
+export MLSQL_VERSION=${MLSQL_VERSION:-latest}
 
 function exit_with_usage {
   cat << EOF
 Inputs are specified with the following environment variables:
 SPARK_VERSION - the spark version, 2.4/3.0 default 2.4
-MLSQL_VERSION - MLSQL version              default 2.1.0-SNAPSHOT
+MLSQL_VERSION - byzer-lang version, default latest
 EOF
   exit 1
 }
@@ -45,6 +45,5 @@ docker run -d \
 -p 9003:9003 \
 -e MYSQL_ROOT_HOST=% \
 -e MYSQL_ROOT_PASSWORD="${MYSQL_PASSWORD}" \
---name mlsql-sandbox-${SPARK_VERSION}-${MLSQL_VERSION} \
-mlsql-sandbox:${SPARK_VERSION}-${MLSQL_VERSION}
-
+--name byzer-sandbox-${SPARK_VERSION}-${MLSQL_VERSION:-latest} \
+byzer/byzer-sandbox:${SPARK_VERSION}-${MLSQL_VERSION:-latest}

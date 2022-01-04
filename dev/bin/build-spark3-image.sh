@@ -54,10 +54,10 @@ function build_image {
       wget https://repo.anaconda.com/miniconda/Miniconda3-4.5.11-Linux-x86_64.sh -O ${lib_path}/miniconda.sh || exit 1
     fi
 
-    docker build -t byzer/byzer-lang-k8s:3.1.1-${MLSQL_VERSION} \
+    docker build -t byzer/byzer-lang-k8s:3.1.1-${MLSQL_VERSION:-latest} \
     --build-arg SPARK_VERSION=${spark_version} \
     --build-arg MLSQL_SPARK_VERSION=3.0 \
-    --build-arg MLSQL_VERSION=${MLSQL_VERSION} \
+    --build-arg MLSQL_VERSION=${MLSQL_VERSION:-latest} \
     --build-arg JUICE_JAR_NAME=${juice_jar_name} \
     -f ${base_dir}/dev/docker/engine/Dockerfile \
     ${base_dir}/dev
