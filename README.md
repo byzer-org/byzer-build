@@ -79,42 +79,23 @@ docker pull byzer/byzer-lang-k8s:3.1.1-2.2.0-SNAPSHOT
 
 Please find a step-by-step guide on K8S deployment from [byzer-k8s](https://github.com/byzer-org/byzer-k8s)
 
-## byzer App
-The byzer app is pre-built with its dependencies and runs as a local process. 
-JRE8+ is required to run this app. 
+## Byzer CLI
+To install and run the CLI, please visit [CLI doc](https://docs.byzer.org/#/byzer-lang/zh-cn/installation/cli-installation) .
+Tar ball naming convention is `byzer-lang-<os>-<byzer_spark_version>-<byzer_lang_version>.tar.gz`.
 
-### Building byzer App
-#### Building with Spark 3.1.1
-Please download and put the following packages in dev/docker/mlsql-sandbox/lib
-- nlp-lang-1.7.8.jar
-- ansj_seg-5.1.6.jar
-- juicefs-hadoop-0.15.2-linux-amd64.jar
-- mlsql-assert-3.0_2.12.jar
-- mlsql-excel-3.0_2.12.jar
-- spark-3.1.1-bin-hadoop3.2.tgz
+| Parameter           | Explanation                                                             |
+|---------------------|-------------------------------------------------------------------------|
+| byzer_lang_version  | The [Byzer Lang](https://github.com/byzer-org/byzer-lang/pulls) version |
+| byzer_spark_version | 3.0 for Spark 3.1.1 2.4 for Spark 2.4.3                                 |
+| os                  | linux darwin(mac) win                                                   |
 
-Run the command to build
+To build the Byzer CLI
 ```shell
-./dev/bin/app/build-mlsql-app.sh 3.1.1
+./dev/bin/app/build-byzer-cli-release.sh <byzer_spark_version> <byzer_lang_version> <os>
 ```
-#### Building with Spark 2.4.3
-- nlp-lang-1.7.8.jar
-- ansj_seg-5.1.6.jar
-- juicefs-hadoop-0.15.2-linux-amd64.jar
-- mlsql-assert-2.4_2.11.jar
-- mlsql-excel-2.4_2.11.jar
-- spark-2.4.3-bin-hadoop2.7.tgz
-
-Run the command to build 
-```
-./dev/bin/app/build-mlsql-app.sh 2.4.3
-```
-
-### Running byzer App
-```shell 
-## Built with Spark 2.4.3
-tar -xf mlsql-app_2.4-2.1.0-darwin-amd64.tar.gz
-./mlsql-app_2.4-2.1.0-darwin-amd64/bin/start-mlsql-app.sh
+For instance, to build Byzer CLI for linux spark 3.1.1 byzer-lang 2.2.0, run
+```shell
+./dev/bin/app/build-byzer-cli-release.sh 3.0 2.2.0 linux
 ```
 
 ## Multi-container deployment
