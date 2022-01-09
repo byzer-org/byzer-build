@@ -106,7 +106,11 @@ function download_jdk8 {
     tar -xf "${target_dir}/tmp/jdk-8u151-linux-x64.tar.gz" -C ${target_dir}
     mv ${target_dir}/jdk1.8.0_151 ${target_dir}/jdk8
     rm -f ${target_dir}/tmp/jdk-8u151-linux-x64.tar.gz
+  elif [[ ${os} == "win" ]]
+  then
+    echo "Not implemented"
   fi
+
   echo "JDK8 download succeed"
 }
 
@@ -125,6 +129,8 @@ function download_plugins {
         echo "${p}-${byzer_spark_version} is not found in plugin store" && exit 1
     fi
   done
+  ## Copy language-server jar
+  cp ${base}/dev/lib/mlsql-language-server-${byzer_spark_version}_${scala_binary_version}-0.1.0-SNAPSHOT.jar ${target_dir}/plugin/
   echo "plugin download succeed"
 }
 
