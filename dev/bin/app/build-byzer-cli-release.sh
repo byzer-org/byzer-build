@@ -121,28 +121,14 @@ function download_jdk8 {
   echo "JDK8 download succeed"
 }
 
-function download_plugins {
-  local declare array plugins=(mlsql-excel mlsql-shell mlsql-assert)
+function cp_plugins {
+  local declare array plugins=(mlsql-excel mlsql-shell mlsql-assert mlsql-language-server)
   for p in "${plugins[@]}"
   do
-    if [[ ! -f ${base}/dev/lib/${p}-${byzer_spark_version}-0.1.0-SNAPSHOT.jar ]]
-    then
-      echo "Downloading ${p}-${byzer_spark_version}-0.1.0-SNAPSHOT.jar"
-      curl -D "${target_dir}/tmp/${p}.head" --retry 3 --location --request POST 'http://store.mlsql.tech/run' \
-       --form 'action="downloadPlugin"' \
-       --form "pluginName=\"${p}-${byzer_spark_version}\"" \
-       --form 'pluginType="MLSQL_PLUGIN"' \
-       --form 'version="0.1.0-SNAPSHOT"' \
-       --output "${base}/dev/lib/${p}-${byzer_spark_version}-0.1.0-SNAPSHOT.jar"
-       if grep --silent '404 Not Found' "${target_dir}/tmp/${p}.head"; then
-               echo "${p}-${byzer_spark_version} is not found in plugin store" && exit 1
-       fi
-    fi
-    cp ${base}/dev/lib/${p}-${byzer_spark_version}-0.1.0-SNAPSHOT.jar ${target_dir}/plugin/${p}-${byzer_spark_version}-0.1.0-SNAPSHOT.jar
+    cp ${base}/dev/lib/${p}-${byzer_spark_version}_${scala_binary_version}-0.1.0-SNAPSHOT.jar ${target_dir}/plugin/${p}-${byzer_spark_version}-0.1.0-SNAPSHOT.jar
   done
-  ## Copy language-server jar
   cp ${base}/dev/lib/mlsql-language-server-${byzer_spark_version}_${scala_binary_version}-0.1.0-SNAPSHOT.jar ${target_dir}/plugin/
-  echo "plugin download succeed"
+  echo "plugin copy succeed"
 }
 
 function cp_byzer_lang {
@@ -252,7 +238,7 @@ download_jdk8
 cp "${base}/dev/bin/app/start-mlsql-app.sh" "${target_dir}/bin/"
 download_cli
 
-download_plugins
+cp_plugins
 
 cp_byzer_lang
 
