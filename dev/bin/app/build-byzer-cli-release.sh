@@ -163,7 +163,7 @@ function download_cli {
   else
     local name="mlsql-linux-amd64"
   fi
-  local url="${download_base_url}/cli/${name}"
+  local url="${download_base_url}/byzer/misc/${name}"
   echo "wget --no-check-certificate --no-verbose ${url} --output-document ${target_dir}/bin/byzer"
   wget --no-check-certificate --no-verbose "${url}" --output-document "${target_dir}/bin/byzer"
 
