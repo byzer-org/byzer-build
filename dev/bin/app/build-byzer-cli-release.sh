@@ -106,45 +106,39 @@ function download_jdk8 {
     tar -xf "${target_dir}/tmp/jdk-8u151-linux-x64.tar.gz" -C ${target_dir}
     mv ${target_dir}/jdk1.8.0_151 ${target_dir}/jdk8
     rm -f ${target_dir}/tmp/jdk-8u151-linux-x64.tar.gz
+  elif [[ ${os} == "win" ]]
+  then
+    wget --no-check-certificate --no-verbose "${download_base_url}/byzer/misc/jdk8_win.zip" \
+      --directory-prefix "${target_dir}/tmp"
+    unzip -q -o "${target_dir}/tmp/jdk8_win.zip" -d ${target_dir}/
+    rm -f "${target_dir}/tmp/jdk8_win.zip"
+  else
+    wget --no-check-certificate --no-verbose "${download_base_url}/byzer/misc/jdk8_mac.zip" \
+          --directory-prefix "${target_dir}/tmp"
+    unzip -q -o "${target_dir}/tmp/jdk8_mac.zip" -d ${target_dir}/
+    rm -f "${target_dir}/tmp/jdk8_mac.zip"
   fi
   echo "JDK8 download succeed"
 }
 
-function download_plugins {
-  local declare array plugins=(mlsql-excel mlsql-shell mlsql-assert)
+function cp_plugins {
+  local declare array plugins=(mlsql-excel mlsql-shell mlsql-assert mlsql-language-server)
   for p in "${plugins[@]}"
   do
-    echo "Downloading ${p}-${byzer_spark_version}-0.1.0-SNAPSHOT.jar"
-    curl -D "${target_dir}/tmp/${p}.head" --retry 3 --location --request POST 'http://store.mlsql.tech/run' \
-       --form 'action="downloadPlugin"' \
-       --form "pluginName=\"${p}-${byzer_spark_version}\"" \
-       --form 'pluginType="MLSQL_PLUGIN"' \
-       --form 'version="0.1.0-SNAPSHOT"' \
-       --output "${target_dir}/plugin/${p}-${byzer_spark_version}-0.1.0-SNAPSHOT.jar"
-    if grep --silent '404 Not Found' "${target_dir}/tmp/${p}.head"; then  
-        echo "${p}-${byzer_spark_version} is not found in plugin store" && exit 1
-    fi
+    cp ${base}/dev/lib/${p}-${byzer_spark_version}_${scala_binary_version}-0.1.0-SNAPSHOT.jar ${target_dir}/plugin/${p}-${byzer_spark_version}-0.1.0-SNAPSHOT.jar
   done
-  echo "plugin download succeed"
+  cp ${base}/dev/lib/mlsql-language-server-${byzer_spark_version}_${scala_binary_version}-0.1.0-SNAPSHOT.jar ${target_dir}/plugin/
+  echo "plugin copy succeed"
 }
 
-function download_cp_byzer_lang {
-  echo "Downloading byzer lang ${byzer_lang_version}"
-  local file="byzer-lang_${byzer_spark_version}-${byzer_lang_version}.tar.gz"
-  local url="${download_base_url}/byzer/${byzer_lang_version}/byzer-lang/${file}"
-  wget --no-check-certificate --no-verbose "${url}" --directory-prefix "${target_dir}/"
-  if [[ ! -f "${target_dir}/${file}" ]]
-  then
-    echo "Failed to download byzer-lang"
-    exit 1
-  fi
-  tar -xf "${target_dir}/byzer-lang_${byzer_spark_version}-${byzer_lang_version}.tar.gz" -C "${target_dir}/tmp"
+function cp_byzer_lang {
+  echo "cp byzer lang ${byzer_lang_version}"
 
+  tar -xf "${base}/dev/lib/mlsql-engine_${byzer_spark_version}-${byzer_lang_version}.tar.gz" -C "${target_dir}/tmp"
   cp "${target_dir}/tmp/mlsql-engine_${byzer_spark_version}-${byzer_lang_version}/libs/streamingpro-mlsql-spark_${byzer_spark_version}_${scala_binary_version}-${byzer_lang_version}.jar" \
   "${target_dir}/main/"
 
-  rm -f "${target_dir:?}/${file}"
-  echo "Download & copy byzer-lang uber jar succeed"
+  echo "copy byzer-lang uber jar succeed"
 }
 
 function download_cli {
@@ -157,7 +151,7 @@ function download_cli {
   else
     local name="mlsql-linux-amd64"
   fi
-  local url="${download_base_url}/cli/${name}"
+  local url="${download_base_url}/byzer/misc/${name}"
   echo "wget --no-check-certificate --no-verbose ${url} --output-document ${target_dir}/bin/byzer"
   wget --no-check-certificate --no-verbose "${url}" --output-document "${target_dir}/bin/byzer"
 
@@ -171,8 +165,17 @@ function download_cli {
 }
 
 function download_3rd_party_jars {
-  wget --no-check-certificate --no-verbose "http://download.mlsql.tech/nlp/ansj_seg-5.1.6.jar" --directory-prefix "${target_dir}/libs/"
-  wget --no-check-certificate --no-verbose http://download.mlsql.tech/nlp/nlp-lang-1.7.8.jar --directory-prefix "${target_dir}/libs/"
+  if [[ ! -f ${base}/dev/lib/ansj_seg-5.1.6.jar ]]
+  then
+    wget --no-check-certificate --no-verbose "http://download.mlsql.tech/nlp/ansj_seg-5.1.6.jar" --directory-prefix "${base}/dev/lib/"
+  fi
+  if [[ ! -f ${base}/dev/lib/nlp-lang-1.7.8.jar ]]
+  then
+    wget --no-check-certificate --no-verbose http://download.mlsql.tech/nlp/nlp-lang-1.7.8.jar --directory-prefix "${base}/dev/lib/"
+  fi
+  cp ${base}/dev/lib/ansj_seg-5.1.6.jar ${target_dir}/libs/
+  cp ${base}/dev/lib/nlp-lang-1.7.8.jar ${target_dir}/libs/
+
   echo  "Download 3rd-party jars succeed"
 }
 
@@ -182,11 +185,14 @@ function download_spark_jars {
 
   if [[ ${byzer_spark_version} == "3.0" ]]
   then
-    wget --no-check-certificate --no-verbose \
-      https://archive.apache.org/dist/spark/spark-3.1.1/spark-3.1.1-bin-hadoop3.2.tgz \
-      --directory-prefix "${target_dir}/tmp/"
+    if [[ ! -f ${base}/dev/lib/spark-3.1.1-bin-hadoop3.2.tgz  ]]
+    then
+      wget --no-check-certificate --no-verbose \
+        https://archive.apache.org/dist/spark/spark-3.1.1/spark-3.1.1-bin-hadoop3.2.tgz \
+        --directory-prefix ${base}/dev/lib/
+    fi
+    cp ${base}/dev/lib/spark-3.1.1-bin-hadoop3.2.tgz "${target_dir}/tmp/"
     tar -xf "${target_dir}/tmp/spark-3.1.1-bin-hadoop3.2.tgz" -C "${target_dir}/tmp/"
-    sleep 2
     cp "${target_dir}/tmp/spark-3.1.1-bin-hadoop3.2/jars/"* "${target_dir}/spark/"
     if [[ ! -f "${target_dir}/spark/spark-core_2.12-3.1.1.jar" ]]
     then
@@ -197,10 +203,13 @@ function download_spark_jars {
 
   if [[ ${byzer_spark_version} == "2.4" ]]
   then
-    wget --no-check-certificate --no-verbose https://archive.apache.org/dist/spark/spark-2.4.3/spark-2.4.3-bin-hadoop2.7.tgz \
-    --directory-prefix "${target_dir}/tmp/"
+    if [[ ! -f "${base}/dev/lib/spark-2.4.3-bin-hadoop2.7.tgz" ]]
+    then
+      wget --no-check-certificate --no-verbose https://archive.apache.org/dist/spark/spark-2.4.3/spark-2.4.3-bin-hadoop2.7.tgz \
+      --directory-prefix ${base}/dev/lib
+    fi
+    cp ${base}/dev/lib/spark-2.4.3-bin-hadoop2.7.tgz "${target_dir}/tmp/"
     tar -xf "${target_dir}/tmp/spark-2.4.3-bin-hadoop2.7.tgz" -C "${target_dir}/tmp/"
-    sleep 2
     cp "${target_dir}/tmp/spark-2.4.3-bin-hadoop2.7.tgz/jars/"* "${target_dir}/spark/"
     if [[ ! -f "${target_dir}/spark/spark-core_2.11-2.4.3.jar" ]]
     then
@@ -229,9 +238,9 @@ download_jdk8
 cp "${base}/dev/bin/app/start-mlsql-app.sh" "${target_dir}/bin/"
 download_cli
 
-download_plugins
+cp_plugins
 
-download_cp_byzer_lang
+cp_byzer_lang
 
 download_3rd_party_jars
 
@@ -242,4 +251,3 @@ tar -czf "byzer-lang-${os}-amd64-${byzer_spark_version}-${byzer_lang_version}.ta
 cat <<EOF
 Build byzer cli release tar ball finished, file name byzer-lang-${os}-amd64-${byzer_spark_version}-${byzer_lang_version}.tar.gz
 EOF
-
