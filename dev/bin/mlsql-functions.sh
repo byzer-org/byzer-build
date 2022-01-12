@@ -43,8 +43,8 @@ export ENABLE_HIVE_THRIFT_SERVER=true
 export MLSQL_SPARK_VERSION=${MLSQL_SPARK_VERSION:-3.0}
 # Spark version, Used by make-distribution.sh
 export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
-export MLSQL_CONSOLE_VERSION=${MLSQL_CONSOLE_VERSION:-2.2.0-SNAPSHOT}
-export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}
+export MLSQL_CONSOLE_VERSION=${MLSQL_CONSOLE_VERSION:-2.2.1-SNAPSHOT}
+export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-1.0.1-SNAPSHOT}
 export BYZER_NOTEBOOK_HOME=$byzer_notebook_path
 if [[ ${SPARK_VERSION} == "2.4.3" ]]
 then
@@ -158,11 +158,12 @@ function build_mlsql_api_console {
 ## Builds byzer_notebook shade jar
 function build_byzer_notebook {
     ## Build byzer-notebook
-    sh "${base_dir}/dev/bin/update-byzer-notebook.sh" \
-    && bash "${byzer_notebook_path}"/build/package.sh skipTar
+    sh "${base_dir}/dev/bin/update-byzer-notebook.sh" && \
+    bash "${byzer_notebook_path}"/build/package.sh skipTar
 
     ## Check if jar file exists
-    if [[ ! -d "${byzer_notebook_path}/dist/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION}" ]]
+    echo "notebook path: ""${base_dir}/byzer-notebook/dist/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION}"
+    if [[ ! -d "${base_dir}/byzer-notebook/dist/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION}" ]]
     then
       echo "Failed to generate byzer-notebook jar file, exit"
       exit 1
