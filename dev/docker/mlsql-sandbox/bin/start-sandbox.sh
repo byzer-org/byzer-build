@@ -26,7 +26,7 @@ nohup ${BASE_DIR}/db_init.sh mysqld 2>&1 2>&1 > /work/logs/db_init.log &
 ## Start mlsql engine
 nohup ${KOLO_LANG_HOME}/bin/start-local.sh 2>&1 > /work/logs/engine.log &
 ## Start Ray
-ray start --head --include-dashboard=false
+$CONDA_HOME/envs/ray1.8.0/bin/ray start --head --include-dashboard=false
 ## Wait for kolo lang startup
 sleep 60
 echo 'Waiting for mysql to be available.'

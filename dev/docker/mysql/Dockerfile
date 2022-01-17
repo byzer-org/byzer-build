@@ -6,6 +6,7 @@ COPY db_init.sql /docker-entrypoint-initdb.d/
 ## Copy db init script
 COPY db_init.sh entrypoint.sh $BASE_DIR/
 
-RUN mkdir -p /work/logs
+RUN mkdir -p /work/logs  && \
+    echo "max_allowed_packet=200M" >> /etc/mysql/my.cnf
 
 ENTRYPOINT $BASE_DIR/entrypoint.sh

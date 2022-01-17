@@ -29,8 +29,8 @@ Usage: build-sandbox-image.sh
 Arguments are specified with the following environment variable:
 MLSQL_SPARK_VERSION     - the spark version, 2.3/2.4/3.0  default 3.0
 SPARK_VERSION           - Spark full version, 2.4.3/3.1.1 default 3.1.1
-KOLO_LANG_VERSION       - mlsql version  default latest
-BYZER_NOTEBOOK_VERSION  - byzer notebook version default latest
+KOLO_LANG_VERSION       - mlsql version  default 2.2.1-SNAPSHOT
+BYZER_NOTEBOOK_VERSION  - byzer notebook version default 1.0.1-SNAPSHOT
 MLSQL_TAG               - mlsql git tag to checkout,   no default value
 EOF
   exit 1
@@ -56,7 +56,17 @@ if [[ $@ == *"help"* ]]; then
     exit_with_usage
 fi
 
-build_kolo_lang_distribution &&
-build_byzer_notebook &&
+# In the CI process, this special parameter is used to avoid repeated builds.
+# If you are not using the build script in CI, you can use the default value regardless of this parameter.
+STEP_01_BUILD_SANDBOX_IMAGE=${STEP_01_BUILD_SANDBOX_IMAGE:-false}
+STEP_02_BUILD_K8S_IMAGE=${STEP_02_BUILD_K8S_IMAGE:-false}
+if [[ $STEP_01_BUILD_SANDBOX_IMAGE == "false" && $STEP_02_BUILD_K8S_IMAGE == "false" ]]; then
+  build_kolo_lang_distribution
+fi
+
+if [[ $STEP_01_BUILD_SANDBOX_IMAGE == "false" ]]; then
+  build_byzer_notebook
+fi
+
 build_images &&
 exit 0

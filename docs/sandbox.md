@@ -14,15 +14,15 @@ There are some manual steps before building:
 ## For Spark 2.4.3 bundle
 export MLSQL_SPARK_VERSION=2.4
 export SPARK_VERSION=2.4.3
-export MLSQL_VERSION=latest
-export BYZER_NOTEBOOK_VERSION=latest
+export MLSQL_VERSION=2.2.1-SNAPSHOT
+export BYZER_NOTEBOOK_VERSION=1.0.1-SNAPSHOT
 ./dev/bin/build-sandbox-image.sh
 
 ## For Spark 3.1.1 bundle
 export MLSQL_SPARK_VERSION=3.0
 export SPARK_VERSION=3.1.1
-export MLSQL_VERSION=latest
-export BYZER_NOTEBOOK_VERSION=latest
+export MLSQL_VERSION=2.2.1-SNAPSHOT
+export BYZER_NOTEBOOK_VERSION=1.0.1-SNAPSHOT
 ./dev/bin/build-sandbox-image.sh
 
 On the other hand, we support specifying git tag to build image:
@@ -30,8 +30,8 @@ On the other hand, we support specifying git tag to build image:
 ## Build with tag
 export MLSQL_SPARK_VERSION=3.0
 export SPARK_VERSION=3.1.1
-export MLSQL_VERSION=latest
-export BYZER_NOTEBOOK_VERSION=latest
+export MLSQL_VERSION=2.2.1-SNAPSHOT
+export BYZER_NOTEBOOK_VERSION=1.0.1-SNAPSHOT
 export MLSQL_TAG=v2.2.0
 export BYZER_NOTEBOOK_TAG=v0.0.1-test
 ./dev/bin/build-sandbox-image.sh
@@ -46,7 +46,7 @@ byzer-sandbox   3.1.1-latest           c24583e8fe47   34 minutes ago   2.61GB
 ## Pushing Image to Docker hub
 ```shell
 export SPARK_VERSION=3.1.1
-export MLSQL_VERSION=latest
+export MLSQL_VERSION=2.2.1-SNAPSHOT
 ## Please enter username & password during execution
 ./dev/bin/push-image.sh <repo>
 ```

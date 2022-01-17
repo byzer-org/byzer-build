@@ -28,8 +28,8 @@ export MYSQL_PORT=${MYSQL_PORT:-3306}
 export KOLO_LANG_PORT=${KOLO_LANG_PORT:-9003}
 export BYZER_NOTEBOOK_PORT=${BYZER_NOTEBOOK_PORT:-9002}
 export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
-export KOLO_LANG_VERSION=${KOLO_LANG_VERSION:-2.2.0-SNAPSHOT}
-export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-0.0.1-SNAPSHOT}
+export KOLO_LANG_VERSION=${KOLO_LANG_VERSION:-2.2.1-SNAPSHOT}
+export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-1.0.1-SNAPSHOT}
 
 function exit_with_usage() {
   cat <<EOF
@@ -39,8 +39,8 @@ MYSQL_PORT             - the mysql port                 default 3306
 KOLO_LANG_PORT         - the kolo-lang port             default 9003
 BYZER_NOTEBOOK_PORT    - the byzer notebook port        default 9002
 SPARK_VERSION          - the spark version, 2.4/3.0     default 3.0
-KOLO_LANG_VERSION      - kolo lang version              default 2.2.0-SNAPSHOT
-BYZER_NOTEBOOK_VERSION - byzer notebook version         default 0.0.1-SNAPSHOT
+KOLO_LANG_VERSION      - kolo lang version              default 2.2.1-SNAPSHOT
+BYZER_NOTEBOOK_VERSION - byzer notebook version         default 1.0.1-SNAPSHOT
 EOF
   exit 1
 }

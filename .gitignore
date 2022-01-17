@@ -8,11 +8,12 @@ dev/lib/*
 dev/docker/mlsql-sandbox/lib/*.jar
 dev/docker/mlsql-sandbox/lib/*.tar.gz
 
-mlsql/
-kolo-lang/
+mlsql
+kolo-lang
 console/
 byzer-notebook/
-
+.DS_Store
+**/.DS_Store
 dev/docker/engine/metastore_db/
 dev/docker/engine/logs/
 dev/bin/app/spark/**
