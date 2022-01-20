@@ -47,7 +47,8 @@ function build_images {
      --build-arg MLSQL_SPARK_VERSION=$MLSQL_SPARK_VERSION \
      --build-arg MLSQL_VERSION=$MLSQL_VERSION \
      --build-arg SPARK_TGZ_NAME=$SPARK_TGZ_NAME \
-     --build-arg BYZER_NOTEBOOK_VERSION=$BYZER_NOTEBOOK_VERSION
+     --build-arg BYZER_NOTEBOOK_VERSION=$BYZER_NOTEBOOK_VERSION \
+     --build-arg AZURE_BLOB_NAME=${AZURE_BLOB_NAME}
 }
 
 source "${self}/mlsql-functions.sh"

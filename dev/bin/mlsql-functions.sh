@@ -49,11 +49,14 @@ export BYZER_NOTEBOOK_HOME=$byzer_notebook_path
 if [[ ${SPARK_VERSION} == "2.4.3" ]]
 then
     export SPARK_TGZ_NAME="spark-${SPARK_VERSION}-bin-hadoop2.7"
+    export AZURE_BLOB_NAME="azure-blob_2.7-1.0-SNAPSHOT.jar"
 elif [[ ${SPARK_VERSION} == "3.1.1" ]]
 then
     export SPARK_TGZ_NAME="spark-${SPARK_VERSION}-bin-hadoop3.2"
+    export AZURE_BLOB_NAME="azure-blob_3.2-1.0-SNAPSHOT.jar"
 else
     echo "Only Spark 2.4.3 or 3.1.1 is supported"
+
     exit 1
 fi
 
@@ -109,6 +112,18 @@ function build_kolo_lang_distribution {
     if [[ ! -f "${lib_path}/nlp-lang-1.7.8.jar" ]]
     then
       ( cd "${lib_path}" && curl -O http://download.mlsql.tech/nlp/nlp-lang-1.7.8.jar ) || exit 1
+    fi
+
+    if [[ ${SPARK_VERSION} == "2.4.3" && ! -f "${lib_path}/azure-blob_2.7-1.0-SNAPSHOT.jar" ]]
+    then
+      wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/misc/azure-blob_2.7-1.0-SNAPSHOT.jar" \
+        --directory-prefix "${lib_path}/"
+    fi
+
+    if [[ ${SPARK_VERSION} == "3.1.1" && ! -f "${lib_path}/azure-blob_3.2-1.0-SNAPSHOT.jar" ]]
+    then
+      wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/misc/azure-blob_3.2-1.0-SNAPSHOT.jar" \
+        --directory-prefix "${lib_path}/"
     fi
 
     "${base_dir}/dev/bin/update-kolo-lang.sh" || exit 1

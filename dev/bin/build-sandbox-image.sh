@@ -51,6 +51,7 @@ function build_image {
     --build-arg MLSQL_VERSION=${MLSQL_VERSION} \
     --build-arg BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION} \
     --build-arg SPARK_TGZ_NAME=${SPARK_TGZ_NAME} \
+    --build-arg AZURE_BLOB_NAME=${AZURE_BLOB_NAME} \
     -t byzer/byzer-sandbox:${SPARK_VERSION}-${MLSQL_VERSION:-latest} \
     -f "${mlsql_sandbox_path}"/Dockerfile \
     "${base_dir}"/dev
