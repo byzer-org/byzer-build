@@ -129,7 +129,7 @@ function build_kolo_lang_distribution {
     fi
 
     ## if byzer-lang tar ball does not exist in dev/lib, exit
-    if [[ ! -f "${lib_path}/${mlsql-engine}_${MLSQL_SPARK_VERSION}_${MLSQL_VERSION}.tar.gz" ]]
+    if [[ ! -f "${lib_path}/mlsql-engine_${MLSQL_SPARK_VERSION}_${MLSQL_VERSION}.tar.gz" ]]
     then
       echo "Please put Byzer-lang tar ball in dev/lib"
       exit 1
