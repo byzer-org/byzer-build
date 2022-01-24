@@ -50,10 +50,12 @@ if [[ ${SPARK_VERSION} == "2.4.3" ]]
 then
     export SPARK_TGZ_NAME="spark-${SPARK_VERSION}-bin-hadoop2.7"
     export AZURE_BLOB_NAME="azure-blob_2.7-1.0-SNAPSHOT.jar"
+    export SCALA_BINARY_VERSION=2.11
 elif [[ ${SPARK_VERSION} == "3.1.1" ]]
 then
     export SPARK_TGZ_NAME="spark-${SPARK_VERSION}-bin-hadoop3.2"
     export AZURE_BLOB_NAME="azure-blob_3.2-1.0-SNAPSHOT.jar"
+    export SCALA_BINARY_VERSION=2.12
 else
     echo "Only Spark 2.4.3 or 3.1.1 is supported"
 
