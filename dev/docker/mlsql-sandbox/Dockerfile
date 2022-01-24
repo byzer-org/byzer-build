@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# This Dockerfile should be called from dev directory
+# The Dockerfile for Byzer Sandbox
 
 FROM mysql-python:8.0-3.6
 

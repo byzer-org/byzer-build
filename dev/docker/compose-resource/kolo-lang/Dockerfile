@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# This Dockerfile should be called from dev directory
+# The Dockerfile for byzer-lang
 
 FROM python-jdk:3.6-8
 
