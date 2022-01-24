@@ -48,7 +48,7 @@ COPY docker/mlsql-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
 
 WORKDIR ${BASE_DIR}
 
-## kolo-lang
+## Byzer-lang
 ADD lib/"mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}.tar.gz" ${BASE_DIR}/
 RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}" kolo-lang
 COPY lib/ansj_seg-5.1.6.jar \

@@ -128,34 +128,14 @@ function build_kolo_lang_distribution {
         --directory-prefix "${lib_path}/"
     fi
 
-    "${base_dir}/dev/bin/update-kolo-lang.sh" || exit 1
-
-    cd ${kolo_lang_path}
-    local kolo_lang_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
-
-    ## Make a soft link from nlp jars to mlsql/dev
-    mkdir -p ${kolo_lang_path}/dev
-    ln -f -s ${lib_path}/ansj_seg-5.1.6.jar  ${kolo_lang_path}/dev/
-    ln -f -s ${lib_path}/nlp-lang-1.7.8.jar  ${kolo_lang_path}/dev/
-
-    ## Builds mlsql engine tar ball
-    "${kolo_lang_path}/dev/make-distribution.sh"
-    return_code=$?
-    if [[ ${return_code} != 0 ]]
+    ## if byzer-lang tar ball does not exist in dev/lib, exit
+    if [[ ! -f "${lib_path}/${mlsql-engine}_${MLSQL_SPARK_VERSION}_${MLSQL_VERSION}.tar.gz" ]]
     then
-      exit ${return_code}
-    fi
-
-
-    mlsql_engine_name="mlsql-engine_${MLSQL_SPARK_VERSION}-${kolo_lang_version}.tar.gz"
-    ## Check if tgz exists
-    if [[ ! -f "${kolo_lang_path}/${mlsql_engine_name}" ]]
-    then
-      echo "Failed to generate mlsql engine tar ball, exit"
+      echo "Please put Byzer-lang tar ball in dev/lib"
       exit 1
     fi
 
-    cp ${kolo_lang_path}/${mlsql_engine_name} ${lib_path}/
+
 }
 
 ## Builds mlsql-api-console shade jar
