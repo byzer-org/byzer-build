@@ -59,6 +59,7 @@ function build_image {
     --build-arg MLSQL_SPARK_VERSION=3.0 \
     --build-arg MLSQL_VERSION=${MLSQL_VERSION:-latest} \
     --build-arg JUICE_JAR_NAME=${juice_jar_name} \
+    --build-arg SCALA_BINARY_VERSION=${SCALA_BINARY_VERSION} \
     -f ${base_dir}/dev/docker/engine/Dockerfile \
     ${base_dir}/dev
 }

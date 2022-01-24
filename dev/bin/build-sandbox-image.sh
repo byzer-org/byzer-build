@@ -18,9 +18,8 @@
 #
 
 ##########################################################################
-## Builds a mlsql sandbox docker image; image includes MySQL, mlsql engine
-## and mlsql api console.
-## The script clones mlsql or mlsql-api-console if either repo does not exists
+## Builds a mlsql sandbox docker image; image includes MySQL, Byzer-lang engine
+## and Notebook
 ##########################################################################
 
 set -u
@@ -31,7 +30,6 @@ function exit_with_usage {
   cat << EOF
 Usage: build-sandbox-image.sh
 Arguments are specified with the following environment variable:
-MLSQL_SPARK_VERSION     - the spark version, 2.3/2.4/3.0  default 3.0
 SPARK_VERSION           - Spark full version, 2.4.3/3.1.1 default 3.1.1
 MLSQL_VERSION           - mlsql version  default latest
 BYZER_NOTEBOOK_VERSION  - byzer notebook version default latest
@@ -52,6 +50,7 @@ function build_image {
     --build-arg BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION} \
     --build-arg SPARK_TGZ_NAME=${SPARK_TGZ_NAME} \
     --build-arg AZURE_BLOB_NAME=${AZURE_BLOB_NAME} \
+    --build-arg SCALA_BINARY_VERSION=${SCALA_BINARY_VERSION} \
     -t byzer/byzer-sandbox:${SPARK_VERSION}-${MLSQL_VERSION:-latest} \
     -f "${mlsql_sandbox_path}"/Dockerfile \
     "${base_dir}"/dev
