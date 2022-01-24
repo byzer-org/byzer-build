@@ -15,7 +15,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# This Dockerfile should be called from dev directory
+# The Dockerfile for Byzer Sandbox
 
 FROM mysql-python:8.0-3.6
 
@@ -48,7 +48,7 @@ COPY docker/mlsql-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
 
 WORKDIR ${BASE_DIR}
 
-## kolo-lang
+## Byzer-lang
 ADD lib/"mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}.tar.gz" ${BASE_DIR}/
 RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}" kolo-lang
 COPY lib/ansj_seg-5.1.6.jar \

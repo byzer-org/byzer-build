@@ -15,10 +15,7 @@
 # limitations under the License.
 #
 
-# The docker build command should be invoked from the dev directory E.g.:
-# docker build -t mlsql-engine:latest -f engine/Dockerfile .
-# to build first stage only,
-# docker build --target ubuntu-jdk-conda --build-arg JDK_MAJOR=14 -f engine/Dockerfile .
+# The Dockerfile for Byzer-lang K8S image
 
 FROM ubuntu:20.04 AS ubuntu-jdk-conda
 
@@ -92,9 +89,16 @@ ADD lib/"mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}.tar.gz" ${BASE_DIR
 RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}" mlsql
 
 ##  auxiliary jars
+COPY lib/ansj_seg-5.1.6.jar \
+  lib/nlp-lang-1.7.8.jar \
+  lib/${AZURE_BLOB_NAME} \
+  lib/mlsql-assert-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-excel-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-ext-ets-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-shell-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+  ${MLSQL_HOME}/libs/
+
 COPY lib/${JUICE_JAR_NAME} /${MLSQL_HOME}/libs/
-COPY lib/ansj_seg-5.1.6.jar ${MLSQL_HOME}/libs/
-COPY lib/nlp-lang-1.7.8.jar ${MLSQL_HOME}/libs/
 COPY docker/engine/start-local.sh ${MLSQL_HOME}/bin/
 COPY docker/engine/entrypoint.sh ${BASE_DIR}/
 ENTRYPOINT [ "/home/deploy/entrypoint.sh" ]
