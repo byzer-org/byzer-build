@@ -62,6 +62,7 @@ ARG SPARK_VERSION=3.1.1
 ARG MLSQL_SPARK_VERSION=3.0
 ARG MLSQL_VERSION=2.1.0-SNAPSHOT
 ARG JUICE_JAR_NAME=juicefs-hadoop-0.15.2-linux-amd64.jar
+ARG SCALA_BINARY_VERSION
 
 ## Setup environment variables
 ENV SPARK_HOME /work/spark-${SPARK_VERSION}-bin-hadoop3.2
