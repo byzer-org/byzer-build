@@ -22,43 +22,43 @@ set -o pipefail
 
 # ie kolo-build root path
 base_dir=$(cd "$(dirname $0)/../.." && pwd)
-scala_version=2.12
-kolo_lang_path="${base_dir}/kolo-lang"
-mlsql_path="${base_dir}/mlsql"
 mlsql_console_path="${base_dir}/console"
 byzer_notebook_path="${base_dir}/byzer-notebook"
 base_image_path="${base_dir}/dev/docker/base"
 mlsql_sandbox_path="${base_dir}/dev/docker/mlsql-sandbox"
 lib_path=${base_dir}/dev/lib
 
-# Used by make-distribution.sh
-export DISTRIBUTION=true
-export DRY_RUN=false
-export OSS_ENABLE=false
-export DATASOURCE_INCLUDED=false
-export ENABLE_JYTHON=true
-export ENABLE_CHINESE_ANALYZER=true
-export ENABLE_HIVE_THRIFT_SERVER=true
-# Spark major version, Used by make-distribution.sh
-export MLSQL_SPARK_VERSION=${MLSQL_SPARK_VERSION:-3.0}
-# Spark version, Used by make-distribution.sh
 export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
+
 export MLSQL_CONSOLE_VERSION=${MLSQL_CONSOLE_VERSION:-2.2.1-SNAPSHOT}
 export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-1.0.1-SNAPSHOT}
 export BYZER_NOTEBOOK_HOME=$byzer_notebook_path
+
 if [[ ${SPARK_VERSION} == "2.4.3" ]]
 then
     export SPARK_TGZ_NAME="spark-${SPARK_VERSION}-bin-hadoop2.7"
     export AZURE_BLOB_NAME="azure-blob_2.7-1.0-SNAPSHOT.jar"
+    export SCALA_BINARY_VERSION=2.11
+    export MLSQL_SPARK_VERSION=2.4
 elif [[ ${SPARK_VERSION} == "3.1.1" ]]
 then
     export SPARK_TGZ_NAME="spark-${SPARK_VERSION}-bin-hadoop3.2"
     export AZURE_BLOB_NAME="azure-blob_3.2-1.0-SNAPSHOT.jar"
+    export SCALA_BINARY_VERSION=2.12
+    export MLSQL_SPARK_VERSION=3.0
 else
     echo "Only Spark 2.4.3 or 3.1.1 is supported"
-
     exit 1
 fi
+
+cat << EOF
+BYZER_LANG_VERSION ${BYZER_LANG_VERSION}
+SPARK_VERSION ${SPARK_VERSION}
+MLSQL_SPARK_VERSION ${MLSQL_SPARK_VERSION}
+AZURE_BLOB_NAME ${AZURE_BLOB_NAME}
+SPARK_TGZ_NAME ${SPARK_TGZ_NAME}
+SCALA_BINARY_VERSION ${SCALA_BINARY_VERSION}
+EOF
 
 ## Builds mlsql distribution tar ball
 function build_kolo_lang_distribution {
@@ -126,34 +126,14 @@ function build_kolo_lang_distribution {
         --directory-prefix "${lib_path}/"
     fi
 
-    "${base_dir}/dev/bin/update-kolo-lang.sh" || exit 1
-
-    cd ${kolo_lang_path}
-    local kolo_lang_version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
-
-    ## Make a soft link from nlp jars to mlsql/dev
-    mkdir -p ${kolo_lang_path}/dev
-    ln -f -s ${lib_path}/ansj_seg-5.1.6.jar  ${kolo_lang_path}/dev/
-    ln -f -s ${lib_path}/nlp-lang-1.7.8.jar  ${kolo_lang_path}/dev/
-
-    ## Builds mlsql engine tar ball
-    "${kolo_lang_path}/dev/make-distribution.sh"
-    return_code=$?
-    if [[ ${return_code} != 0 ]]
+    ## if byzer-lang tar ball does not exist in dev/lib, exit
+    if [[ ! -f "${lib_path}/mlsql-engine_${MLSQL_SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ]]
     then
-      exit ${return_code}
-    fi
-
-
-    mlsql_engine_name="mlsql-engine_${MLSQL_SPARK_VERSION}-${kolo_lang_version}.tar.gz"
-    ## Check if tgz exists
-    if [[ ! -f "${kolo_lang_path}/${mlsql_engine_name}" ]]
-    then
-      echo "Failed to generate mlsql engine tar ball, exit"
+      echo "Please put Byzer-lang tar ball in dev/lib"
       exit 1
     fi
 
-    cp ${kolo_lang_path}/${mlsql_engine_name} ${lib_path}/
+
 }
 
 ## Builds mlsql-api-console shade jar

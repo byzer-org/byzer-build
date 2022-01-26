@@ -15,17 +15,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-# This Dockerfile should be called from dev directory
+# The Dockerfile for Byzer Sandbox
 
 FROM mysql-python:8.0-3.6
 
 ## Input arguments
 ARG SPARK_VERSION
 ARG MLSQL_SPARK_VERSION
-ARG MLSQL_VERSION
+ARG BYZER_LANG_VERSION
 ARG BYZER_NOTEBOOK_VERSION
 ARG SPARK_TGZ_NAME
 ARG AZURE_BLOB_NAME
+ARG SCALA_BINARY_VERSION
 
 ## Environment variables
 ENV BASE_DIR=/home/deploy
@@ -47,10 +48,17 @@ COPY docker/mlsql-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
 
 WORKDIR ${BASE_DIR}
 
-## kolo-lang
-ADD lib/"mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}.tar.gz" ${BASE_DIR}/
-RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}" kolo-lang
-COPY lib/ansj_seg-5.1.6.jar lib/nlp-lang-1.7.8.jar lib/${AZURE_BLOB_NAME} ${KOLO_LANG_HOME}/libs/
+## Byzer-lang
+ADD lib/"mlsql-engine_${MLSQL_SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ${BASE_DIR}/
+RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${BYZER_LANG_VERSION}" kolo-lang
+COPY lib/ansj_seg-5.1.6.jar \
+  lib/nlp-lang-1.7.8.jar \
+  lib/${AZURE_BLOB_NAME} \
+  lib/mlsql-assert-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-excel-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-ext-ets-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-shell-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+  ${KOLO_LANG_HOME}/libs/
 
 # byzer-notebook
 COPY lib/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION} ${BYZER_NOTEBOOK_HOME}

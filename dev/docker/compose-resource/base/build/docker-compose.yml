@@ -30,10 +30,10 @@ services:
       args:
         - SPARK_VERSION
         - MLSQL_SPARK_VERSION
-        - MLSQL_VERSION
+        - BYZER_LANG_VERSION
         - SPARK_TGZ_NAME
         - BUILD_PATH=./docker/compose-resource/kolo-lang
-    image: "byzer/byzer-lang:${SPARK_VERSION:-3.1.1}-${KOLO_LANG_VERSION:-latest}"
+    image: "byzer/byzer-lang:${SPARK_VERSION:-3.1.1}-${BYZER_LANG_VERSION:-latest}"
     restart: always
     depends_on:
       - python-jdk

@@ -17,8 +17,8 @@ if [[ "${STEP_01_BUILD_SANDBOX_IMAGE}" == "true" ]]; then
   echo "step 1:start to push images..."
 
   echo "=============== push SANDBOX Image ================"
-  docker push byzer/byzer-sandbox:${SPARK_VERSION}-${MLSQL_VERSION}
-  docker tag byzer/byzer-sandbox:${SPARK_VERSION}-${MLSQL_VERSION} byzer/byzer-sandbox:${SPARK_VERSION}-latest
+  docker push byzer/byzer-sandbox:${SPARK_VERSION}-${BYZER_LANG_VERSION}
+  docker tag byzer/byzer-sandbox:${SPARK_VERSION}-${BYZER_LANG_VERSION} byzer/byzer-sandbox:${SPARK_VERSION}-latest
   docker push byzer/byzer-sandbox:${SPARK_VERSION}-latest
 fi
 
@@ -35,8 +35,8 @@ if [[ "${STEP_02_BUILD_K8S_IMAGE}" == "true" ]]; then
   if [[ "${STEP_02_BUILD_K8S_IMAGE}" == "true" ]]; then
   	echo "=============== push k8s Image ================"
 
-      docker push byzer/byzer-lang-k8s:${SPARK_VERSION}-${MLSQL_VERSION}
-      docker tag byzer/byzer-lang-k8s:${SPARK_VERSION}-${MLSQL_VERSION} byzer/byzer-lang-k8s:${SPARK_VERSION}-latest
+      docker push byzer/byzer-lang-k8s:${SPARK_VERSION}-${BYZER_LANG_VERSION}
+      docker tag byzer/byzer-lang-k8s:${SPARK_VERSION}-${BYZER_LANG_VERSION} byzer/byzer-lang-k8s:${SPARK_VERSION}-latest
       docker push byzer/byzer-lang-k8s:${SPARK_VERSION}-latest
   fi
 fi
@@ -66,8 +66,8 @@ if [[ "${STEP_03_BUILD_MULTI_IMAGE}" == "true" ]]; then
       docker tag byzer/byzer-notebook:${BYZER_NOTEBOOK_VERSION} byzer/byzer-notebook:latest
       docker push byzer/byzer-notebook:latest
 
-    docker push byzer/byzer-lang:${SPARK_VERSION}-${MLSQL_VERSION}
-      docker tag byzer/byzer-lang:${SPARK_VERSION}-${MLSQL_VERSION} byzer/byzer-lang:${SPARK_VERSION}-latest
+    docker push byzer/byzer-lang:${SPARK_VERSION}-${BYZER_LANG_VERSION}
+      docker tag byzer/byzer-lang:${SPARK_VERSION}-${BYZER_LANG_VERSION} byzer/byzer-lang:${SPARK_VERSION}-latest
       docker push byzer/byzer-lang:${SPARK_VERSION}-latest
 
       if [[ "${SKIP_PUSH_MYSQL_IMAGE}" == "false" ]]; then

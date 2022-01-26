@@ -29,7 +29,7 @@ Usage: build-sandbox-image.sh
 Arguments are specified with the following environment variable:
 MLSQL_SPARK_VERSION     - the spark version, 2.3/2.4/3.0  default 3.0
 SPARK_VERSION           - Spark full version, 2.4.3/3.1.1 default 3.1.1
-KOLO_LANG_VERSION       - mlsql version  default 2.2.1-SNAPSHOT
+BYZER_LANG_VERSION      - Byzer-lang version  default 2.2.1-SNAPSHOT
 BYZER_NOTEBOOK_VERSION  - byzer notebook version default 1.0.1-SNAPSHOT
 MLSQL_TAG               - mlsql git tag to checkout,   no default value
 EOF
@@ -45,10 +45,11 @@ function build_images {
     docker-compose build \
      --build-arg SPARK_VERSION=$SPARK_VERSION \
      --build-arg MLSQL_SPARK_VERSION=$MLSQL_SPARK_VERSION \
-     --build-arg MLSQL_VERSION=$MLSQL_VERSION \
+     --build-arg BYZER_LANG_VERSION=$BYZER_LANG_VERSION \
      --build-arg SPARK_TGZ_NAME=$SPARK_TGZ_NAME \
      --build-arg BYZER_NOTEBOOK_VERSION=$BYZER_NOTEBOOK_VERSION \
-     --build-arg AZURE_BLOB_NAME=${AZURE_BLOB_NAME}
+     --build-arg AZURE_BLOB_NAME=${AZURE_BLOB_NAME} \
+     --build-arg SCALA_BINARY_VERSION=${SCALA_BINARY_VERSION}
 }
 
 source "${self}/mlsql-functions.sh"
