@@ -31,7 +31,7 @@ function exit_with_usage {
 Usage: build-sandbox-image.sh
 Arguments are specified with the following environment variable:
 SPARK_VERSION           - Spark full version, 2.4.3/3.1.1 default 3.1.1
-MLSQL_VERSION           - mlsql version  default latest
+BYZER_LANG_VERSION      - Byzer-lang version  default latest
 BYZER_NOTEBOOK_VERSION  - byzer notebook version default latest
 MLSQL_TAG               - mlsql git tag to checkout,   no default value
 EOF
@@ -46,12 +46,12 @@ function build_image {
     docker build -t mysql-python:8.0-3.6 -f "${base_image_path}"/Dockerfile ${base_image_path} &&
     docker build --build-arg SPARK_VERSION=${SPARK_VERSION} \
     --build-arg MLSQL_SPARK_VERSION=${MLSQL_SPARK_VERSION} \
-    --build-arg MLSQL_VERSION=${MLSQL_VERSION} \
+    --build-arg BYZER_LANG_VERSION=${BYZER_LANG_VERSION} \
     --build-arg BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION} \
     --build-arg SPARK_TGZ_NAME=${SPARK_TGZ_NAME} \
     --build-arg AZURE_BLOB_NAME=${AZURE_BLOB_NAME} \
     --build-arg SCALA_BINARY_VERSION=${SCALA_BINARY_VERSION} \
-    -t byzer/byzer-sandbox:${SPARK_VERSION}-${MLSQL_VERSION:-latest} \
+    -t byzer/byzer-sandbox:${SPARK_VERSION}-${BYZER_LANG_VERSION:-latest} \
     -f "${mlsql_sandbox_path}"/Dockerfile \
     "${base_dir}"/dev
 }

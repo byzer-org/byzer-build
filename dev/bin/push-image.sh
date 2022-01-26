@@ -22,15 +22,15 @@ set -e
 set -o pipefail
 
 export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
-export MLSQL_VERSION=${MLSQL_VERSION:-2.2.0-SNAPSHOT}
-tag="${SPARK_VERSION}-${MLSQL_VERSION}"
+export BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-2.2.0-SNAPSHOT}
+tag="${SPARK_VERSION}-${BYZER_LANG_VERSION}"
 
 function exit_with_usage {
   cat << EOF
 push-image.sh <tag>
 Set the following environment variables:
-SPARK_VERSION - the spark version, 2.4/3.0 default 3.0
-MLSQL_VERSION - MLSQL version              default 2.2.0-SNAPSHOT
+SPARK_VERSION      - the spark version, 2.4/3.0 default 3.0
+BYZER_LANG_VERSION - Byzer-lang version default 2.2.0-SNAPSHOT
 EOF
   exit 1
 }
@@ -40,7 +40,7 @@ then
   exit_with_usage
 fi
 
-tag=${SPARK_VERSION}-${MLSQL_VERSION}
+tag=${SPARK_VERSION}-${BYZER_LANG_VERSION}
 repo=$1
 
 docker login 

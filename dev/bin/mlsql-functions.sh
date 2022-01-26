@@ -52,7 +52,7 @@ else
 fi
 
 cat << EOF
-MLSQL_VERSION ${MLSQL_VERSION}
+BYZER_LANG_VERSION ${BYZER_LANG_VERSION}
 SPARK_VERSION ${SPARK_VERSION}
 MLSQL_SPARK_VERSION ${MLSQL_SPARK_VERSION}
 AZURE_BLOB_NAME ${AZURE_BLOB_NAME}
@@ -127,7 +127,7 @@ function build_kolo_lang_distribution {
     fi
 
     ## if byzer-lang tar ball does not exist in dev/lib, exit
-    if [[ ! -f "${lib_path}/mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}.tar.gz" ]]
+    if [[ ! -f "${lib_path}/mlsql-engine_${MLSQL_SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ]]
     then
       echo "Please put Byzer-lang tar ball in dev/lib"
       exit 1

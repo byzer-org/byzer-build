@@ -22,7 +22,7 @@ FROM python-jdk:3.6-8
 ## Input arguments
 ARG SPARK_VERSION
 ARG MLSQL_SPARK_VERSION
-ARG MLSQL_VERSION
+ARG BYZER_LANG_VERSION
 ARG SPARK_TGZ_NAME
 ARG BUILD_PATH
 ARG AZURE_BLOB_NAME
@@ -53,8 +53,8 @@ COPY ${BUILD_PATH}/log4j.properties ${SPARK_HOME}/conf/
 WORKDIR ${BASE_DIR}
 
 ## kolo-lang
-ADD lib/"mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}.tar.gz" ${BASE_DIR}/
-RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${MLSQL_VERSION}" kolo-lang
+ADD lib/"mlsql-engine_${MLSQL_SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ${BASE_DIR}/
+RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${BYZER_LANG_VERSION}" kolo-lang
 COPY lib/ansj_seg-5.1.6.jar \
   lib/nlp-lang-1.7.8.jar \
   lib/${AZURE_BLOB_NAME} \
