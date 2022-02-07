@@ -122,7 +122,7 @@ function download_jdk8 {
 }
 
 function cp_plugins {
-  local declare array plugins=(mlsql-excel mlsql-shell mlsql-assert mlsql-language-server mlsql-ext-ets)
+  local declare array plugins=(mlsql-excel mlsql-shell mlsql-assert mlsql-language-server mlsql-ext-ets mlsql-mllib)
   for p in "${plugins[@]}"
   do
     cp ${base}/dev/lib/${p}-${byzer_spark_version}_${scala_binary_version}-0.1.0-SNAPSHOT.jar ${target_dir}/plugin/${p}-${byzer_spark_version}-0.1.0-SNAPSHOT.jar

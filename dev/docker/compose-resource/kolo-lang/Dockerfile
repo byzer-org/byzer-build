@@ -62,6 +62,7 @@ COPY lib/ansj_seg-5.1.6.jar \
   lib/mlsql-excel-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   lib/mlsql-ext-ets-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   lib/mlsql-shell-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-mllib-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   ${KOLO_LANG_HOME}/libs/
 COPY docker/engine/start-local.sh ${KOLO_LANG_HOME}/bin/
 
