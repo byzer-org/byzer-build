@@ -78,4 +78,4 @@ $SPARK_HOME/bin/spark-submit --class streaming.core.StreamingApp \
         -streaming.thrift false \
         -streaming.enableHiveSupport true \
         -streaming.datalake.path "/mlsql/_delta" \
-        -streaming.plugin.clzznames "tech.mlsql.plugins.ds.MLSQLExcelApp,tech.mlsql.plugins.assert.app.MLSQLAssert,tech.mlsql.plugins.shell.app.MLSQLShell,tech.mlsql.plugins.ext.ets.app.MLSQLETApp,tech.mlsql.plugins.mllib.app.MLSQLMllib"
+        -streaming.plugin.clzznames "tech.mlsql.plugins.ds.MLSQLExcelApp,tech.mlsql.plugins.assert.app.MLSQLAssert,tech.mlsql.plugins.shell.app.MLSQLShell,tech.mlsql.plugins.ext.ets.app.MLSQLETApp"
