@@ -26,13 +26,16 @@ set -u
 set -e
 set -o pipefail
 
+self=$(cd "$(dirname $0)" && pwd)
+source "${self}/mlsql-functions.sh"
+
 function exit_with_usage {
   cat << EOF
 Usage: build-sandbox-image.sh
 Arguments are specified with the following environment variable:
 SPARK_VERSION           - Spark full version, 2.4.3/3.1.1 default 3.1.1
-BYZER_LANG_VERSION      - Byzer-lang version  default latest
-BYZER_NOTEBOOK_VERSION  - byzer notebook version default latest
+BYZER_LANG_VERSION      - Byzer-lang version  default 2.3.0-SNAPSHOT
+BYZER_NOTEBOOK_VERSION  - byzer notebook version default 1.0.2-SNAPSHOT
 MLSQL_TAG               - mlsql git tag to checkout,   no default value
 EOF
   exit 1
@@ -55,9 +58,6 @@ function build_image {
     -f "${mlsql_sandbox_path}"/Dockerfile \
     "${base_dir}"/dev
 }
-
-self=$(cd "$(dirname $0)" && pwd)
-source "${self}/mlsql-functions.sh"
 
 if [[ $@ == *"help"* ]]; then
     exit_with_usage

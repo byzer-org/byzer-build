@@ -29,8 +29,8 @@ export MYSQL_PORT=3306
 export KOLO_LANG_PORT=9003
 export BYZER_NOTEBOOK_PORT=9002
 export SPARK_VERSION=3.1.1
-export BYZER_LANG_VERSION=2.2.1-SNAPSHOT
-export BYZER_NOTEBOOK_VERSION=1.0.1-SNAPSHOT
+export BYZER_LANG_VERSION=2.3.0-SNAPSHOT
+export BYZER_NOTEBOOK_VERSION=1.0.2-SNAPSHOT
 ```
 
 All the above parameters have default values, which are shown in the above parameters.
@@ -45,9 +45,9 @@ sh -x dev/bin/build-images.sh
 
 ```
 # Set startup parameters
-export BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-2.2.1-SNAPSHOT}
-export BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-2.2.1-SNAPSHOT}
-export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-1.0.1-SNAPSHOT}
+export BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-2.3.0-SNAPSHOT}
+export BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-2.3.0-SNAPSHOT}
+export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-1.0.2-SNAPSHOT}
 # Build image by specifying branch
 export BYZER_NOTEBOOK_BRANCH=${BYZER_NOTEBOOK_BRANCH:-main}
 # byzer lang branch, default branch is master
