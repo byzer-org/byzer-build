@@ -18,7 +18,7 @@ services:
     build:
       context: ${COMPOSE_PATH}/docker/base
       dockerfile: Dockerfile
-    image: "python-jdk:3.6-8"
+    image: "byzer/python-jdk:3.6-8"
     restart: always
     depends_on:
       - ubuntu-baseimage
@@ -32,6 +32,7 @@ services:
         - MLSQL_SPARK_VERSION
         - BYZER_LANG_VERSION
         - SPARK_TGZ_NAME
+        - HADOOP_TGZ_NAME
         - BUILD_PATH=./docker/compose-resource/kolo-lang
     image: "byzer/byzer-lang:${SPARK_VERSION:-3.1.1}-${BYZER_LANG_VERSION:-latest}"
     restart: always
