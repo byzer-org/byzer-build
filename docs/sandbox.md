@@ -14,15 +14,15 @@ There are some manual steps before building:
 ## For Spark 2.4.3 bundle
 export MLSQL_SPARK_VERSION=2.4
 export SPARK_VERSION=2.4.3
-export BYZER_LANG_VERSION=2.2.1-SNAPSHOT
-export BYZER_NOTEBOOK_VERSION=1.0.1-SNAPSHOT
+export BYZER_LANG_VERSION=2.3.0-SNAPSHOT
+export BYZER_NOTEBOOK_VERSION=1.0.2-SNAPSHOT
 ./dev/bin/build-sandbox-image.sh
 
 ## For Spark 3.1.1 bundle
 export MLSQL_SPARK_VERSION=3.0
 export SPARK_VERSION=3.1.1
-export BYZER_LANG_VERSION=2.2.1-SNAPSHOT
-export BYZER_NOTEBOOK_VERSION=1.0.1-SNAPSHOT
+export BYZER_LANG_VERSION=2.3.0-SNAPSHOT
+export BYZER_NOTEBOOK_VERSION=1.0.2-SNAPSHOT
 ./dev/bin/build-sandbox-image.sh
 
 On the other hand, we support specifying git tag to build image:
@@ -30,8 +30,8 @@ On the other hand, we support specifying git tag to build image:
 ## Build with tag
 export MLSQL_SPARK_VERSION=3.0
 export SPARK_VERSION=3.1.1
-export BYZER_LANG_VERSION=2.2.1-SNAPSHOT
-export BYZER_NOTEBOOK_VERSION=1.0.1-SNAPSHOT
+export BYZER_LANG_VERSION=2.3.0-SNAPSHOT
+export BYZER_NOTEBOOK_VERSION=1.0.2-SNAPSHOT
 export MLSQL_TAG=v2.2.0
 export BYZER_NOTEBOOK_TAG=v0.0.1-test
 ./dev/bin/build-sandbox-image.sh
