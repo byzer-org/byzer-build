@@ -26,13 +26,16 @@ services:
     restart: on-failure
     networks:
       - byzer-network
+    depends_on:
+      hadoop3:
+        condition: service_healthy
     expose:
       - 9003
     ports:
       - ${KOLO_LANG_PORT:-9003}:9003
       - ${SPARK_UI_PORT:-14040}:4040
-      - ${YARN_UI_PORT:-18088}:8088
       - ${RAY_DASHBOARD_PORT:-18265}:8265
+      - "10002:10002"
     healthcheck:
       test: [ "CMD","curl", "-f", "http://127.0.0.1:9003" ]
       interval: 2s
@@ -53,6 +56,23 @@ services:
         condition: service_healthy
     ports:
       - ${BYZER_NOTEBOOK_PORT:-9002}:9002
+
+  hadoop3:
+    image: "byzer/hadoop3:latest"
+    container_name: "testcontiner_hadoop3_latest"
+    restart: on-failure
+    networks:
+      - byzer-network
+    ports:
+      - "9870:9870"
+      - "8088:8088"
+      - "19888:19888"
+    healthcheck:
+      test: [ "CMD","curl", "-f", "http://127.0.0.1:8088/cluster" ]
+      interval: 2s
+      timeout: 300s
+      retries: 300
+      start_period: 60s
 
 networks:
   byzer-network:

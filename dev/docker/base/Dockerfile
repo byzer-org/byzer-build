@@ -44,3 +44,5 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.10.3-Linu
     echo "conda activate ray1.8.0" >> /etc/profile && \
     echo "conda activate ray1.8.0" >> ~/.bashrc && \
     . /etc/profile
+
+RUN ln -fs /bin/bash /bin/sh
