@@ -16,9 +16,9 @@
 # limitations under the License.
 #
 
-##########################################################################
+##############################################################################
 # This script build byzer-lang cli tar.
-# Tar file name convention byzer-lang-${os}-amd64-${byzer_lang_version}.tar.gz
+# Tar file name convention: byzer-lang-${os}-amd64-${byzer_lang_version}.tar.gz
 # Layout looks like:
 #├── bin
 #│ ├── byzer                 ## byzer-cli
@@ -33,10 +33,11 @@
 #│ ├── mlsql-assert-2.4_2.11-0.1.0-SNAPSHOT.jar
 #│ ├── mlsql-excel-2.4_2.11-0.1.0-SNAPSHOT.jar
 #│ └── mlsql-shell-2.4_2.11-0.1.0-SNAPSHOT.jar
-#└── spark      ## Spark jars
+#├── hadoop-3.0.0           ## hadoop native lib for windows
+#└── spark                  ## Spark jars
 #
 # To build linux tar for Spark 3.1.1  byzer-lang 2.3.0-SNAPSHOT : build-byzer-cli-release.sh 3.0  2.3.0-SNAPSHOT linux
-##########################################################################
+##############################################################################
 
 set -e
 set -o pipefail
@@ -179,6 +180,16 @@ function download_3rd_party_jars {
   echo  "Download 3rd-party jars succeed"
 }
 
+function download_hadoop_win_lib {
+  if [[ ! -f ${base}/dev/lib/hadoop-3.0.0.tar.gz ]]
+    then
+      wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/misc/hadoop-3.0.0.tar.gz" --directory-prefix "${base}/dev/lib/"
+    fi
+    tar -xf ${base}/dev/lib/hadoop-3.0.0.tar.gz -C ${target_dir}/
+
+    echo  "Download hadoop win libs succeed"
+}
+
 function download_spark_jars {
   [[ -z ${target_dir} ]] && echo "variable target_dir is not defined" && exit 1
   [[ ! -d "${target_dir}/tmp/" ]] && mkdir -p "${target_dir}/tmp/"
@@ -245,6 +256,8 @@ cp_byzer_lang
 download_3rd_party_jars
 
 download_spark_jars
+
+[[ ${os} == "win" ]] && download_hadoop_win_lib
 
 cd "${target_dir}/.."
 tar -czf "byzer-lang-${os}-amd64-${byzer_spark_version}-${byzer_lang_version}.tar.gz" "./byzer-lang-${os}-amd64-${byzer_spark_version}-${byzer_lang_version}"
