@@ -28,6 +28,7 @@ base_image_path="${base_dir}/dev/docker/base"
 mlsql_sandbox_path="${base_dir}/dev/docker/mlsql-sandbox"
 lib_path=${base_dir}/dev/lib
 
+# Many environment variables are inferred from SPARK_VERSION
 export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
 
 #export MLSQL_CONSOLE_VERSION=${MLSQL_CONSOLE_VERSION:-2.2.1-SNAPSHOT}

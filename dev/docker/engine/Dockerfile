@@ -62,7 +62,8 @@ ARG SPARK_VERSION=3.1.1
 ARG MLSQL_SPARK_VERSION=3.0
 ARG BYZER_LANG_VERSION=2.1.0-SNAPSHOT
 ARG JUICE_JAR_NAME=juicefs-hadoop-0.15.2-linux-amd64.jar
-ARG SCALA_BINARY_VERSION
+ARG SCALA_BINARY_VERSION=2.12
+ARG AZURE_BLOB_NAME=azure-blob_3.2-1.0-SNAPSHOT.jar
 
 ## Setup environment variables
 ENV SPARK_HOME /work/spark-${SPARK_VERSION}-bin-hadoop3.2
@@ -79,15 +80,17 @@ ADD lib/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz /work
 COPY docker/mlsql-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
 
 ## copy jars to Spark/home
-COPY lib/${JUICE_JAR_NAME} ${SPARK_HOME}/jars/
-COPY lib/ansj_seg-5.1.6.jar ${SPARK_HOME}/jars/
-COPY lib/nlp-lang-1.7.8.jar ${SPARK_HOME}/jars/
+COPY lib/${JUICE_JAR_NAME} \
+  lib/ansj_seg-5.1.6.jar \
+  lib/nlp-lang-1.7.8.jar \
+  ${SPARK_HOME}/jars/
 
 WORKDIR ${BASE_DIR}
 
 ## mlsql
 ADD lib/"mlsql-engine_${MLSQL_SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ${BASE_DIR}/
-RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${BYZER_LANG_VERSION}" mlsql
+RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${BYZER_LANG_VERSION}" mlsql \
+    && mkdir -p ${BASE_DIR}/mlsql/logs
 
 ##  auxiliary jars
 COPY lib/ansj_seg-5.1.6.jar \
@@ -98,9 +101,8 @@ COPY lib/ansj_seg-5.1.6.jar \
   lib/mlsql-ext-ets-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   lib/mlsql-shell-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   lib/mlsql-mllib-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-  ${MLSQL_HOME}/libs/
+  lib/${JUICE_JAR_NAME} ${MLSQL_HOME}/libs/
 
-COPY lib/${JUICE_JAR_NAME} /${MLSQL_HOME}/libs/
 COPY docker/engine/start-local.sh ${MLSQL_HOME}/bin/
 COPY docker/engine/entrypoint.sh ${BASE_DIR}/
 ENTRYPOINT [ "/home/deploy/entrypoint.sh" ]

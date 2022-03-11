@@ -23,6 +23,7 @@
 #├── bin
 #│ ├── byzer                 ## byzer-cli
 #│ └── start-mlsql-app.sh    ##
+#│ └── start-mlsql-app.cmd   ##
 #├── libs          ## 3rd-party jars
 #│ ├── ansj_seg-5.1.6.jar
 #│ └── nlp-lang-1.7.8.jar
@@ -143,18 +144,11 @@ function cp_byzer_lang {
 }
 
 function download_cli {
-  if [[ ${os} == "darwin" ]]
-  then
-    local name="mlsql-darwin-amd64"
-  elif [[ ${os} == "win" ]]
-  then
-    local name="mlsql-windows-amd64.exe"
-  else
-    local name="mlsql-linux-amd64"
-  fi
-  local url="${download_base_url}/byzer/misc/${name}"
-  echo "wget --no-check-certificate --no-verbose ${url} --output-document ${target_dir}/bin/byzer"
-  wget --no-check-certificate --no-verbose "${url}" --output-document "${target_dir}/bin/byzer"
+  local url="${download_base_url}/byzer/misc/"
+  echo "Downloading byzr cli executables "
+  wget --no-check-certificate --no-verbose "${url}/mlsql-darwin-amd64" --output-document "${target_dir}/bin/byzer"
+  wget --no-check-certificate --no-verbose "${url}/mlsql-linux-amd64" --output-document "${target_dir}/bin/byzer"
+  wget --no-check-certificate --no-verbose "${url}/mlsql-windows-amd64.exe" --output-document "${target_dir}/bin/byzer.exe"
 
   if [[ ! -f "${target_dir}/bin/byzer" ]]
   then
@@ -247,6 +241,7 @@ mkdir -p "${target_dir}/tmp"
 download_jdk8
 
 cp "${base}/dev/bin/app/start-mlsql-app.sh" "${target_dir}/bin/"
+cp "${base}/dev/bin/app/start-mlsql-app.cmd" "${target_dir}/bin/"
 download_cli
 
 cp_plugins
