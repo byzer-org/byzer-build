@@ -88,6 +88,7 @@ WORKDIR ${BASE_DIR}
 ## mlsql
 ADD lib/"mlsql-engine_${MLSQL_SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ${BASE_DIR}/
 RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${BYZER_LANG_VERSION}" mlsql
+RUN mkdir -p /home/deploy/mlsql/logs
 
 ##  auxiliary jars
 COPY lib/ansj_seg-5.1.6.jar \
