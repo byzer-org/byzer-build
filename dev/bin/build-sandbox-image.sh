@@ -63,7 +63,7 @@ if [[ $@ == *"help"* ]]; then
     exit_with_usage
 fi
 
-build_kolo_lang_distribution &&
+build_byzer_lang_distribution &&
 build_byzer_notebook &&
 build_image &&
 exit 0

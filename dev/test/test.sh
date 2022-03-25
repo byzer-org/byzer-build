@@ -10,7 +10,7 @@ docker run -d \
 -p 9003:9003 \
 -e MYSQL_ROOT_HOST=% \
 -e MYSQL_ROOT_PASSWORD="${MYSQL_PASSWORD}" \
--v /Users/lin.zhang/tmp/logs/byzer-notebook:/home/deploy/byzer-notebook/logs \
--v /Users/lin.zhang/tmp/logs/kolo-lang:/work/logs \
+-v ~/tmp/logs/byzer-notebook:/home/deploy/byzer-notebook/logs \
+-v ~/tmp/logs/byzer-lang:/work/logs \
 --name mlsql-sandbox-${SPARK_VERSION}-${BYZER_LANG_VERSION} \
 mlsql-sandbox:${SPARK_VERSION}-${BYZER_LANG_VERSION}

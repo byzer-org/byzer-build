@@ -30,7 +30,7 @@
 #|-- jdk8
 #├── main                   ## byzer-lang uber jar
 #│ └── streamingpro-mlsql-spark_2.4_2.11-2.1.0.jar
-#├── plugin      ## kolo-lang plugins
+#├── plugin      ## byzer-lang plugins
 #│ ├── mlsql-assert-2.4_2.11-0.1.0-SNAPSHOT.jar
 #│ ├── mlsql-excel-2.4_2.11-0.1.0-SNAPSHOT.jar
 #│ └── mlsql-shell-2.4_2.11-0.1.0-SNAPSHOT.jar
@@ -57,7 +57,7 @@ EOF
 
 ## Current script name
 myself=$(basename "$0")
-## base -- kolo-build project base dir
+## base -- byzer-build project base dir
 base=$(cd "$(dirname "$0")"/../../.. && pwd)
 ## Byzer download base url
 download_base_url="https://download.byzer.org/"

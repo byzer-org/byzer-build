@@ -9,7 +9,7 @@ dev/docker/mlsql-sandbox/lib/*.jar
 dev/docker/mlsql-sandbox/lib/*.tar.gz
 
 mlsql
-kolo-lang
+byzer-lang
 console/
 byzer-notebook/
 .DS_Store

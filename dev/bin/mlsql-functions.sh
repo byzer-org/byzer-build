@@ -65,7 +65,7 @@ SCALA_BINARY_VERSION ${SCALA_BINARY_VERSION}
 EOF
 
 ## Builds mlsql distribution tar ball
-function build_kolo_lang_distribution {
+function build_byzer_lang_distribution {
 
     ## Download jars & packages if needed
     if [[ ! -f "${lib_path}/${SPARK_TGZ_NAME}.tgz" && ${SPARK_VERSION} == "3.1.1" ]]

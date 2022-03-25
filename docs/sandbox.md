@@ -55,7 +55,7 @@ export BYZER_LANG_VERSION=2.2.1-SNAPSHOT
 ````shell
 export SPARK_VERSION=<2.4.3 || 3.1.1>
 export SPARK_HOME=/work/spark-${SPARK_VERSION}
-export MLSQL_HOME=/home/deploy/kolo-lang
+export MLSQL_HOME=/home/deploy/byzer-lang
 export BYZER_NOTEBOOK_HOME=/home/deploy/byzer-notebook
 export PATH=$PATH:${MLSQL_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin
 ````

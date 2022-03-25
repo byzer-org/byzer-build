@@ -27,7 +27,7 @@ nohup ${BASE_DIR}/db_init.sh mysqld 2>&1 2>&1 > /work/logs/db_init.log &
 nohup ${BYZER_LANG_HOME}/bin/start-local.sh 2>&1 > /work/logs/engine.log &
 ## Start Ray
 $CONDA_HOME/envs/ray1.8.0/bin/ray start --head --include-dashboard=false
-## Wait for kolo lang startup
+## Wait for byzer lang startup
 sleep 60
 echo 'Waiting for mysql to be available.'
 while ! mysqladmin ping -h"${DB_HOST:-127.0.0.1}" --silent; do
