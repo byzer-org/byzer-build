@@ -6,7 +6,7 @@ There are some manual steps before building:
 
 1. Download [Spark 2.4.3(hadoop-2.7 based) or 3.1.1(hadoop-3.2 based) Distribution](https://archive.apache.org/dist/spark/)  and put it to dev/docker/mlsql-sandbox/lib
 
-2. Download [NLP jars](http://download.mlsql.tech/nlp/) and put them to dev/docker/mlsql-sandbox/lib.
+2. Download [NLP jars](https://download.byzer.org/byzer/misc/) and put them to dev/docker/byzer-sandbox/lib.
 
 3. Start building
 
@@ -93,7 +93,7 @@ sh -x dev/bin/run-sandbox-container.sh
         |-- spark-${SPARK_VERSION}/
 |-- /home/deploy/
         |-- README.md
-        |-- mlsql/
+        |-- byzer-lang/
             |-- bin/                          
             |-- conf/                         
             |-- libs/                         

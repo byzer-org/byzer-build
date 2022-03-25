@@ -27,7 +27,7 @@ set -o pipefail
 function checkout_tag {
     echo "Checking out byzer-lang ${MLSQL_TAG}"
 
-    cd kolo-lang
+    cd byzer-lang
     git tag | xargs -I {} git tag -d {}
     git reset --hard
     git checkout master
@@ -40,15 +40,15 @@ function checkout_tag {
 base=$(cd "$(dirname $0)/../.." && pwd)
 cd "${base}"
 
-if [[ ! -d kolo-lang/.git ]]; then
+if [[ ! -d byzer-lang/.git ]]; then
     echo "cloning byzer-lang repo..."
-    git clone https://github.com/byzer-org/byzer-lang kolo-lang
+    git clone https://github.com/byzer-org/byzer-lang byzer-lang
     if [[ -n ${MLSQL_TAG} ]]; then
         checkout_tag
     else
-      if [[ -n ${KOLO_LANG_BRANCH} ]]; then
-          branch=${KOLO_LANG_BRANCH}
-          cd kolo-lang && git checkout "$branch" && git pull -r origin "$branch"
+      if [[ -n ${BYZER_LANG_BRANCH} ]]; then
+          branch=${BYZER_LANG_BRANCH}
+          cd byzer-lang && git checkout "$branch" && git pull -r origin "$branch"
       fi
     fi
 
@@ -56,8 +56,8 @@ else
     if [[ -n ${MLSQL_TAG} ]]; then
         checkout_tag
     else
-        echo "update kolo-lang to latest..."
-        branch=${KOLO_LANG_BRANCH:-master}
-        ( cd kolo-lang && git checkout $branch && git pull -r origin $branch )
+        echo "update byzer-lang to latest..."
+        branch=${BYZER_LANG_BRANCH:-master}
+        ( cd byzer-lang && git checkout $branch && git pull -r origin $branch )
     fi
 fi

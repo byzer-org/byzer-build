@@ -20,12 +20,12 @@ set -u
 set -e
 set -o pipefail
 
-# ie kolo-build root path
+# ie byzer-build root path
 base_dir=$(cd "$(dirname $0)/../.." && pwd)
 mlsql_console_path="${base_dir}/console"
 byzer_notebook_path="${base_dir}/byzer-notebook"
 base_image_path="${base_dir}/dev/docker/base"
-mlsql_sandbox_path="${base_dir}/dev/docker/mlsql-sandbox"
+byzer_sandbox_path="${base_dir}/dev/docker/byzer-sandbox"
 lib_path=${base_dir}/dev/lib
 
 # Many environment variables are inferred from SPARK_VERSION

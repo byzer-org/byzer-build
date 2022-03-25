@@ -64,7 +64,7 @@ fi
 STEP_01_BUILD_SANDBOX_IMAGE=${STEP_01_BUILD_SANDBOX_IMAGE:-false}
 STEP_02_BUILD_K8S_IMAGE=${STEP_02_BUILD_K8S_IMAGE:-false}
 if [[ $STEP_01_BUILD_SANDBOX_IMAGE == "false" && $STEP_02_BUILD_K8S_IMAGE == "false" ]]; then
-  build_kolo_lang_distribution
+  build_byzer_lang_distribution
 fi
 
 if [[ $STEP_01_BUILD_SANDBOX_IMAGE == "false" ]]; then

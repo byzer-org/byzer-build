@@ -75,7 +75,7 @@ source "${base_dir}/dev/bin/mlsql-functions.sh"
 # If you are not using the build script in CI, you can use the default value regardless of this parameter.
 STEP_01_BUILD_SANDBOX_IMAGE=${STEP_01_BUILD_SANDBOX_IMAGE:-false}
 if [[ $STEP_01_BUILD_SANDBOX_IMAGE == "false" ]]; then
-  build_kolo_lang_distribution
+  build_byzer_lang_distribution
 fi
 
 build_image

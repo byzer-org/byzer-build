@@ -30,27 +30,27 @@ ARG SCALA_BINARY_VERSION
 
 ## Environment variables
 ENV BASE_DIR=/home/deploy
-ENV KOLO_LANG_HOME="${BASE_DIR}/kolo-lang" \
+ENV BYZER_LANG_HOME="${BASE_DIR}/byzer-lang" \
     SPARK_HOME="/work/${SPARK_TGZ_NAME}"
 ENV SPARK_VERSION="${SPARK_VERSION}" \
     SPARK_TGZ_NAME="${SPARK_TGZ_NAME}" \
-    MLSQL_HOME="${BASE_DIR}/kolo-lang" \
+    BYZER_HOME="${BASE_DIR}/byzer-lang" \
     BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION} \
     BYZER_NOTEBOOK_HOME=${BASE_DIR}/byzer-notebook \
-    PATH=$PATH:${KOLO_LANG_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin
+    PATH=$PATH:${BYZER_LANG_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin
 
 ## Creates directories
 RUN mkdir -p /work/logs /work/user /mlsql/_delta
 
 ## Spark
 ADD lib/${SPARK_TGZ_NAME}.tgz /work
-COPY docker/mlsql-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
+COPY docker/byzer-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
 
 WORKDIR ${BASE_DIR}
 
 ## Byzer-lang
 ADD lib/"mlsql-engine_${MLSQL_SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ${BASE_DIR}/
-RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${BYZER_LANG_VERSION}" kolo-lang
+RUN mv "mlsql-engine_${MLSQL_SPARK_VERSION}-${BYZER_LANG_VERSION}" byzer-lang
 COPY lib/ansj_seg-5.1.6.jar \
   lib/nlp-lang-1.7.8.jar \
   lib/${AZURE_BLOB_NAME} \
@@ -58,13 +58,13 @@ COPY lib/ansj_seg-5.1.6.jar \
   lib/mlsql-excel-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   lib/mlsql-ext-ets-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   lib/mlsql-shell-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-  ${KOLO_LANG_HOME}/libs/
+  ${BYZER_LANG_HOME}/libs/
 
 # byzer-notebook
 COPY lib/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION} ${BYZER_NOTEBOOK_HOME}
 COPY docker/byzer-notebook/notebook.docker.properties ${BYZER_NOTEBOOK_HOME}/conf/notebook.properties
 
 ## Entrypoint script
-COPY docker/mlsql-sandbox/bin/start-sandbox.sh $BASE_DIR/
-COPY docker/engine/start-local.sh ${KOLO_LANG_HOME}/bin/
+COPY docker/byzer-sandbox/bin/start-sandbox.sh $BASE_DIR/
+COPY docker/engine/start-local.sh ${BYZER_LANG_HOME}/bin/
 ENTRYPOINT $BASE_DIR/start-sandbox.sh

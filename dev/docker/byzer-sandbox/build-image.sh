@@ -10,4 +10,4 @@ docker build ./ \
 --build-arg BYZER_LANG_VERSION=${BYZER_LANG_VERSION} \
 --build-arg BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION} \
 --build-arg SCALA_VERSION=${scala_version} \
--t mlsql-sandbox:${BYZER_LANG_VERSION}
+-t byzer-sandbox:${BYZER_LANG_VERSION}

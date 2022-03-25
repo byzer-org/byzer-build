@@ -45,7 +45,7 @@ repo=$1
 
 docker login 
 
-docker tag mlsql-sandbox:${tag} ${repo}:${tag}
+docker tag byzer-sandbox:${tag} ${repo}:${tag}
 
 docker images 
 
