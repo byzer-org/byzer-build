@@ -60,6 +60,7 @@ function build_image {
     --build-arg BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-latest} \
     --build-arg JUICE_JAR_NAME=${juice_jar_name} \
     --build-arg SCALA_BINARY_VERSION=${SCALA_BINARY_VERSION} \
+    --build-arg AZURE_BLOB_NAME=${AZURE_BLOB_NAME} \
     -f ${base_dir}/dev/docker/engine/Dockerfile \
     ${base_dir}/dev
 }
@@ -67,6 +68,7 @@ function build_image {
 base_dir=$(cd "$(dirname $0)/../.." && pwd)
 echo "Project base dir ${base_dir}"
 
+# import environment variables from mlsql-functions
 source "${base_dir}/dev/bin/mlsql-functions.sh"
 
 #In the CI process, this special parameter is used to avoid repeated builds.
