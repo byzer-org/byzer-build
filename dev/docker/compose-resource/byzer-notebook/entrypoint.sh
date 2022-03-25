@@ -21,7 +21,7 @@ set -u
 set -e
 set -o pipefail
 
-echo 'Waiting for kolo-lang to be available.'
+echo 'Waiting for byzer-lang to be available.'
 sleep 20
 
 ## Start byzer-notebook

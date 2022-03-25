@@ -32,7 +32,7 @@ services:
     expose:
       - 9003
     ports:
-      - ${KOLO_LANG_PORT:-9003}:9003
+      - ${BYZER_LANG_PORT:-9003}:9003
       - ${SPARK_UI_PORT:-14040}:4040
       - ${RAY_DASHBOARD_PORT:-18265}:8265
       - "10002:10002"
@@ -59,7 +59,7 @@ services:
 
   hadoop3:
     image: "byzer/hadoop3:latest"
-    container_name: "testcontiner_hadoop3_latest"
+    container_name: "byzer-hadoop3_latest"
     restart: on-failure
     networks:
       - byzer-network

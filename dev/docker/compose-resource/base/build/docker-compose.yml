@@ -23,17 +23,17 @@ services:
     depends_on:
       - ubuntu-baseimage
 
-  kolo-lang:
+  byzer-lang:
     build:
       context: ${COMPOSE_PATH}/
-      dockerfile: ./docker/compose-resource/kolo-lang/Dockerfile
+      dockerfile: ./docker/compose-resource/byzer-lang/Dockerfile
       args:
         - SPARK_VERSION
         - MLSQL_SPARK_VERSION
         - BYZER_LANG_VERSION
         - SPARK_TGZ_NAME
         - HADOOP_TGZ_NAME
-        - BUILD_PATH=./docker/compose-resource/kolo-lang
+        - BUILD_PATH=./docker/compose-resource/byzer-lang
     image: "byzer/byzer-lang:${SPARK_VERSION:-3.1.1}-${BYZER_LANG_VERSION:-latest}"
     restart: always
     depends_on:
@@ -44,7 +44,6 @@ services:
       context: ${COMPOSE_PATH}/
       dockerfile: ./docker/compose-resource/byzer-notebook/Dockerfile
       args:
-        - BYZER_NOTEBOOK_VERSION
         - BUILD_PATH=./docker/compose-resource/byzer-notebook
     image: "byzer/byzer-notebook:${BYZER_NOTEBOOK_VERSION:-latest}"
     restart: always

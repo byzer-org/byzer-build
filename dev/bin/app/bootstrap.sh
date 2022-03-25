@@ -26,7 +26,7 @@ if [ "$1" == "start" ] || [ "$1" == "spawn" ]
 then
 # start command
     echo "Starting Byzer-lang server..."
-    MAIN_JAR=$(ls "${base}"/main | grep 'streamingpro-mlsql')
+    MAIN_JAR=$(ls "${base}"/main | grep 'byzer-lang')
     echo ${MAIN_JAR}
 
     java -cp ${base}/main/${MAIN_JAR}:${base}/spark/*:${base}/libs/*:${base}/plugin/* \

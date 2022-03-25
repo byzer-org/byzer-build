@@ -26,7 +26,7 @@ docker pull byzer/byzer-notebook:latest
 ```
 export MYSQL_ROOT_PASSWORD=root
 export MYSQL_PORT=3306
-export KOLO_LANG_PORT=9003
+export BYZER_LANG_PORT=9003
 export BYZER_NOTEBOOK_PORT=9002
 export SPARK_VERSION=3.1.1
 export BYZER_LANG_VERSION=2.3.0-SNAPSHOT
@@ -51,11 +51,9 @@ export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-1.0.2-SNAPSHOT}
 # Build image by specifying branch
 export BYZER_NOTEBOOK_BRANCH=${BYZER_NOTEBOOK_BRANCH:-main}
 # byzer lang branch, default branch is master
-export KOLO_LANG_BRANCH="${KOLO_LANG_BRANCH:-master}"
 # Build image by specifying tag
 export BYZER_NOTEBOOK_TAG="${BYZER_NOTEBOOK_TAG:-}"
 # If you need to specify the git tag of byzer-lang, you need to set it.
-export MLSQL_TAG=${MLSQL_TAG:-}
 
 sh -x dev/bin/build-images.sh
 ```
