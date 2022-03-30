@@ -146,8 +146,13 @@ function cp_byzer_lang {
 function download_cli {
   local url="${download_base_url}/byzer/misc/"
   echo "Downloading byzr cli executables "
-  wget --no-check-certificate --no-verbose "${url}/mlsql-darwin-amd64" --output-document "${target_dir}/bin/byzer"
-  wget --no-check-certificate --no-verbose "${url}/mlsql-linux-amd64" --output-document "${target_dir}/bin/byzer"
+
+  if [[ ${os} == "linux"  ]]
+  then
+    wget --no-check-certificate --no-verbose "${url}/mlsql-darwin-amd64" --output-document "${target_dir}/bin/byzer"
+  else
+    wget --no-check-certificate --no-verbose "${url}/mlsql-linux-amd64" --output-document "${target_dir}/bin/byzer"
+  fi
   wget --no-check-certificate --no-verbose "${url}/mlsql-windows-amd64.exe" --output-document "${target_dir}/bin/byzer.exe"
 
   if [[ ! -f "${target_dir}/bin/byzer" ]]
