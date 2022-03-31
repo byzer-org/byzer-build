@@ -1,83 +1,34 @@
-# byzer-build
+# Byzer-build
 
 Project byzer-build comes with tools to build
-- byzer sandbox docker image
-- [byzer Engine](https://github.com/byzer-org/byzer-lang/) K8S image
-- byzer app
+- Byzer sandbox docker image
+- Byzer lang container
+- [Byzer-lang](https://github.com/byzer-org/byzer-lang/) K8S image
+- Byzer CLI
 
-## byzer Sandbox Docker Image
-With byzer Sandbox docker image, users are able to take a quick glance into byzer stack.
-
-### Pre-built image
+## Byzer Sandbox Docker Image
+With Byzer Sandbox docker image, users are able to take a quick glance into Byzer stack.
 Based on spark 2.4.3:
 ```
-docker pull byzer/byzer-lang-k8s:2.4.3-2.2.0-SNAPSHOT
+docker run -d --name sandbox -p 9002:9002 -p 9003:9003 -e MYSQL_ROOT_PASSWORD=root byzer/byzer-sandbox:2.4.3-latest
 ```
+
 
 Based on spark 3.1.1:
 ```
-docker pull byzer/byzer-lang-k8s:3.1.1-2.2.0-SNAPSHOT
-```
+docker run -d --name sandbox -p 9002:9002 -p 9003:9003 -e MYSQL_ROOT_PASSWORD=root byzer/byzer-sandbox:3.1.1-latest
 
-### Environment Variables
-```
-export SPARK_VERSION=<2.4.3 || 3.1.1>
-export BYZER_LANG_VERSION=2.2.0-SNAPSHOT
-```
-
-## Running sandbox
-
-### Pre-built image
-
-Based on spark 2.4.3:
-```
-docker pull byzer/byzer-sandbox:2.4.3-2.2.0-SNAPSHOT
-```
-
-Based on spark 3.1.1:
-```
-docker pull byzer/byzer-sandbox:3.1.1-2.2.0-SNAPSHOT
-```
-
-```shell
-sh ./dev/bin/run-sandbox-container.sh
-```
-
-We support specifying the mysql root password. For example, if the password is `root`, please pass it to the script as a parameter:
-```shell
-sh ./dev/bin/run-sandbox-container.sh root
-```
-
-It uses this command to deploy the container internally, as follows:
-
-```
-docker run -d \
--p 3306:3306 \
--p 9002:9002 \
--p 9003:9003 \
--e MYSQL_ROOT_HOST=% \
--e MYSQL_ROOT_PASSWORD="${MYSQL_PASSWORD}" \
---name mlsql-sandbox-${SPARK_VERSION}-${BYZER_LANG_VERSION} \
-byzer-sandbox:${SPARK_VERSION}-${BYZER_LANG_VERSION}
 ```
 
 ### Building Sandbox
 [Click for details](./docs/sandbox.md)
 
-## byzer Engine K8S Image
-
-Pre-built image: 
-
-```
-docker pull byzer/byzer-lang-k8s:3.1.1-2.2.0-SNAPSHOT
-```
-
-### Building byzer Engine K8S Image
-```shell
-./dev/bin/build-spark3-image.sh
-```
-
-Please find a step-by-step guide on K8S deployment from [byzer-k8s](https://github.com/byzer-org/byzer-k8s)
+## Byzer-lang Container
+`docker run -d --name byzer-lang -e DRIVER_MEMORY=8g -e MASTER=local[*] -p9003:9003 byzer/byzer-lang:3.1.1-latest`
+This command launches byzre-lang container with
+- heap size of 8GB
+- byzer-lang on local mode
+- exposes container's 9003 port 
 
 ## Byzer CLI
 To install and run the CLI, please visit [CLI doc](https://docs.byzer.org/#/byzer-lang/zh-cn/installation/cli-installation) .
@@ -101,3 +52,4 @@ For instance, to build Byzer CLI for linux spark 3.1.1 byzer-lang 2.2.0, run
 ## Multi-container deployment
 
 We provide scripts to start multiple microservices at once to facilitate us to build and start docker containers flexibly. Each service is deployed in an independent Ubuntu environment, which can isolate resources and environments.
+

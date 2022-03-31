@@ -34,6 +34,8 @@ for env in SPARK_HOME ; do
   fi
 done
 
+[[ ${MASTER} == local* ]] && unset HADOOP_HOME && unset HADOOP_CONF_DIR
+
 ## 本脚本部署在${MLSQL_HOME}/bin 目录
 if [ -z "${MLSQL_HOME}" ]; then
   export MLSQL_HOME="$(cd "`dirname "$0"`"/..; pwd)"
@@ -61,7 +63,7 @@ sleep 5
 $SPARK_HOME/bin/spark-submit --class streaming.core.StreamingApp \
         --driver-memory ${DRIVER_MEMORY} \
         --jars ${JARS} \
-        --master yarn \
+        --master ${MASTER:-yarn} \
         --deploy-mode client \
         --name mlsql \
         --conf "spark.sql.hive.thriftServer.singleSession=true" \
