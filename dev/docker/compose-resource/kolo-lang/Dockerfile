@@ -36,12 +36,13 @@ ENV BASE_DIR=/home/deploy \
 ENV KOLO_LANG_HOME="${BASE_DIR}/kolo-lang" \
     SPARK_HOME="/work/${SPARK_TGZ_NAME}" \
     HADOOP_HOME="/work/${HADOOP_TGZ_NAME:-hadoop-3.2.2}" \
-    SCALA_HOME="/work/${SCALA_TGZ_NAME}"
-
-ENV SPARK_VERSION="${SPARK_VERSION}" \
+    SCALA_HOME="/work/${SCALA_TGZ_NAME}" \
+    MLSQL_HOME="${BASE_DIR}/kolo-lang" \
+    MASTER="yarn" \
+    DRIVER_MEMORY="2g" \
+    SPARK_VERSION="${SPARK_VERSION}" \
     SPARK_TGZ_NAME="${SPARK_TGZ_NAME}" \
     HADOOP_TGZ_NAME="${HADOOP_TGZ_NAME}" \
-    MLSQL_HOME="${BASE_DIR}/kolo-lang" \
     PATH=$PATH:${KOLO_LANG_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin \
     BUILD_PATH=${BUILD_PATH}
 
