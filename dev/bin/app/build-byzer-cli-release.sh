@@ -158,8 +158,6 @@ function download_cli {
       wget --no-check-certificate --no-verbose "${url}/mlsql-darwin-amd64" --output-document "${target_dir}/bin/byzer"
       chmod 755 "${target_dir}/bin/byzer"
     fi
-
-  chmod +x ${target_dir}/bin/byzer
   echo "byzer cli download succeed"
 }
 
