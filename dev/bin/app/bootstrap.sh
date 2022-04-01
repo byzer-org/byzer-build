@@ -20,9 +20,14 @@
 base=$(cd "$(dirname $0)/.." && pwd)
 cd "$base" || return
 
-MAIN_JAR=$(ls ${base}/main | grep 'streamingpro-mlsql')
-echo ${MAIN_JAR}
+if [ "$1" == "start" ] || [ "$1" == "spawn" ]
+then
+# start command
+    echo "Starting Byzer-lang server..."
+    MAIN_JAR=$(ls "${base}"/main | grep 'streamingpro-mlsql')
+    echo ${MAIN_JAR}
 
-java -cp ${base}/main/${MAIN_JAR}:${base}/spark/*:${base}/libs/*:${base}/plugin/* \
-tech.mlsql.example.app.LocalSparkServiceApp \
--streaming.plugin.clzznames tech.mlsql.plugins.assert.app.MLSQLAssert,tech.mlsql.plugins.ds.MLSQLExcelApp
+    java -cp ${base}/main/${MAIN_JAR}:${base}/spark/*:${base}/libs/*:${base}/plugin/* \
+    tech.mlsql.example.app.LocalSparkServiceApp \
+    -streaming.plugin.clzznames tech.mlsql.plugins.ds.MLSQLExcelApp,tech.mlsql.plugins.assert.app.MLSQLAssert,tech.mlsql.plugins.shell.app.MLSQLShell,tech.mlsql.plugins.ext.ets.app.MLSQLETApp,tech.mlsql.plugins.mllib.app.MLSQLMllib
+fi
