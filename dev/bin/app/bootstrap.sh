@@ -20,6 +20,8 @@
 base=$(cd "$(dirname $0)/.." && pwd)
 cd "$base" || return
 
+[[ $# -lt 1 ]] && echo "Please usage: bootstrap <start|spawn>" && exit 1
+
 if [ "$1" == "start" ] || [ "$1" == "spawn" ]
 then
 # start command
