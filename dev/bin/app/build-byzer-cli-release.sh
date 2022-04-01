@@ -33,6 +33,7 @@
 #├── plugin      ## kolo-lang plugins
 #│ ├── mlsql-assert-2.4_2.11-0.1.0-SNAPSHOT.jar
 #│ ├── mlsql-excel-2.4_2.11-0.1.0-SNAPSHOT.jar
+#│ ├── mlsql-mllib-2.4_2.11-0.1.0-SNAPSHOT.jar
 #│ └── mlsql-shell-2.4_2.11-0.1.0-SNAPSHOT.jar
 #├── hadoop-3.0.0           ## hadoop native lib for windows
 #└── spark                  ## Spark jars
@@ -154,8 +155,8 @@ function download_cli {
     then
       wget --no-check-certificate --no-verbose "${url}/mlsql-windows-amd64.exe" --output-document "${target_dir}/bin/byzer.exe"
     else
-      wget --no-check-certificate --no-verbose "${url}/mlsql-darwin-amd64" --output-document "${target_dir}/bin/byzer-darwin"
-      chmod 755 "${target_dir}/bin/byzer-darwin"
+      wget --no-check-certificate --no-verbose "${url}/mlsql-darwin-amd64" --output-document "${target_dir}/bin/byzer"
+      chmod 755 "${target_dir}/bin/byzer"
     fi
 
   if [[ ! -f "${target_dir}/bin/byzer" ]]

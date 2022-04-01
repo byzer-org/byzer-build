@@ -29,5 +29,5 @@ then
 
     java -cp ${base}/main/${MAIN_JAR}:${base}/spark/*:${base}/libs/*:${base}/plugin/* \
     tech.mlsql.example.app.LocalSparkServiceApp \
-    -streaming.plugin.clzznames tech.mlsql.plugins.assert.app.MLSQLAssert,tech.mlsql.plugins.ds.MLSQLExcelApp
+    -streaming.plugin.clzznames tech.mlsql.plugins.ds.MLSQLExcelApp,tech.mlsql.plugins.assert.app.MLSQLAssert,tech.mlsql.plugins.shell.app.MLSQLShell,tech.mlsql.plugins.ext.ets.app.MLSQLETApp,tech.mlsql.plugins.mllib.app.MLSQLMllib
 fi
