@@ -249,8 +249,12 @@ mkdir -p "${target_dir}/tmp"
 
 download_jdk8
 
-cp "${base}/dev/bin/app/start-mlsql-app.sh" "${target_dir}/bin/"
-cp "${base}/dev/bin/app/start-mlsql-app.cmd" "${target_dir}/bin/"
+if [[ ${os} == "win" ]]
+then
+  cp "${base}/dev/bin/app/bootstrap.cmd" "${target_dir}/bin/"
+else
+  cp "${base}/dev/bin/app/bootstrap.sh" "${target_dir}/bin/"
+fi
 download_cli
 
 cp_plugins
