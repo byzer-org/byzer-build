@@ -159,11 +159,6 @@ function download_cli {
       chmod 755 "${target_dir}/bin/byzer"
     fi
 
-  if [[ ! -f "${target_dir}/bin/byzer" ]]
-  then
-    echo "Download byzer cli failed"
-    exit 1
-  fi
   chmod +x ${target_dir}/bin/byzer
   echo "byzer cli download succeed"
 }
