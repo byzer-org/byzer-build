@@ -119,6 +119,7 @@ function download_jdk8 {
     wget --no-check-certificate --no-verbose "${download_base_url}/byzer/misc/jdk8_mac.zip" \
           --directory-prefix "${target_dir}/tmp"
     unzip -q -o "${target_dir}/tmp/jdk8_mac.zip" -d ${target_dir}/
+    chmod +x ${target_dir}/jdk8/bin/java
     rm -f "${target_dir}/tmp/jdk8_mac.zip"
   fi
   echo "JDK8 download succeed"
