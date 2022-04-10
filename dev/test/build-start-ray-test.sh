@@ -1,4 +1,4 @@
-cd ../docker/compose-resource/kolo-lang/ray
+cd ../docker/compose-resource/byzer-lang/ray
 docker build -t  byzer/ray-test .
 
 docker run -d  --privileged \

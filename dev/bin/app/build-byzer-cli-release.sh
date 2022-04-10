@@ -22,15 +22,15 @@
 # Layout looks like:
 #├── bin
 #│ ├── byzer                 ## byzer-cli
-#│ └── start-mlsql-app.sh    ##
-#│ └── start-mlsql-app.cmd   ##
+#│ └── bootstrap.sh   ##
+#│ └── bootstrap.cmd   ##
 #├── libs          ## 3rd-party jars
 #│ ├── ansj_seg-5.1.6.jar
 #│ └── nlp-lang-1.7.8.jar
 #|-- jdk8
 #├── main                   ## byzer-lang uber jar
-#│ └── streamingpro-mlsql-spark_2.4_2.11-2.1.0.jar
-#├── plugin      ## kolo-lang plugins
+#│ └── byzer-lang-2.4.3-2.11-2.1.0.jar
+#├── plugin      ## byzer-lang plugins
 #│ ├── mlsql-assert-2.4_2.11-0.1.0-SNAPSHOT.jar
 #│ ├── mlsql-excel-2.4_2.11-0.1.0-SNAPSHOT.jar
 #│ ├── mlsql-mllib-2.4_2.11-0.1.0-SNAPSHOT.jar
@@ -58,7 +58,7 @@ EOF
 
 ## Current script name
 myself=$(basename "$0")
-## base -- kolo-build project base dir
+## base -- byzer-build project base dir
 base=$(cd "$(dirname "$0")"/../../.. && pwd)
 ## Byzer download base url
 download_base_url="https://download.byzer.org/"
@@ -90,8 +90,10 @@ fi
 if [[ ${byzer_spark_version} == "3.0" ]]
   then
     scala_binary_version=2.12
+    spark_version=3.1.1
   else
     scala_binary_version=2.11
+    spark_version=2.4.3
 fi
 
 cat <<EOF
@@ -138,8 +140,8 @@ function cp_plugins {
 function cp_byzer_lang {
   echo "cp byzer lang ${byzer_lang_version}"
 
-  tar -xf "${base}/dev/lib/mlsql-engine_${byzer_spark_version}-${byzer_lang_version}.tar.gz" -C "${target_dir}/tmp"
-  cp "${target_dir}/tmp/mlsql-engine_${byzer_spark_version}-${byzer_lang_version}/libs/streamingpro-mlsql-spark_${byzer_spark_version}_${scala_binary_version}-${byzer_lang_version}.jar" \
+  tar -xf "${base}/dev/lib/byzer-lang-${spark_version}-${byzer_lang_version}.tar.gz" -C "${target_dir}/tmp"
+  cp "${target_dir}/tmp/byzer-lang-${spark_version}-${byzer_lang_version}/main/byzer-lang-${spark_version}-${scala_binary_version}-${byzer_lang_version}.jar" \
   "${target_dir}/main/"
 
   echo "copy byzer-lang uber jar succeed"
@@ -150,13 +152,13 @@ function download_cli {
   echo "Downloading byzr cli executables "
   if [[ ${os} == "linux" ]]
     then
-      wget --no-check-certificate --no-verbose "${url}/mlsql-linux-amd64" --output-document "${target_dir}/bin/byzer"
+      wget --no-check-certificate --no-verbose "${url}/byzer-lang-linux-amd64" --output-document "${target_dir}/bin/byzer"
       chmod 755 "${target_dir}/bin/byzer"
     elif [[ ${os} == "win" ]]
     then
-      wget --no-check-certificate --no-verbose "${url}/mlsql-windows-amd64.exe" --output-document "${target_dir}/bin/byzer.exe"
+      wget --no-check-certificate --no-verbose "${url}/byzer-lang-win-amd64.exe" --output-document "${target_dir}/bin/byzer.exe"
     else
-      wget --no-check-certificate --no-verbose "${url}/mlsql-darwin-amd64" --output-document "${target_dir}/bin/byzer"
+      wget --no-check-certificate --no-verbose "${url}/byzer-lang-darwin-amd64" --output-document "${target_dir}/bin/byzer"
       chmod 755 "${target_dir}/bin/byzer"
     fi
   echo "byzer cli download succeed"
@@ -264,5 +266,5 @@ download_spark_jars
 cd "${target_dir}/.."
 tar -czf "byzer-lang-${os}-amd64-${byzer_spark_version}-${byzer_lang_version}.tar.gz" "./byzer-lang-${os}-amd64-${byzer_spark_version}-${byzer_lang_version}"
 cat <<EOF
-Build byzer cli release tar ball finished, file name byzer-lang-${os}-amd64-${byzer_spark_version}-${byzer_lang_version}.tar.gz
+Build byzer cli release tar ball finished, file name byzer-lang-all-in-one-${os}-amd64-${spark_version}-${byzer_lang_version}.tar.gz
 EOF

@@ -10,7 +10,7 @@ production:
       port: 3306
       database: mlsql_console
       username: root
-      password: mlsql
+      password: root
       disable: false
       initialSize: 3
       removeAbandoned: true

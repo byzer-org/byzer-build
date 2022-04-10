@@ -21,8 +21,21 @@ set -u
 set -e
 set -o pipefail
 
+## Init mysql
+nohup ${BASE_DIR}/db_init.sh mysqld 2>&1 2>&1 > /work/logs/db_init.log &
+## Start byzer lang engine
+nohup ${BYZER_LANG_HOME}/bin/start-local.sh 2>&1 > /work/logs/engine.log &
 ## Start Ray
-nohup $CONDA_HOME/envs/ray1.8.0/bin/ray start --head --include-dashboard=false 2>&1 &
+$CONDA_HOME/envs/ray1.8.0/bin/ray start --head --include-dashboard=false
+## Wait for byzer lang startup
+sleep 60
+echo 'Waiting for mysql to be available.'
+while ! mysqladmin ping -h"${DB_HOST:-127.0.0.1}" --silent; do
+  echo "mysql health check failed, retrying in 1 seconds."
+  sleep 1
+done
+echo "The mysql initialized successfully."
 
-## Start mlsql engine
-${KOLO_LANG_HOME}/bin/start-yarn.sh 2>&1 > /work/logs/engine.log
+## Start byzer-notebook
+"$BYZER_NOTEBOOK_HOME"/startup.sh hangup
+

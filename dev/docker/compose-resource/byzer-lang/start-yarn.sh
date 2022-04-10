@@ -42,9 +42,10 @@ if [ -z "${MLSQL_HOME}" ]; then
   echo "MLSQL_HOME is not set, default to ${MLSQL_HOME}"
 fi
 
-JARS=$(echo ${MLSQL_HOME}/libs/*.jar | tr ' ' ',')
-EXT_JARS=$(echo ${MLSQL_HOME}/libs/*.jar | tr ' ' ':')
-MAIN_JAR=$(ls ${MLSQL_HOME}/libs|grep 'streamingpro-mlsql')
+MAIN_JAR=$(ls ${MLSQL_HOME}/main|grep 'byzer-lang')
+MAIN_JAR_PATH="${MLSQL_HOME}/main/${MAIN_JAR}"
+JARS=$(echo ${MLSQL_HOME}/libs/*.jar | tr ' ' ',')",$MAIN_JAR_PATH"
+EXT_JARS=$(echo ${MLSQL_HOME}/libs/*.jar | tr ' ' ':')":$MAIN_JAR_PATH"
 export DRIVER_MEMORY=${DRIVER_MEMORY:-2g}
 
 echo
@@ -53,7 +54,7 @@ echo "Run with spark : $SPARK_HOME"
 echo "With DRIVER_MEMORY=${DRIVER_MEMORY:-2g}"
 echo
 echo "JARS: ${JARS}"
-echo "MAIN_JAR: ${MLSQL_HOME}/libs/${MAIN_JAR}"
+echo "MAIN_JAR: ${MLSQL_HOME}/main/${MAIN_JAR}"
 echo "#############"
 echo
 echo
@@ -65,7 +66,7 @@ $SPARK_HOME/bin/spark-submit --class streaming.core.StreamingApp \
         --jars ${JARS} \
         --master ${MASTER:-yarn} \
         --deploy-mode client \
-        --name mlsql \
+        --name byzer-on-yarn \
         --conf "spark.sql.hive.thriftServer.singleSession=true" \
         --conf "spark.kryoserializer.buffer=256k" \
         --conf "spark.kryoserializer.buffer.max=1024m" \
@@ -73,13 +74,13 @@ $SPARK_HOME/bin/spark-submit --class streaming.core.StreamingApp \
         --conf "spark.scheduler.mode=FAIR" \
         --conf "spark.driver.extraClassPath=${EXT_JARS}" \
         --conf "spark.executor.extraClassPath=${EXT_JARS}" \
-        ${MLSQL_HOME}/libs/${MAIN_JAR}    \
-        -streaming.name mlsql    \
+        ${MLSQL_HOME}/main/${MAIN_JAR}    \
+        -streaming.name byzer-on-yarn    \
         -streaming.platform spark   \
         -streaming.rest true   \
         -streaming.driver.port 9003   \
         -streaming.spark.service true \
         -streaming.thrift false \
         -streaming.enableHiveSupport true \
-        -streaming.datalake.path "/mlsql/_delta" \
+        -streaming.datalake.path "/byzer/_delta" \
         -streaming.plugin.clzznames "tech.mlsql.plugins.ds.MLSQLExcelApp,tech.mlsql.plugins.assert.app.MLSQLAssert,tech.mlsql.plugins.shell.app.MLSQLShell,tech.mlsql.plugins.ext.ets.app.MLSQLETApp,tech.mlsql.plugins.mllib.app.MLSQLMllib"

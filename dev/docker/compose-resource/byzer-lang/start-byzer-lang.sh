@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -16,20 +17,12 @@
 # limitations under the License.
 #
 
-MLSQL_CONSOLE_VERSION=${MLSQL_CONSOLE_VERSION:-2.2.0-SNAPSHOT}
-MLSQL_CONSOLE_HOME=${MLSQL_CONSOLE_HOME:-/home/deploy/mlsql-console}
-MLSQL_ENGINE_URL=${MLSQL_ENGINE_URL:-"http://127.0.0.1:9003"}
+set -u
+set -e
+set -o pipefail
 
-echo "Starting console"
-echo "MLSQL_CONSOLE_VERSION ${MLSQL_CONSOLE_VERSION}"
-echo "MLSQL_CONSOLE_HOME ${MLSQL_CONSOLE_HOME}"
-echo "MLSQL_ENGINE_URL ${MLSQL_ENGINE_URL}"
-echo -ex
+## Start Ray
+nohup $CONDA_HOME/envs/ray1.8.0/bin/ray start --head --include-dashboard=false 2>&1 &
 
-## Start mlsql-api-console
-java -cp ${MLSQL_CONSOLE_HOME}/libs/mlsql-api-console-${MLSQL_CONSOLE_VERSION}.jar:./ tech.mlsql.MLSQLConsole \
--mlsql_engine_url ${MLSQL_ENGINE_URL} \
--my_url http://localhost:9002 \
--user_home /work/user/ \
--enable_auth_center false \
--config ${MLSQL_CONSOLE_HOME}/conf/application.yml
+## Start mlsql engine
+${BYZER_LANG_HOME}/bin/start-yarn.sh 2>&1 > /work/logs/engine.log

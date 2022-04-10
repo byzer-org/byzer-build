@@ -25,13 +25,11 @@ self=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 
 function exit_with_usage {
   cat << EOF
-Usage: build-sandbox-image.sh
+Usage: build-image.sh
 Arguments are specified with the following environment variable:
-MLSQL_SPARK_VERSION     - the spark version, 2.3/2.4/3.0  default 3.0
 SPARK_VERSION           - Spark full version, 2.4.3/3.1.1 default 3.1.1
 BYZER_LANG_VERSION      - Byzer-lang version  default 2.3.0-SNAPSHOT
 BYZER_NOTEBOOK_VERSION  - byzer notebook version default 1.0.2-SNAPSHOT
-MLSQL_TAG               - mlsql git tag to checkout,   no default value
 EOF
   exit 1
 }
@@ -64,7 +62,7 @@ fi
 STEP_01_BUILD_SANDBOX_IMAGE=${STEP_01_BUILD_SANDBOX_IMAGE:-false}
 STEP_02_BUILD_K8S_IMAGE=${STEP_02_BUILD_K8S_IMAGE:-false}
 if [[ $STEP_01_BUILD_SANDBOX_IMAGE == "false" && $STEP_02_BUILD_K8S_IMAGE == "false" ]]; then
-  build_kolo_lang_distribution
+  build_byzer_lang_distribution
 fi
 
 if [[ $STEP_01_BUILD_SANDBOX_IMAGE == "false" ]]; then

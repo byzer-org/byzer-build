@@ -20,18 +20,17 @@ set -u
 set -e
 set -o pipefail
 
-# ie kolo-build root path
+# ie byzer-build root path
 base_dir=$(cd "$(dirname $0)/../.." && pwd)
 mlsql_console_path="${base_dir}/console"
 byzer_notebook_path="${base_dir}/byzer-notebook"
 base_image_path="${base_dir}/dev/docker/base"
-mlsql_sandbox_path="${base_dir}/dev/docker/mlsql-sandbox"
+byzer_sandbox_path="${base_dir}/dev/docker/byzer-sandbox"
 lib_path=${base_dir}/dev/lib
 
 # Many environment variables are inferred from SPARK_VERSION
 export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
 
-#export MLSQL_CONSOLE_VERSION=${MLSQL_CONSOLE_VERSION:-2.2.1-SNAPSHOT}
 export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-1.0.2-SNAPSHOT}
 export BYZER_NOTEBOOK_HOME=$byzer_notebook_path
 
@@ -65,7 +64,7 @@ SCALA_BINARY_VERSION ${SCALA_BINARY_VERSION}
 EOF
 
 ## Builds mlsql distribution tar ball
-function build_kolo_lang_distribution {
+function build_byzer_lang_distribution {
 
     ## Download jars & packages if needed
     if [[ ! -f "${lib_path}/${SPARK_TGZ_NAME}.tgz" && ${SPARK_VERSION} == "3.1.1" ]]
@@ -219,7 +218,7 @@ function build_kolo_lang_distribution {
     fi
 
     ## if byzer-lang tar ball does not exist in dev/lib, exit
-    if [[ ! -f "${lib_path}/mlsql-engine_${MLSQL_SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ]]
+    if [[ ! -f "${lib_path}/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ]]
     then
       echo "Please put Byzer-lang tar ball in dev/lib"
       exit 1
