@@ -55,6 +55,7 @@ COPY ${BUILD_PATH}/start-byzer-lang.sh $BASE_DIR/
 
 ## Spark
 ADD lib/${SPARK_TGZ_NAME}.tgz /work
+RUN rm /work/${SPARK_TGZ_NAME}/jars/velocity-1.5.jar
 ADD lib/${HADOOP_TGZ_NAME}.tar.gz /work
 ADD lib/${SCALA_TGZ_NAME}.tgz /work
 COPY ${BUILD_PATH}/log4j.properties ${BUILD_PATH}/spark-env.sh ${SPARK_HOME}/conf/

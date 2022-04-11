@@ -77,6 +77,7 @@ RUN mkdir -p /work/user
 
 ## Spark
 ADD lib/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz /work
+RUN rm /work/spark-${SPARK_VERSION}-bin-hadoop3.2/jars/velocity-1.5.jar
 COPY docker/byzer-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
 
 ## copy jars to Spark/home
