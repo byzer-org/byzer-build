@@ -204,6 +204,7 @@ function download_spark_jars {
     cp ${base}/dev/lib/spark-3.1.1-bin-hadoop3.2.tgz "${target_dir}/tmp/"
     tar -xf "${target_dir}/tmp/spark-3.1.1-bin-hadoop3.2.tgz" -C "${target_dir}/tmp/"
     cp "${target_dir}/tmp/spark-3.1.1-bin-hadoop3.2/jars/"* "${target_dir}/spark/"
+    rm "${target_dir}/spark/velocity-1.5.jar"
     if [[ ! -f "${target_dir}/spark/spark-core_2.12-3.1.1.jar" ]]
     then
       echo "Failed to download spark 3.1.1"
