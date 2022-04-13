@@ -233,7 +233,7 @@ function download_spark_jars {
   echo "Spark download succeed"
 }
 
-target_dir="${base}/dev/lib/byzer-lang-all-in-one-${os}-amd64-${byzer_spark_version}-${byzer_lang_version}"
+target_dir="${base}/dev/lib/byzer-lang-all-in-one-${os}-amd64-${spark_version}-${byzer_lang_version}"
 echo "make dir ${target_dir}"
 rm -rf ${target_dir:?}/
 mkdir -p "${target_dir}/main"
@@ -265,7 +265,7 @@ download_spark_jars
 [[ ${os} == "win" ]] && download_hadoop_win_lib
 
 cd "${target_dir}/.."
-tar -czf "byzer-lang-all-in-one-${os}-amd64-${byzer_spark_version}-${byzer_lang_version}.tar.gz" "./byzer-lang-all-in-one-${os}-amd64-${byzer_spark_version}-${byzer_lang_version}"
+tar -czf "byzer-lang-all-in-one-${os}-amd64-${spark_version}-${byzer_lang_version}.tar.gz" "./byzer-lang-all-in-one-${os}-amd64-${spark_version}-${byzer_lang_version}"
 cat <<EOF
 Build byzer cli release tar ball finished, file name byzer-lang-all-in-one-${os}-amd64-${spark_version}-${byzer_lang_version}.tar.gz
 EOF
