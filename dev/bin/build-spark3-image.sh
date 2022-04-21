@@ -56,7 +56,7 @@ function build_image {
 
     docker build -t byzer/byzer-lang-k8s:3.1.1-${BYZER_LANG_VERSION:-latest} \
     --build-arg SPARK_VERSION=${spark_version} \
-    --build-arg MLSQL_SPARK_VERSION=3.0 \
+    --build-arg BYZER_SPARK_VERSION=3.0 \
     --build-arg BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-latest} \
     --build-arg JUICE_JAR_NAME=${juice_jar_name} \
     --build-arg SCALA_BINARY_VERSION=${SCALA_BINARY_VERSION} \
@@ -75,7 +75,7 @@ source "${base_dir}/dev/bin/mlsql-functions.sh"
 # If you are not using the build script in CI, you can use the default value regardless of this parameter.
 STEP_01_BUILD_SANDBOX_IMAGE=${STEP_01_BUILD_SANDBOX_IMAGE:-false}
 if [[ $STEP_01_BUILD_SANDBOX_IMAGE == "false" ]]; then
-  build_byzer_lang_distribution
+  download_byzer_lang_related_jars
 fi
 
 build_image

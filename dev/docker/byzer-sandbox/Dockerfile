@@ -16,12 +16,14 @@
 # limitations under the License.
 #
 # The Dockerfile for Byzer Sandbox
+# Byzer Sandbox has different tags for Spark 3.x and Spark 2.4.x.
+# Therefore, Byzer-lang and Spark tar names are arguments
 
 FROM mysql-python:8.0-3.6
 
 ## Input arguments
 ARG SPARK_VERSION
-ARG MLSQL_SPARK_VERSION
+ARG BYZER_SPARK_VERSION
 ARG BYZER_LANG_VERSION
 ARG BYZER_NOTEBOOK_VERSION
 ARG SPARK_TGZ_NAME
@@ -32,11 +34,8 @@ ARG SCALA_BINARY_VERSION
 ENV BASE_DIR=/home/deploy
 
 ENV BYZER_LANG_HOME="${BASE_DIR}/byzer-lang" \
-    SPARK_HOME="/work/${SPARK_TGZ_NAME}"
-
-ENV SPARK_VERSION="${SPARK_VERSION}" \
-    SPARK_TGZ_NAME="${SPARK_TGZ_NAME}" \
-    MLSQL_HOME="$BYZER_LANG_HOME" \
+    SPARK_HOME="/work/${SPARK_TGZ_NAME}" \
+    SPARK_VERSION="${SPARK_VERSION}" \
     BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION} \
     BYZER_NOTEBOOK_HOME=${BASE_DIR}/byzer-notebook \
     PATH=$PATH:${BYZER_LANG_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin
@@ -52,16 +51,20 @@ WORKDIR ${BASE_DIR}
 
 ## Byzer-lang
 ADD lib/"byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ${BASE_DIR}/
-RUN mv "byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}" byzer-lang
+RUN mv "byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}" byzer-lang && \
+    rm ${SPARK_HOME}/jars/velocity-1.5.jar
 
 COPY lib/ansj_seg-5.1.6.jar \
   lib/nlp-lang-1.7.8.jar \
   lib/${AZURE_BLOB_NAME} \
-  lib/mlsql-assert-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-  lib/mlsql-excel-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-  lib/mlsql-ext-ets-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-  lib/mlsql-shell-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   ${BYZER_LANG_HOME}/libs/
+COPY lib/mlsql-assert-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+     lib/mlsql-excel-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+     lib/mlsql-ext-ets-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+     lib/mlsql-shell-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+     lib/mlsql-mllib-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+     ${BYZER_LANG_HOME}/plugin/
+COPY docker/byzer-sandbox/conf/byzer.properties ${BYZER_LANG_HOME}/conf/
 
 # byzer-notebook
 COPY lib/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION} ${BYZER_NOTEBOOK_HOME}
@@ -69,5 +72,4 @@ COPY docker/byzer-notebook/notebook.docker.properties ${BYZER_NOTEBOOK_HOME}/con
 
 ## Entrypoint script
 COPY docker/byzer-sandbox/bin/start-sandbox.sh $BASE_DIR/
-COPY docker/engine/start-local.sh ${BYZER_LANG_HOME}/bin/
 ENTRYPOINT $BASE_DIR/start-sandbox.sh

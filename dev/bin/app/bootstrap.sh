@@ -29,7 +29,7 @@ then
     MAIN_JAR=$(ls "${base}"/main | grep 'byzer-lang')
     echo ${MAIN_JAR}
 
-    java -cp ${base}/main/${MAIN_JAR}:${base}/spark/*:${base}/libs/*:${base}/plugin/* \
+    ${base}/jdk8/bin/java -cp ${base}/main/${MAIN_JAR}:${base}/spark/*:${base}/libs/*:${base}/plugin/* \
     tech.mlsql.example.app.LocalSparkServiceApp \
     -streaming.plugin.clzznames tech.mlsql.plugins.ds.MLSQLExcelApp,tech.mlsql.plugins.assert.app.MLSQLAssert,tech.mlsql.plugins.shell.app.MLSQLShell,tech.mlsql.plugins.ext.ets.app.MLSQLETApp,tech.mlsql.plugins.mllib.app.MLSQLMllib
 fi

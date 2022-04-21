@@ -19,22 +19,31 @@
 
 set -u
 set -e
-set -o pipefail
 
 ## Init mysql
-nohup ${BASE_DIR}/db_init.sh mysqld 2>&1 2>&1 > /work/logs/db_init.log &
+echo "Starting MySQL"
+nohup ${BASE_DIR}/db_init.sh mysqld 2>&1 > /work/logs/db_init.log &
 ## Start byzer lang engine
-nohup ${BYZER_LANG_HOME}/bin/start-local.sh 2>&1 > /work/logs/engine.log &
+echo "Calling byzer.sh to run Byzer-lang as daemon"
+${BYZER_LANG_HOME}/bin/byzer.sh start
+
 ## Start Ray
 $CONDA_HOME/envs/ray1.8.0/bin/ray start --head --include-dashboard=false
-## Wait for byzer lang startup
-sleep 60
-echo 'Waiting for mysql to be available.'
+sleep 30
+echo 'Waiting for MySQL and Byzer-lang to be ready.'
 while ! mysqladmin ping -h"${DB_HOST:-127.0.0.1}" --silent; do
   echo "mysql health check failed, retrying in 1 seconds."
   sleep 1
 done
-echo "The mysql initialized successfully."
+echo "The MySQL is ready."
+
+lang_ready=0
+while [[ ${lang_ready} == 0 ]]
+do
+  lang_ready=$(curl -i --silent http://127.0.0.1:9003/health/readiness | grep "200" | wc -l)
+  sleep 5
+done
+echo "Byzer-lang is ready"
 
 ## Start byzer-notebook
 "$BYZER_NOTEBOOK_HOME"/startup.sh hangup
