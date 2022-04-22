@@ -1,6 +1,10 @@
 FROM ubuntu-baseimage
 
-ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 DEBIAN_FRONTEND=noninteractive
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 DEBIAN_FRONTEND=noninteractive \
+  JAVA_HOME /work/openjdk-8u292 \
+  CONDA_HOME /opt/conda \
+  PATH=$CONDA_HOME/bin:$PATH:${JAVA_HOME}/bin
+
 RUN rm -rf /var/lib/apt/lists/*  \
     && apt-get clean \
     && apt-get update -o Acquire::CompressionTypes::Order::=gz \
@@ -15,14 +19,10 @@ RUN rm -rf /var/lib/apt/lists/*  \
    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
    rm -rf /var/lib/apt/lists/* && \
    mkdir -p /work && \
-   wget "https://repo.huaweicloud.com/java/jdk/8u151-b12/jdk-8u151-linux-x64.tar.gz" && \
-   tar -xvf jdk-8u151-linux-x64.tar.gz -C /work/ && \
-   rm jdk-8u151-linux-x64.tar.gz
-
-ENV JAVA_HOME /work/jdk1.8.0_151
-ENV CONDA_HOME /opt/conda
-ENV PATH=$CONDA_HOME/bin:$PATH:${JAVA_HOME}/bin
-
+   wget "http://download.byzer.org/byzer/misc/jdk/jdk8/openjdk-8u292-b10-linux-x64.tar.gz" && \
+   tar -xf openjdk-8u292-b10-linux-x64.tar.gz -C /work/ && \
+   mv /work/openlogic-openjdk-8u292-b10-linux-x64 /work/openjdk-8u292 && \
+   rm openjdk-8u292-b10-linux-x64.tar.gz
 
 ## Install conda.
 ## ray/issues/19938: In ray>=1.8.0 version, python3.6.11 or python3.7.10 should be used.

@@ -22,7 +22,7 @@ ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
 
 RUN set -ex \
    && apt-get update \
-   && apt-get install -y locales tini wget \
+   && apt-get install -y locales tini wget curl net-tools vim \
    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
    && rm -rf /var/lib/apt/lists/* \
    && mkdir -p /work/bin

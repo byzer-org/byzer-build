@@ -42,7 +42,7 @@ function build_images {
 #    docker-compose build  --parallel \
     docker-compose build \
      --build-arg SPARK_VERSION=$SPARK_VERSION \
-     --build-arg MLSQL_SPARK_VERSION=$MLSQL_SPARK_VERSION \
+     --build-arg BYZER_SPARK_VERSION=$BYZER_SPARK_VERSION \
      --build-arg BYZER_LANG_VERSION=$BYZER_LANG_VERSION \
      --build-arg SPARK_TGZ_NAME=$SPARK_TGZ_NAME \
      --build-arg HADOOP_TGZ_NAME=$HADOOP_TGZ_NAME \
@@ -62,7 +62,7 @@ fi
 STEP_01_BUILD_SANDBOX_IMAGE=${STEP_01_BUILD_SANDBOX_IMAGE:-false}
 STEP_02_BUILD_K8S_IMAGE=${STEP_02_BUILD_K8S_IMAGE:-false}
 if [[ $STEP_01_BUILD_SANDBOX_IMAGE == "false" && $STEP_02_BUILD_K8S_IMAGE == "false" ]]; then
-  build_byzer_lang_distribution
+  download_byzer_lang_related_jars
 fi
 
 if [[ $STEP_01_BUILD_SANDBOX_IMAGE == "false" ]]; then

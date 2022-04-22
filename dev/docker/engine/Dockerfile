@@ -59,7 +59,7 @@ RUN mkdir ~/.pip && \
 FROM ubuntu-jdk-conda AS mlsql-engine
 
 ARG SPARK_VERSION=3.1.1
-ARG MLSQL_SPARK_VERSION=3.0
+ARG BYZER_SPARK_VERSION=3.0
 ARG BYZER_LANG_VERSION=2.1.0-SNAPSHOT
 ARG JUICE_JAR_NAME=juicefs-hadoop-0.15.2-linux-amd64.jar
 ARG SCALA_BINARY_VERSION=2.12
@@ -97,11 +97,11 @@ RUN mv "byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}" ${MLSQL_HOME} \
 COPY lib/ansj_seg-5.1.6.jar \
   lib/nlp-lang-1.7.8.jar \
   lib/${AZURE_BLOB_NAME} \
-  lib/mlsql-assert-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-  lib/mlsql-excel-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-  lib/mlsql-ext-ets-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-  lib/mlsql-shell-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-  lib/mlsql-mllib-${MLSQL_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-assert-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-excel-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-ext-ets-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-shell-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-mllib-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   lib/${JUICE_JAR_NAME} ${MLSQL_HOME}/libs/
 
 COPY docker/engine/start-local.sh ${MLSQL_HOME}/bin/

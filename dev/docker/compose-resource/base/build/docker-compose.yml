@@ -29,7 +29,7 @@ services:
       dockerfile: ./docker/compose-resource/byzer-lang/Dockerfile
       args:
         - SPARK_VERSION
-        - MLSQL_SPARK_VERSION
+        - BYZER_SPARK_VERSION
         - BYZER_LANG_VERSION
         - SPARK_TGZ_NAME
         - HADOOP_TGZ_NAME

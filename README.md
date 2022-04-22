@@ -13,7 +13,6 @@ Based on spark 2.4.3:
 docker run -d --name sandbox -p 9002:9002 -p 9003:9003 -e MYSQL_ROOT_PASSWORD=root byzer/byzer-sandbox:2.4.3-latest
 ```
 
-
 Based on spark 3.1.1:
 ```
 docker run -d --name sandbox -p 9002:9002 -p 9003:9003 -e MYSQL_ROOT_PASSWORD=root byzer/byzer-sandbox:3.1.1-latest

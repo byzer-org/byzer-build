@@ -2,13 +2,7 @@
 
 ## Building Byzer Sandbox
 
-There are some manual steps before building:
-
-1. Download [Spark 2.4.3(hadoop-2.7 based) or 3.1.1(hadoop-3.2 based) Distribution](https://archive.apache.org/dist/spark/)  and put it to dev/docker/byzer-sandbox/lib
-
-2. Download [NLP jars](https://download.byzer.org/byzer/misc/) and put them to dev/docker/byzer-sandbox/lib.
-
-3. Start building
+Please change BYZER_LANG_VERSION & BYZER_NOTEBOOK_VERSION according to each project's pom.xml
 
 ```shell   
 ## For Spark 2.4.3 bundle
@@ -32,7 +26,10 @@ export BYZER_NOTEBOOK_VERSION=1.0.2-SNAPSHOT
 export BYZER_NOTEBOOK_TAG=v0.0.1-test
 ./dev/bin/build-sandbox-image.sh
 ```
-4. Check image
+
+If you'd like to skip building notebook and notebook exists in dev/lib/ , please `export SKIP_BUILDING_NOTEBOOK=true`
+
+Check image
 ```shell
 docker images
 REPOSITORY      TAG                    IMAGE ID       CREATED          SIZE
@@ -41,36 +38,13 @@ byzer-sandbox   3.1.1-latest           c24583e8fe47   34 minutes ago   2.61GB
 
 ## Environment Variables
 ````shell
+export JAVA_HOME=/work/openjdk-8u292
 export SPARK_VERSION=<2.4.3 || 3.1.1>
 export SPARK_HOME=/work/spark-${SPARK_VERSION}
+export BYZER_LANG_HOME=/home/deploy/byzer-lang
 export BYZER_NOTEBOOK_HOME=/home/deploy/byzer-notebook
 export PATH=$PATH:${MLSQL_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin
 ````
-
-## Scripts
-```shell
-/home/deploy/start-sandbox.sh
-$MLSQL_HOME/bin/start-local.sh
-```
-
-## Start service
-
-You can start the sandbox service with the following command:
-
-```
-docker run -d --name sandbox-3.1.1-latest \
--p9002:9002 \
--p 9003:9003 \
--p 3306:3306 \
--e MYSQL_ROOT_PASSWORD=root \
-byzer/byzer-sandbox:3.1.1-latest
-```
-
-You can also use the script we provide to start the sandbox service:
-
-```shell
-sh -x dev/bin/run-sandbox-container.sh
-```
 
 ## Directory Structure
 ```shell
@@ -97,6 +71,6 @@ sh -x dev/bin/run-sandbox-container.sh
 - OpenJDK 8
 - Python 3.6
 - PyJava 0.3.3
-- Ray 1.3.0
+- Ray 1.8.0
 - Pandas
 - PyArrow
