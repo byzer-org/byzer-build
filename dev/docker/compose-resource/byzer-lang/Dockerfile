@@ -36,7 +36,7 @@ ENV BASE_DIR=/home/deploy \
 ENV BYZER_LANG_HOME="${BASE_DIR}/byzer-lang"
 
 ENV SPARK_HOME="/work/${SPARK_TGZ_NAME}" \
-    HADOOP_HOME="/work/${HADOOP_TGZ_NAME:-hadoop-3.2.2}" \
+    HADOOP_HOME="/work/${HADOOP_TGZ_NAME:-hadoop-3.2.3}" \
     SCALA_HOME="/work/${SCALA_TGZ_NAME}" \
     MLSQL_HOME="$BYZER_LANG_HOME" \
     MASTER="yarn" \

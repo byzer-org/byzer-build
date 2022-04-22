@@ -46,7 +46,7 @@ elif [[ ${SPARK_VERSION} == "3.1.1" ]]
 then
     export SPARK_TGZ_NAME="spark-${SPARK_VERSION}-bin-hadoop3.2"
     export AZURE_BLOB_NAME="azure-blob_3.2-1.0-SNAPSHOT.jar"
-    export HADOOP_TGZ_NAME="hadoop-3.2.2"
+    export HADOOP_TGZ_NAME="hadoop-3.2.3"
     export SCALA_BINARY_VERSION=2.12
     export BYZER_SPARK_VERSION=3.0
 else
@@ -118,15 +118,15 @@ function download_byzer_lang_related_jars {
         local times_tried=0
         while [ $times_tried -le 3 ]; do
           echo "Downloading $times_tried"
-          if curl -O https://dlcdn.apache.org/hadoop/common/hadoop-3.2.2/hadoop-3.2.2.tar.gz && tar -zxvf hadoop-3.2.2.tar.gz; then
-            rm -rf "${lib_path}"/hadoop-3.2.2
+          if curl -O https://dlcdn.apache.org/hadoop/common/hadoop-3.2.3/hadoop-3.2.3.tar.gz && tar -zxvf hadoop-3.2.3.tar.gz; then
+            rm -rf "${lib_path}"/hadoop-3.2.3
             break
           fi
           if [[ $times_tried -ge 3 ]];then
-            echo "Download hadoop-3.2.2.tar.gz failed!" && exit 1;
+            echo "Download hadoop-3.2.3.tar.gz failed!" && exit 1;
           fi
           times_tried=$((times_tried + 1))
-          rm -rf hadoop-3.2.2.tar.gz
+          rm -rf hadoop-3.2.3.tar.gz
         done
       ) || exit 1
     fi
