@@ -15,13 +15,13 @@
 # limitations under the License.
 #
 
-# The Dockerfile for Byzer-lang K8S image
+# The Dockerfile for Byzer-lang K8S image with jdk14
 
 FROM ubuntu:20.04 AS ubuntu-jdk-conda
 
 ARG JDK_MAJOR=14
-ENV LANG=C.UTF-8 LC_ALL=C.UTF-8
-ENV JAVA_HOME=/work/jdk-14
+ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
+    JAVA_HOME=/work/jdk-14
 ENV PATH=$PATH:${JAVA_HOME}/bin
 
 RUN set -ex \
@@ -72,8 +72,8 @@ ENV MLSQL_HOME ${BASE_DIR}/byzer-lang
 ENV PATH=$PATH:${MLSQL_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin:/opt/conda/bin
 
 ## Creates directories
-RUN mkdir -p /work/logs
-RUN mkdir -p /work/user
+RUN mkdir -p /work/logs && \
+    mkdir -p /work/user
 
 ## Spark
 ADD lib/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz /work
