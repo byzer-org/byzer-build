@@ -18,7 +18,7 @@
 #
 
 ##############################################################################
-## Builds a mlsql-spark3 K8S image;
+## Builds a Byzer-spark3 K8S image;
 ##############################################################################
 set -u
 set -e
@@ -28,7 +28,6 @@ export JUICEFS_VERSION=${JUICEFS_VERSION:-0.15.2}
 juice_jar_name="juicefs-hadoop-${JUICEFS_VERSION}-linux-amd64.jar"
 
 function build_image {
-    local spark_version=3.1.1
 
     if [[ ! -f "${lib_path}/openjdk-14_linux-x64_bin.tar.gz" ]]
     then
@@ -48,19 +47,13 @@ function build_image {
       ) || exit 1
     fi
 
-    if [[ ! -f ${lib_path}/miniconda.sh ]]
-    then
-      echo "Downloading conda-4.5.11" &&
-      wget https://repo.anaconda.com/miniconda/Miniconda3-4.5.11-Linux-x86_64.sh -O ${lib_path}/miniconda.sh || exit 1
-    fi
-
     docker build -t byzer/byzer-lang-k8s:3.1.1-${BYZER_LANG_VERSION:-latest} \
-    --build-arg SPARK_VERSION=${spark_version} \
+    --build-arg SPARK_VERSION=3.1.1 \
     --build-arg BYZER_SPARK_VERSION=3.0 \
     --build-arg BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-latest} \
     --build-arg JUICE_JAR_NAME=${juice_jar_name} \
-    --build-arg SCALA_BINARY_VERSION=${SCALA_BINARY_VERSION} \
-    --build-arg AZURE_BLOB_NAME=${AZURE_BLOB_NAME} \
+    --build-arg SCALA_BINARY_VERSION=2.12 \
+    --build-arg AZURE_BLOB_NAME="azure-blob_3.2-1.0-SNAPSHOT.jar" \
     -f ${base_dir}/dev/docker/engine/Dockerfile \
     ${base_dir}/dev
 }
