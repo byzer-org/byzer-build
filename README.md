@@ -3,7 +3,7 @@
 Project byzer-build comes with tools to build
 - Byzer sandbox docker image
 - Byzer lang container
-- [Byzer-lang](https://github.com/byzer-org/byzer-lang/) K8S image
+- Byzer-lang K8S image
 - Byzer CLI
 
 ## Byzer Sandbox Docker Image
@@ -28,6 +28,23 @@ This command launches byzre-lang container with
 - heap size of 8GB
 - byzer-lang on local mode
 - exposes container's 9003 port 
+
+## Byzer-lang K8S image
+
+The image is built on Ubuntu 20.04, and packaged with
+- OpenJDK 14
+- Spark-3.1.1-bin-hadoop3.2
+- Byzer-lang
+- Byzer-lang extensions: Shell, Excel, MLLib, Assert
+An example to build the image
+
+```shell
+export BYZER_LANG_VERSION=2.3.0-SNAPSHOT
+export SPARK_VERSION=3.1.1
+## Run the script on dev directory, or it fails
+cd dev
+./bin/build-spark3-image.sh
+```
 
 ## Byzer CLI
 To install and run the CLI, please visit [CLI doc](https://docs.byzer.org/#/byzer-lang/zh-cn/installation/cli-installation) .

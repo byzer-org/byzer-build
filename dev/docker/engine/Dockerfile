@@ -34,27 +34,28 @@ RUN set -ex \
 RUN mkdir /work
 ADD lib/openjdk-14_linux-x64_bin.tar.gz /work/
 
-## Install conda
-COPY lib/miniconda.sh /work/
-RUN /bin/bash /work/miniconda.sh -b -p /opt/conda && \
-    rm /work/miniconda.sh && \
-    /opt/conda/bin/conda clean -tipsy && \
-    ln -s /opt/conda/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+## Install Conda Ray
+## Activate Ray 1.8.0 by default
+## ray/issues/19938: In ray>=1.8.0 version, python3.6.11 or python3.7.10 should be used.
+RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.10.3-Linux-x86_64.sh -O ~/miniconda.sh && \
+    /bin/bash ~/miniconda.sh -b -p $CONDA_HOME && \
+    rm ~/miniconda.sh && \
+    ln -s $CONDA_HOME/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> /etc/profile && \
-    echo "conda activate base" >> /etc/profile && \
-    . /etc/profile
-
-## Add aliyun pip mirror
-## Install python packages
-RUN mkdir ~/.pip && \
-    echo "[global]\n trusted-host = mirrors.aliyun.com\n index-url = https://mirrors.aliyun.com/pypi/simple" > ~/.pip/pip.conf && \
+    echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     . /etc/profile && \
+    pip config set global.trusted-host mirrors.aliyun.com && \
+    pip config set global.index-url http://mirrors.aliyun.com/pypi/simple/ && \
+    conda create -y --name ray1.8.0 python=3.6.13 && \
+    conda activate ray1.8.0 && \
     pip install --upgrade pip && \
-    pip install --no-cache-dir \
-      Cython numpy pandas scikit-learn plotly ray[default]==1.3.0 \
-      watchdog requests click uuid sfcli \
-      aiohttp psutil setproctitle grpcio xlsxwriter \
-      watchdog requests click uuid sfcli pyjava>=0.2.8.8 pyarrow
+    pip install --upgrade pyarrow==4.0.1 "ray[default]==1.8.0" aiohttp==3.7.4 "pandas~=1.0.5" requests  \
+             "matplotlib~=3.3.4" "uuid~=1.30" pyjava opencv-python pyecharts matplotlib seaborn sklearn keras tensorflow && \
+    $CONDA_HOME/bin/conda clean -tipsy -a && \
+    echo "conda activate ray1.8.0" >> /etc/profile && \
+    echo "conda activate ray1.8.0" >> ~/.bashrc && \
+    . /etc/profile && \
+    ln -fs /bin/bash /bin/sh
 
 FROM ubuntu-jdk-conda AS mlsql-engine
 
@@ -77,6 +78,7 @@ RUN mkdir -p /work/logs && \
 
 ## Spark
 ADD lib/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz /work
+## Byzer-lang comes with higher version of velocity, so delete velocity-1.5.jar
 RUN rm /work/spark-${SPARK_VERSION}-bin-hadoop3.2/jars/velocity-1.5.jar
 COPY docker/byzer-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
 
@@ -97,12 +99,15 @@ RUN mv "byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}" ${MLSQL_HOME} \
 COPY lib/ansj_seg-5.1.6.jar \
   lib/nlp-lang-1.7.8.jar \
   lib/${AZURE_BLOB_NAME} \
-  lib/mlsql-assert-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
+  lib/${JUICE_JAR_NAME} \
+  ${MLSQL_HOME}/libs/
+
+COPY  lib/mlsql-assert-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   lib/mlsql-excel-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   lib/mlsql-ext-ets-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   lib/mlsql-shell-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   lib/mlsql-mllib-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-  lib/${JUICE_JAR_NAME} ${MLSQL_HOME}/libs/
+  ${MLSQL_HOME}/plugin/
 
 COPY docker/engine/start-local.sh ${MLSQL_HOME}/bin/
 COPY docker/engine/entrypoint.sh ${BASE_DIR}/
