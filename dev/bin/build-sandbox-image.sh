@@ -43,8 +43,10 @@ EOF
 ## Builds docker image
 function build_image {
     ## Build docker images
-    docker build -t mysql-python:8.0-3.6 -f "${base_image_path}"/Dockerfile ${base_image_path} &&
+    ## Ubuntu 20.04 and MySQL 8
     docker build -t ubuntu-baseimage -f "${base_dir}"/dev/docker/mysql/Dockerfile "${base_dir}"/dev/docker/mysql &&
+    ## Adding python 3 conda and Ray
+    docker build -t mysql-python:8.0-3.6 -f "${base_image_path}"/Dockerfile ${base_image_path} &&
     docker build --build-arg SPARK_VERSION=${SPARK_VERSION} \
     --build-arg BYZER_SPARK_VERSION=${BYZER_SPARK_VERSION} \
     --build-arg BYZER_LANG_VERSION=${BYZER_LANG_VERSION} \
