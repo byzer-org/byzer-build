@@ -1,8 +1,8 @@
 FROM ubuntu-baseimage
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 DEBIAN_FRONTEND=noninteractive \
-  JAVA_HOME /work/openjdk-8u292 \
-  CONDA_HOME /opt/conda \
+  JAVA_HOME=/work/openjdk-8u292 \
+  CONDA_HOME=/opt/conda \
   PATH=$CONDA_HOME/bin:$PATH:${JAVA_HOME}/bin
 
 RUN rm -rf /var/lib/apt/lists/*  \

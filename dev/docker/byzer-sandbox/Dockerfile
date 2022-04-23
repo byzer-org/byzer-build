@@ -31,9 +31,8 @@ ARG AZURE_BLOB_NAME
 ARG SCALA_BINARY_VERSION
 
 ## Environment variables
-ENV BASE_DIR=/home/deploy
-
-ENV BYZER_LANG_HOME="${BASE_DIR}/byzer-lang" \
+ENV BASE_DIR=/home/deploy \
+    BYZER_LANG_HOME="${BASE_DIR}/byzer-lang" \
     SPARK_HOME="/work/${SPARK_TGZ_NAME}" \
     SPARK_VERSION="${SPARK_VERSION}" \
     BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION} \
