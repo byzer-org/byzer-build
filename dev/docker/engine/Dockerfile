@@ -21,7 +21,7 @@ FROM ubuntu:20.04 AS ubuntu-jdk-conda
 
 ARG JDK_MAJOR=14
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 \
-    JAVA_HOME=/work/jdk-14
+    JAVA_HOME=/work/jdk-14 \
     CONDA_HOME=/opt/conda
 ENV PATH=$PATH:${JAVA_HOME}/bin:$CONDA_HOME/bin
 
