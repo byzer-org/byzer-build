@@ -25,4 +25,6 @@ echo 'Waiting for byzer-lang to be available.'
 sleep 20
 
 ## Start byzer-notebook
-"$BYZER_NOTEBOOK_HOME"/startup.sh hangup
+"$BYZER_NOTEBOOK_HOME"/bin/notebook.sh start
+echo "Start byzer-notebook..." >> "$BYZER_NOTEBOOK_HOME"/logs/notebook.log
+tail -f "$BYZER_NOTEBOOK_HOME"/logs/notebook.log

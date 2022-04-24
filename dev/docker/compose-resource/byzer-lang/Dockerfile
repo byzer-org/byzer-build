@@ -78,6 +78,6 @@ COPY lib/ansj_seg-5.1.6.jar \
   lib/mlsql-shell-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   lib/mlsql-mllib-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   ${BYZER_LANG_HOME}/libs/
-COPY docker/engine/start-local.sh ${BUILD_PATH}/start-yarn.sh ${BYZER_LANG_HOME}/bin/
+COPY ${BUILD_PATH}/byzer.properties ${BYZER_LANG_HOME}/conf/
 
 ENTRYPOINT $BASE_DIR/start-byzer-lang.sh
