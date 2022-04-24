@@ -36,6 +36,7 @@ EOF
 
 ## Builds docker image
 function build_images {
+    echo "start to build multi image..."
     cd "${base_dir}/dev/docker/compose-resource/base/build"
     export COMPOSE_PATH="${base_dir}/dev"
     ## It uses docker-compose.yml to build. option <--no-cache>
@@ -62,10 +63,12 @@ fi
 STEP_01_BUILD_SANDBOX_IMAGE=${STEP_01_BUILD_SANDBOX_IMAGE:-false}
 STEP_02_BUILD_K8S_IMAGE=${STEP_02_BUILD_K8S_IMAGE:-false}
 if [[ $STEP_01_BUILD_SANDBOX_IMAGE == "false" && $STEP_02_BUILD_K8S_IMAGE == "false" ]]; then
+    echo "start to download byzer lang..."
   download_byzer_lang_related_jars
 fi
 
 if [[ $STEP_01_BUILD_SANDBOX_IMAGE == "false" ]]; then
+  echo "start to build byzer notebook..."
   build_byzer_notebook
 fi
 

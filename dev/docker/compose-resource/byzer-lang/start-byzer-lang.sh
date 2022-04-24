@@ -24,5 +24,8 @@ set -o pipefail
 ## Start Ray
 nohup $CONDA_HOME/envs/ray1.8.0/bin/ray start --head --include-dashboard=false 2>&1 &
 
-## Start mlsql engine
-${BYZER_LANG_HOME}/bin/start-yarn.sh 2>&1 > /work/logs/engine.log
+## Start byzer lang engine
+echo "Calling byzer.sh to run Byzer-lang as daemon"
+${BYZER_LANG_HOME}/bin/byzer.sh start
+echo "Wait for byzer-lang to start..." >> /home/deploy/byzer-lang/logs/byzer-lang.log
+tail -f /home/deploy/byzer-lang/logs/byzer-lang.log

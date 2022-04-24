@@ -113,7 +113,7 @@ function download_byzer_lang_related_jars {
     if [[ ! -f "${lib_path}/${HADOOP_TGZ_NAME}.tar.gz" && ${SPARK_VERSION} == "3.1.1" ]]
     then
       (
-        echo "Downloading hadoop 3.2.2" &&
+        echo "Downloading hadoop 3.2.3" &&
         cd "${lib_path}" &&
         local times_tried=0
         while [ $times_tried -le 3 ]; do

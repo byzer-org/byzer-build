@@ -39,7 +39,7 @@ services:
     healthcheck:
       test: [ "CMD","curl", "-f", "http://127.0.0.1:9003" ]
       interval: 2s
-      timeout: 300s
+      timeout: 600s
       retries: 1600
       start_period: 150s
 
@@ -70,7 +70,7 @@ services:
     healthcheck:
       test: [ "CMD","curl", "-f", "http://127.0.0.1:8088/cluster" ]
       interval: 2s
-      timeout: 300s
+      timeout: 600s
       retries: 800
       start_period: 70s
 

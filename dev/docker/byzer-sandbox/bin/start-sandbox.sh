@@ -21,7 +21,7 @@ set -u
 set -e
 
 ## Init mysql
-echo "Starting MySQL"
+echo "Starting init mysql"
 nohup ${BASE_DIR}/db_init.sh mysqld 2>&1 > /work/logs/db_init.log &
 ## Start byzer lang engine
 echo "Calling byzer.sh to run Byzer-lang as daemon"
@@ -46,5 +46,6 @@ done
 echo "Byzer-lang is ready"
 
 ## Start byzer-notebook
-"$BYZER_NOTEBOOK_HOME"/startup.sh hangup
-
+"$BYZER_NOTEBOOK_HOME"/bin/notebook.sh start
+echo "Start byzer-notebook..." >> "$BYZER_NOTEBOOK_HOME"/logs/notebook.log
+tail -f "$BYZER_NOTEBOOK_HOME"/logs/notebook.log
