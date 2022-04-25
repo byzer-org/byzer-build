@@ -104,6 +104,8 @@ function cp_byzer_lang {
   "${target_dir}/main/"
   ## Copy start and stop script
   cp "${target_dir}/tmp/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}/bin/"* "${target_dir}/bin/"
+  cp "${target_dir}/tmp/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}/conf/"* "${target_dir}/conf/"
+  cp "${target_dir}/conf/byzer.properties.all-in-one.example" "${target_dir}/conf/byzer.properties.override"
 
   echo "byzer-lang copy succeed"
 
@@ -199,6 +201,7 @@ mkdir -p "${target_dir}/plugin"
 mkdir -p "${target_dir}/spark"
 mkdir -p "${target_dir}/logs"
 mkdir -p "${target_dir}/tmp"
+mkdir -p "${target_dir}/conf"
 
 
 ## This function is defined in mlsql-function.sh
@@ -218,11 +221,6 @@ cp_spark_jars
 
 [[ ${os} == "win" ]] && download_hadoop_win_lib
 
-## Copy windows startup script.
-if [[ ${os} == "win" ]]
-then
-  cp "${base_dir}/dev/bin/app/byzer.cmd" "${target_dir}/bin/"
-fi
 ## hello.byzer contains simple Byzer script for testing purposes
 cp "${base_dir}/dev/bin/app/hello.byzer" "${target_dir}/bin/"
 
