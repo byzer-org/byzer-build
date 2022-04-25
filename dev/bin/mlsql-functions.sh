@@ -29,7 +29,6 @@ byzer_sandbox_path="${base_dir}/dev/docker/byzer-sandbox"
 lib_path=${base_dir}/dev/lib
 declare array plugins=(mlsql-excel mlsql-shell mlsql-assert mlsql-language-server mlsql-ext-ets mlsql-mllib )
 
-
 # Many environment variables are inferred from SPARK_VERSION
 export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
 export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-1.0.2-SNAPSHOT}
@@ -54,6 +53,13 @@ else
     exit 1
 fi
 
+## Something went wrong, exit
+if [[ ${base_dir} == "/" ]]
+then
+  echo "base_idr is ${base_dir}, please check your configuration"
+  exit 1
+fi
+
 cat << EOF
 BYZER_LANG_VERSION ${BYZER_LANG_VERSION}
 SPARK_VERSION ${SPARK_VERSION}
@@ -62,6 +68,7 @@ AZURE_BLOB_NAME ${AZURE_BLOB_NAME}
 SPARK_TGZ_NAME ${SPARK_TGZ_NAME}
 HADOOP_TGZ_NAME ${HADOOP_TGZ_NAME}
 SCALA_BINARY_VERSION ${SCALA_BINARY_VERSION}
+BYZER_NOTEBOOK_VERSION ${BYZER_NOTEBOOK_VERSION}
 EOF
 
 ## Download byzer-lang, spark, hadoop, nlp , ansj , plugin
@@ -222,12 +229,20 @@ function build_byzer_notebook {
     sh "${base_dir}/dev/bin/update-byzer-notebook.sh" && \
     bash "${byzer_notebook_path}"/build/package.sh skipTar
 
-    ## Check if jar file exists
-    echo "notebook path: ""${base_dir}/byzer-notebook/dist/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION}"
-    if [[ ! -d "${base_dir}/byzer-notebook/dist/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION}" ]]
+    ## Check if build succeeds
+    notebook_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout -f ${byzer_notebook_path}/pom.xml)
+    echo "notebook path: ${base_dir}/byzer-notebook/dist/Byzer-Notebook-${notebook_version}"
+    if [[ ! -d "${base_dir}/byzer-notebook/dist/Byzer-Notebook-${notebook_version}" ]]
     then
-      echo "Failed to generate byzer-notebook jar file, exit"
+      echo "Failed to generate byzer-notebook distribution package, exit"
       exit 1
     fi
-    cp -r "${byzer_notebook_path}/dist/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION}" "${lib_path}/"
+    ## Remove the old then copy
+    if [[  -d "${lib_path}/Byzer-Notebook-${notebook_version}" ]]
+    then
+      echo "Remove ${lib_path}/Byzer-Notebook-${notebook_version}"
+      rm -rf ${lib_path}/Byzer-Notebook-${notebook_version}
+    fi
+    cp -r "${byzer_notebook_path}/dist/Byzer-Notebook-${notebook_version}" "${lib_path}/" && \
+    mv "${lib_path}/Byzer-Notebook-${notebook_version}" "${lib_path}/byzer-notebook"
 }
