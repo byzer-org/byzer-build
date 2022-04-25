@@ -25,7 +25,6 @@ FROM mysql-python:8.0-3.6
 ARG SPARK_VERSION
 ARG BYZER_SPARK_VERSION
 ARG BYZER_LANG_VERSION
-ARG BYZER_NOTEBOOK_VERSION
 ARG SPARK_TGZ_NAME
 ARG AZURE_BLOB_NAME
 ARG SCALA_BINARY_VERSION
@@ -35,7 +34,6 @@ ENV BASE_DIR=/home/deploy
 ENV BYZER_LANG_HOME="${BASE_DIR}/byzer-lang"
 ENV SPARK_HOME="/work/${SPARK_TGZ_NAME}"
 ENV SPARK_VERSION="${SPARK_VERSION}"
-ENV BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION}
 ENV BYZER_NOTEBOOK_HOME=${BASE_DIR}/byzer-notebook
 ENV PATH=$PATH:${BYZER_LANG_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin
 
@@ -66,7 +64,7 @@ COPY lib/mlsql-assert-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPS
 COPY docker/byzer-sandbox/conf/byzer.properties ${BYZER_LANG_HOME}/conf/
 
 # byzer-notebook
-COPY lib/Byzer-Notebook-${BYZER_NOTEBOOK_VERSION} ${BYZER_NOTEBOOK_HOME}
+COPY lib/byzer-notebook ${BYZER_NOTEBOOK_HOME}
 COPY docker/byzer-notebook/notebook.docker.properties ${BYZER_NOTEBOOK_HOME}/conf/notebook.properties
 
 ## Entrypoint script
