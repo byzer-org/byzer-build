@@ -66,7 +66,7 @@ ENV PATH=$PATH:${JAVA_HOME}/bin:${MLSQL_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOM
 RUN mkdir -p /work/server/
 ADD https://download.byzer.org/byzer/${DOWNLOAD_DIR}/byzer-lang-all-in-one-linux-amd64-3.1.1-${BYZER_LANG_VERSION}.tar.gz /work/server/
 RUN tar -xf /work/server/byzer-lang-all-in-one-linux-amd64-3.1.1-${BYZER_LANG_VERSION}.tar.gz -C /work/server \
-    && mv /work/server/byzer-lang-all-in-one-linux-amd64-3.1.1-2.3.0-SNAPSHOT /work/server/byzer-lang
+    && mv /work/server/byzer-lang-all-in-one-linux-amd64-3.1.1-${BYZER_LANG_VERSION} /work/server/byzer-lang
 COPY ./entrypoint.sh /work/bin/
 
 ENTRYPOINT [ "/work/bin/entrypoint.sh" ]
