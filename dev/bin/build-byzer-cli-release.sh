@@ -42,7 +42,7 @@
 # export SPARK_VERSION=3.1.1
 # export BYZER_LANG_VERSION=2.3.0-SNAPSHOT
 # export OS=linux
-# build-byzer-cli-release.sh
+# dev/bin/build-byzer-cli-release.sh
 ##############################################################################
 
 set -e
@@ -102,8 +102,11 @@ function cp_byzer_lang {
   tar -xf "${base_dir}/dev/lib/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" -C "${target_dir}/tmp"
   cp "${target_dir}/tmp/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}/main/byzer-lang-${SPARK_VERSION}-${SCALA_BINARY_VERSION}-${BYZER_LANG_VERSION}.jar" \
   "${target_dir}/main/"
+  ## Copy start and stop script
+  cp "${target_dir}/tmp/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}/bin/"* "${target_dir}/bin/"
 
   echo "byzer-lang copy succeed"
+
 }
 
 function download_cli {
@@ -215,12 +218,12 @@ cp_spark_jars
 
 [[ ${os} == "win" ]] && download_hadoop_win_lib
 
+## Copy windows startup script.
 if [[ ${os} == "win" ]]
 then
-  cp "${base_dir}/dev/bin/app/bootstrap.cmd" "${target_dir}/bin/"
-else
-  cp "${base_dir}/dev/bin/app/bootstrap.sh" "${target_dir}/bin/"
+  cp "${base_dir}/dev/bin/app/byzer.cmd" "${target_dir}/bin/"
 fi
+## hello.byzer contains simple Byzer script for testing purposes
 cp "${base_dir}/dev/bin/app/hello.byzer" "${target_dir}/bin/"
 
 cd "${target_dir}/.."
