@@ -65,7 +65,7 @@ COPY docker/byzer-sandbox/conf/byzer.properties ${BYZER_LANG_HOME}/conf/
 
 # byzer-notebook
 COPY lib/byzer-notebook ${BYZER_NOTEBOOK_HOME}
-COPY docker/byzer-notebook/notebook.docker.properties ${BYZER_NOTEBOOK_HOME}/conf/notebook.properties
+COPY docker/byzer-sandbox/conf/notebook.docker.properties ${BYZER_NOTEBOOK_HOME}/conf/notebook.properties
 
 ## Entrypoint script
 COPY docker/byzer-sandbox/bin/start-sandbox.sh $BASE_DIR/
