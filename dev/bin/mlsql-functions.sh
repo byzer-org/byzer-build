@@ -223,13 +223,13 @@ function build_mlsql_api_console {
     cp ${mlsql_console_path}/target/mlsql-api-console-${MLSQL_CONSOLE_VERSION}.jar ${lib_path}/
 }
 
-## Builds byzer_notebook shade jar
+## Builds byzer_notebook distribution package
 function build_byzer_notebook {
-    ## Build byzer-notebook
+    # Build byzer-notebook
     sh "${base_dir}/dev/bin/update-byzer-notebook.sh" && \
     bash "${byzer_notebook_path}"/build/package.sh skipTar
 
-    ## Check if build succeeds
+    # Check if build succeeds
     notebook_version=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout -f ${byzer_notebook_path}/pom.xml)
     echo "notebook path: ${base_dir}/byzer-notebook/dist/Byzer-Notebook-${notebook_version}"
     if [[ ! -d "${base_dir}/byzer-notebook/dist/Byzer-Notebook-${notebook_version}" ]]
@@ -237,12 +237,13 @@ function build_byzer_notebook {
       echo "Failed to generate byzer-notebook distribution package, exit"
       exit 1
     fi
-    ## Remove the old then copy
-    if [[  -d "${lib_path}/Byzer-Notebook-${notebook_version}" ]]
+    # Remove the old then copy
+    if [[ ! -z ${lib_path} && -d "${lib_path}/byzer-notebook" ]]
     then
-      echo "Remove ${lib_path}/Byzer-Notebook-${notebook_version}"
-      rm -rf ${lib_path}/Byzer-Notebook-${notebook_version}
+      echo "Remove ${lib_path}/byzer-notebook"
+      rm -rf ${lib_path}/byzer-notebook
     fi
-    cp -r "${byzer_notebook_path}/dist/Byzer-Notebook-${notebook_version}" "${lib_path}/" && \
-    mv "${lib_path}/Byzer-Notebook-${notebook_version}" "${lib_path}/byzer-notebook"
+    # Get rid of BYZER_NOTEBOOK_VERSION from path; because human-set BYZER_NOTEBOOK_VERSION sometimes is incorrect
+    echo "Copy byzer-notebook to ${lib_path}/byzer-notebook"
+    cp -r "${byzer_notebook_path}/dist/Byzer-Notebook-${notebook_version}" "${lib_path}/byzer-notebook"
 }
