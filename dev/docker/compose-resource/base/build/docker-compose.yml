@@ -44,7 +44,7 @@ services:
       context: ${COMPOSE_PATH}/
       dockerfile: ./docker/compose-resource/byzer-notebook/Dockerfile
       args:
-        - BUILD_PATH=./docker/compose-resource/byzer-notebook
+        - BUILD_PATH=.
     image: "byzer/byzer-notebook:${BYZER_NOTEBOOK_VERSION:-latest}"
     restart: always
     depends_on:
