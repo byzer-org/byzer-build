@@ -50,7 +50,6 @@ function build_image {
     docker build --build-arg SPARK_VERSION=${SPARK_VERSION} \
     --build-arg BYZER_SPARK_VERSION=${BYZER_SPARK_VERSION} \
     --build-arg BYZER_LANG_VERSION=${BYZER_LANG_VERSION} \
-    --build-arg BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION} \
     --build-arg SPARK_TGZ_NAME=${SPARK_TGZ_NAME} \
     --build-arg AZURE_BLOB_NAME=${AZURE_BLOB_NAME} \
     --build-arg SCALA_BINARY_VERSION=${SCALA_BINARY_VERSION} \
@@ -63,7 +62,15 @@ if [[ $@ == *"help"* ]]; then
     exit_with_usage
 fi
 
-[[ ${SKIP_BUILDING_NOTEBOOK} ]] && echo "Skip building Byzer-notebook" && build_byzer_notebook
+SKIP_BUILDING_NOTEBOOK=${SKIP_BUILDING_NOTEBOOK:-false}
+
+echo "SKIP_BUILDING_NOTEBOOK ${SKIP_BUILDING_NOTEBOOK}"
+if [[ "${SKIP_BUILDING_NOTEBOOK}" == "true" ]]
+then
+  echo "Skip building Byzer-notebook"
+else
+  build_byzer_notebook
+fi
 
 download_byzer_lang_related_jars &&
 build_image &&

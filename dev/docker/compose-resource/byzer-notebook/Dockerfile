@@ -20,7 +20,6 @@
 FROM byzer/python-jdk:3.6-8
 
 ## Input arguments
-ARG BYZER_NOTEBOOK_VERSION
 ARG BUILD_PATH
 
 ## Environment variables
@@ -29,6 +28,7 @@ ENV BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION} \
     BYZER_NOTEBOOK_HOME=${BASE_DIR}/byzer-notebook \
     BUILD_PATH=${BUILD_PATH} \
     COMPOSE_PATH=${BUILD_PATH}/docker/compose-resource/byzer-notebook
+
 
 WORKDIR ${BASE_DIR}
 
