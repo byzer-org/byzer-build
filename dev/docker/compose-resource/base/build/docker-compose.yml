@@ -33,7 +33,7 @@ services:
         - BYZER_LANG_VERSION
         - SPARK_TGZ_NAME
         - HADOOP_TGZ_NAME
-        - BUILD_PATH=./docker/compose-resource/byzer-lang
+        - BUILD_PATH=${COMPOSE_PATH}/docker/compose-resource/byzer-lang
     image: "byzer/byzer-lang:${SPARK_VERSION:-3.1.1}-${BYZER_LANG_VERSION:-latest}"
     restart: always
     depends_on:
@@ -44,7 +44,7 @@ services:
       context: ${COMPOSE_PATH}/
       dockerfile: ./docker/compose-resource/byzer-notebook/Dockerfile
       args:
-        - BUILD_PATH=.
+        - BUILD_PATH=${COMPOSE_PATH}
     image: "byzer/byzer-notebook:${BYZER_NOTEBOOK_VERSION:-latest}"
     restart: always
     depends_on:
