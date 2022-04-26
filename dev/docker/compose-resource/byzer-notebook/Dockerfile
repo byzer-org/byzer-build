@@ -19,22 +19,18 @@
 
 FROM byzer/python-jdk:3.6-8
 
-## Input arguments
-ARG BUILD_PATH
-
 ## Environment variables
 ENV BASE_DIR=/home/deploy
 ENV BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION} \
     BYZER_NOTEBOOK_HOME=${BASE_DIR}/byzer-notebook \
-    BUILD_PATH=${BUILD_PATH} \
-    COMPOSE_PATH=${BUILD_PATH}/docker/compose-resource/byzer-notebook
+    NOTEBOOK_COMPOSE_PATH=./docker/compose-resource/byzer-notebook
 
 
 WORKDIR ${BASE_DIR}
 
 # byzer-notebook
-COPY ${BUILD_PATH}/lib/byzer-notebook ${BYZER_NOTEBOOK_HOME}
-COPY ${COMPOSE_PATH}/notebook.docker.properties ${BYZER_NOTEBOOK_HOME}/conf/notebook.properties
-COPY ${COMPOSE_PATH}/entrypoint.sh ${BYZER_NOTEBOOK_HOME}/
+COPY ./lib/byzer-notebook ${BYZER_NOTEBOOK_HOME}
+COPY ${NOTEBOOK_COMPOSE_PATH}/notebook.docker.properties ${BYZER_NOTEBOOK_HOME}/conf/notebook.properties
+COPY ${NOTEBOOK_COMPOSE_PATH}/entrypoint.sh ${BYZER_NOTEBOOK_HOME}/
 
 ENTRYPOINT ${BYZER_NOTEBOOK_HOME}/entrypoint.sh

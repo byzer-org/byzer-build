@@ -25,7 +25,6 @@ ARG BYZER_SPARK_VERSION
 ARG BYZER_LANG_VERSION
 ARG SPARK_TGZ_NAME
 ARG HADOOP_TGZ_NAME
-ARG BUILD_PATH
 ARG AZURE_BLOB_NAME
 ARG SCALA_BINARY_VERSION
 
@@ -45,24 +44,24 @@ ENV SPARK_HOME="/work/${SPARK_TGZ_NAME}" \
     SPARK_TGZ_NAME="${SPARK_TGZ_NAME}" \
     HADOOP_TGZ_NAME="${HADOOP_TGZ_NAME}" \
     PATH=$PATH:${BYZER_LANG_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin \
-    BUILD_PATH=${BUILD_PATH}
+    BYZER_COMPOSE_PATH=./docker/compose-resource/byzer-lang
 
 ## Creates directories
 RUN mkdir -p /work/logs /work/user /byzer/_delta
 
 ## README.md and Entrypoint script
-COPY ${BUILD_PATH}/start-byzer-lang.sh $BASE_DIR/
+COPY ${BYZER_COMPOSE_PATH}/start-byzer-lang.sh $BASE_DIR/
 
 ## Spark
 ADD lib/${SPARK_TGZ_NAME}.tgz /work
 RUN rm /work/${SPARK_TGZ_NAME}/jars/velocity-1.5.jar
 ADD lib/${HADOOP_TGZ_NAME}.tar.gz /work
 ADD lib/${SCALA_TGZ_NAME}.tgz /work
-COPY ${BUILD_PATH}/log4j.properties ${BUILD_PATH}/spark-env.sh ${SPARK_HOME}/conf/
-COPY ${BUILD_PATH}/hadoop/core-site.xml \
-     ${BUILD_PATH}/hadoop/hdfs-site.xml \
-     ${BUILD_PATH}/hadoop/mapred-site.xml \
-     ${BUILD_PATH}/hadoop/yarn-site.xml $HADOOP_HOME/etc/hadoop/
+COPY ${BYZER_COMPOSE_PATH}/log4j.properties ${BYZER_COMPOSE_PATH}/spark-env.sh ${SPARK_HOME}/conf/
+COPY ${BYZER_COMPOSE_PATH}/hadoop/core-site.xml \
+     ${BYZER_COMPOSE_PATH}/hadoop/hdfs-site.xml \
+     ${BYZER_COMPOSE_PATH}/hadoop/mapred-site.xml \
+     ${BYZER_COMPOSE_PATH}/hadoop/yarn-site.xml $HADOOP_HOME/etc/hadoop/
 
 WORKDIR ${BASE_DIR}
 
@@ -78,6 +77,6 @@ COPY lib/ansj_seg-5.1.6.jar \
   lib/mlsql-shell-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   lib/mlsql-mllib-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
   ${BYZER_LANG_HOME}/libs/
-COPY ${BUILD_PATH}/byzer.properties ${BYZER_LANG_HOME}/conf/
+COPY ${BYZER_COMPOSE_PATH}/byzer.properties ${BYZER_LANG_HOME}/conf/
 
 ENTRYPOINT $BASE_DIR/start-byzer-lang.sh

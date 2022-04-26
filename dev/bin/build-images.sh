@@ -73,4 +73,5 @@ if [[ $STEP_01_BUILD_SANDBOX_IMAGE == "false" ]]; then
 fi
 
 build_images &&
+echo "Build Multi images finished."
 exit 0
