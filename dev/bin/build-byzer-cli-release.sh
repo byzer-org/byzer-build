@@ -106,6 +106,9 @@ function cp_byzer_lang {
   cp "${target_dir}/tmp/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}/bin/"* "${target_dir}/bin/"
   cp "${target_dir}/tmp/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}/conf/"* "${target_dir}/conf/"
   cp "${target_dir}/conf/byzer.properties.all-in-one.example" "${target_dir}/conf/byzer.properties.override"
+  cp "${target_dir}/tmp/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}/LICENSE" "${target_dir}/"
+  cp "${target_dir}/tmp/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}/README.md" "${target_dir}/"
+  cp "${target_dir}/tmp/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}/RELEASES.md" "${target_dir}/"
 
   echo "byzer-lang copy succeed"
 
