@@ -187,7 +187,7 @@ function download_byzer_lang_related_jars {
       echo "Downloading Byzer-lang tar ball from download.byzer.org"
       if [[ ${BYZER_LANG_VERSION} == *"-SNAPSHOT" ]]
       then
-        wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/nightly-build/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" \
+        wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/nightly-build/byzer-lang-${SPARK_VERSION}-latest.tar.gz" \
               --directory-prefix "${lib_path}/"
       else
         wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/${BYZER_LANG_VERSION}/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" \
