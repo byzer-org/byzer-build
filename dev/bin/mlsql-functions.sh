@@ -74,6 +74,8 @@ EOF
 ## Download byzer-lang, spark, hadoop, nlp , ansj , plugin
 function download_byzer_lang_related_jars {
     echo "lib_path ${lib_path}"
+    [[ -z "${lib_path}" ]] && echo "lib_path is undefined, exit" && exit 1
+
     ## Download jars & packages if needed
     if [[ ! -f "${lib_path}/${SPARK_TGZ_NAME}.tgz" && ${SPARK_VERSION} == "3.1.1" ]]
     then
@@ -181,19 +183,25 @@ function download_byzer_lang_related_jars {
         --directory-prefix "${lib_path}/"
     fi
 
-    ## if byzer-lang tar ball does not exist in dev/lib, download
+    ## If byzer-lang tar ball does not exist in dev/lib, download
     if [[ ! -f "${lib_path}/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ]]
     then
       echo "Downloading Byzer-lang tar ball from download.byzer.org"
       if [[ ${BYZER_LANG_VERSION} == *"-SNAPSHOT" ]]
       then
-        wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/nightly-build/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" \
-              --directory-prefix "${lib_path}/"
+        wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/nightly-build/byzer-lang-${SPARK_VERSION}-latest.tar.gz" \
+              --directory-prefix "${lib_path}/" --output-document="byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz"
       else
         wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/${BYZER_LANG_VERSION}/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" \
-              --directory-prefix "${lib_path}/"
+              --directory-prefix "${lib_path}"
       fi
     fi
+    ## In Dockerfile,  ADD byzer-lang.tar and mv byzer-lang... byzer-lang would result in two layers,
+    ## making image size large. here, untar byzer-lang and rename its directory to byzer-lang.
+    ## In Dockerfile, two commands reduced to one.
+    rm -rf "${lib_path}/byzer-lang"
+    tar -xf "${lib_path}"/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz -C ${lib_path} && \
+    mv "${lib_path}/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}" "${lib_path}/byzer-lang"
 
     ## Download plugins from download.byzer.org
     for p in ${plugins[@]}
