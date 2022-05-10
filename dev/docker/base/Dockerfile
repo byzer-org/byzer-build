@@ -44,7 +44,7 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.10.3-Linu
     conda create -y --name ray1.8.0 python=3.6.13 && \
     conda activate ray1.8.0 && \
     pip install --upgrade pip && \
-    pip install --upgrade pyarrow==4.0.1 "ray[default]==1.8.0" aiohttp==3.7.4 "pandas~=1.0.5" requests  \
+    pip install --upgrade --no-cache-dir pyarrow==4.0.1 "ray[default]==1.8.0" aiohttp==3.7.4 "pandas~=1.0.5" requests  \
              "matplotlib~=3.3.4" "uuid~=1.30" pyjava opencv-python pyecharts matplotlib seaborn sklearn keras tensorflow && \
     $CONDA_HOME/bin/conda clean -tipsy -a && \
     echo "conda activate ray1.8.0" >> /etc/profile && \

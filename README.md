@@ -36,6 +36,9 @@ The image is built on Ubuntu 20.04, and packaged with
 - Spark-3.1.1-bin-hadoop3.2
 - Byzer-lang
 - Byzer-lang extensions: Shell, Excel, MLLib, Assert
+- MiniConda 3
+- Python 3.6 Ray 1.8.0 pandas 1.0.5 seaborn sklearn keras tensorflow
+
 An example to build the image
 
 ```shell
@@ -44,6 +47,40 @@ export SPARK_VERSION=3.1.1
 ## Run the script on dev directory, or it fails
 cd dev
 ./bin/build-spark3-image.sh
+```
+
+**Directory structure**
+
+```text
+/work
+├── jdk-14                        
+├── logs
+├── spark-3.1.1-bin-hadoop3.2
+└── user
+
+/home/deploy
+├── byzer-lang
+├── entrypoint.sh
+├── logs
+└── spark-warehouse
+
+/opt/conda
+├── LICENSE.txt
+├── bin
+├── compiler_compat
+├── conda-meta
+├── condabin
+├── envs
+├── etc
+├── include
+├── lib
+├── [Apr 23 09:29]  pkgs
+├── share
+├── shell
+├── ssl
+├── x86_64-conda-linux-gnu
+└── x86_64-conda_cos6-linux-gnu
+
 ```
 
 ## Byzer CLI

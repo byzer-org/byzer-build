@@ -27,12 +27,13 @@ ENV PATH=$PATH:${JAVA_HOME}/bin:$CONDA_HOME/bin
 
 RUN set -ex \
    && apt-get update \
-   && apt-get install -y locales tini wget \
+   && apt-get install -y locales tini wget vim curl \
    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 \
-   && rm -rf /var/lib/apt/lists/*
+   && rm -rf /var/lib/apt/lists/* \
+   && mkdir -p /work/logs \
+   && mkdir -p /work/user \
+   && mkdir -p /home/deploy/byzer-lang
 
-## Openjdk-14
-RUN mkdir /work
 ADD lib/openjdk-14_linux-x64_bin.tar.gz /work/
 
 ## Install Conda Ray
@@ -50,7 +51,7 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.10.3-Linu
     conda create -y --name ray1.8.0 python=3.6.13 && \
     conda activate ray1.8.0 && \
     pip install --upgrade pip && \
-    pip install --upgrade pyarrow==4.0.1 "ray[default]==1.8.0" aiohttp==3.7.4 "pandas~=1.0.5" requests  \
+    pip install --upgrade --no-cache-dir pyarrow==4.0.1 "ray[default]==1.8.0" aiohttp==3.7.4 "pandas~=1.0.5" requests  \
              "matplotlib~=3.3.4" "uuid~=1.30" pyjava opencv-python pyecharts matplotlib seaborn sklearn keras tensorflow && \
     $CONDA_HOME/bin/conda clean -tipsy -a && \
     echo "conda activate ray1.8.0" >> /etc/profile && \
@@ -73,28 +74,16 @@ ENV BASE_DIR /home/deploy
 ENV MLSQL_HOME ${BASE_DIR}/byzer-lang
 ENV PATH=$PATH:${MLSQL_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin:/opt/conda/bin
 
-## Creates directories
-RUN mkdir -p /work/logs && \
-    mkdir -p /work/user
-
 ## Spark
 ADD lib/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz /work
 ## Byzer-lang comes with higher version of velocity, so delete velocity-1.5.jar
 RUN rm /work/spark-${SPARK_VERSION}-bin-hadoop3.2/jars/velocity-1.5.jar
 COPY docker/byzer-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
 
-## copy jars to Spark/home
-COPY lib/${JUICE_JAR_NAME} \
-  lib/ansj_seg-5.1.6.jar \
-  lib/nlp-lang-1.7.8.jar \
-  ${SPARK_HOME}/jars/
-
 WORKDIR ${BASE_DIR}
 
-## mlsql
-ADD lib/"byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ${BASE_DIR}/
-RUN mv "byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}" ${MLSQL_HOME} \
-    && mkdir -p ${MLSQL_HOME}/logs
+## Byzer-lang. Byzer-lang is downloaded , untarred , renamed in mlsql-functions.sh
+ADD lib/byzer-lang ${BASE_DIR}/byzer-lang
 
 ##  auxiliary jars
 COPY lib/ansj_seg-5.1.6.jar \
