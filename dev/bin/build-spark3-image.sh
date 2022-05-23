@@ -24,7 +24,7 @@ set -u
 set -e
 set -o pipefail
 
-export JUICEFS_VERSION=${JUICEFS_VERSION:-0.15.2}
+export JUICEFS_VERSION=${JUICEFS_VERSION:-0.17.5}
 juice_jar_name="juicefs-hadoop-${JUICEFS_VERSION}-linux-amd64.jar"
 
 function build_image {
@@ -33,8 +33,9 @@ function build_image {
     then
       (
       echo "Downloading openjdk-14" &&
-      cd ${lib_path} &&
-      curl -O https://download.java.net/java/GA/jdk14/076bab302c7b4508975440c56f6cc26a/36/GPL/openjdk-14_linux-x64_bin.tar.gz
+      wget --no-check-certificate --no-verbose \
+       https://download.java.net/java/GA/jdk14/076bab302c7b4508975440c56f6cc26a/36/GPL/openjdk-14_linux-x64_bin.tar.gz \
+       --directory-prefix "${lib_path}/"
       ) || exit 1
     fi
 
@@ -42,10 +43,12 @@ function build_image {
     then
       (
       echo "Downloading juicefs-${JUICEFS_VERSION}" &&
-      cd ${lib_path} &&
-      curl -O "https://github.com/juicedata/juicefs/releases/download/v${JUICEFS_VERSION}/${juice_jar_name}"
+      wget --no-check-certificate --no-verbose \
+       "https://github.com/juicedata/juicefs/releases/download/v${JUICEFS_VERSION}/${juice_jar_name}" \
+       --directory-prefix "${lib_path}/"
       ) || exit 1
     fi
+
 
     docker build -t byzer/byzer-lang-k8s:3.1.1-${BYZER_LANG_VERSION:-latest} \
     --build-arg SPARK_VERSION=3.1.1 \
