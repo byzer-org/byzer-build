@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with
@@ -15,27 +17,21 @@
 # limitations under the License.
 #
 
-# The Dockerfile for Byzer-lang K8S aws image, adding s3-hadoop jar. This image includes
-# OpenJDK8
-# Spark 3.1.1-bin-hadoop3.2
-# Byzer-lang
-# Byzer-lang plugins
-# s3-hadoop shade jar
-# Directory structure
-# |- /work
-# |--- spark
-# |--- jdk
-# |- /home
-# |--- deploy
-# |------ byzer-lang
-# |-------- plugin
-# |-------- libs
-# |-------- main
-# |-------- bin
-# |-------- logs
+##############################################################################
+## Builds Byzer-lang arure k8s image
+##############################################################################
+set -u
+set -e
+set -o pipefail
 
-ARG TAG=latest
-FROM byzer-k8s-base:$TAG
-ARG HADOOP_S3_SHADE_JAR=aws-s3_3.3.1-1.0.1-SNAPSHOT.jar
+base_dir=$(cd "$(dirname $0)/../.." && pwd)
+echo "Project base dir ${base_dir}"
+export BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-latest}
+export AZURE_BLOB_NAME=${AZURE_BLOB_NAME:-azure-blob_3.2-1.0-SNAPSHOT.jar}
+echo "BYZER_LANG_VERSION ${BYZER_LANG_VERSION}"
 
-ADD https://download.byzer.org/byzer/misc/cloud/s3/${HADOOP_S3_SHADE_JAR} /home/deploy/byzer-lang/libs/
+docker build -t byzer/byzer-lang-k8s-azure:3.1.1-${BYZER_LANG_VERSION:-latest} \
+--build-arg AZURE_BLOB_NAME="${AZURE_BLOB_NAME}" \
+--build-arg TAG="${BYZER_LANG_VERSION}" \
+-f "${base_dir}/dev/k8s/azure/Dockerfile" \
+"${base_dir}/dev/k8s/azure"

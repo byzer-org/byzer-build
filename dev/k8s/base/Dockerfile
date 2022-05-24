@@ -35,10 +35,12 @@
 # |-------- logs
 
 FROM ubuntu:20.04
+ARG SPARK_VERSION=3.1.1
+ARG JUICEFS_VERSION=0.17.5
 
 ENV SPARK_VERSION=3.1.1 \
     LANG=C.UTF-8 LC_ALL=C.UTF-8 \
-    JAVA_HOME=/work/openlogic-openjdk-8u292-b10-linux-x64 \
+    JAVA_HOME=/work/jdk8 \
     BYZER_HOME=/home/deploy/byzer-lang
 ENV SPARK_HOME=/work/spark-${SPARK_VERSION}-bin-hadoop3.2
 ENV PATH=$PATH:${JAVA_HOME}/bin:${SPARK_HOME}/bin:${BYZER_HOME}/bin
@@ -52,23 +54,21 @@ RUN set -ex \
    && mkdir -p /work/user \
    && mkdir -p /home/deploy/byzer-lang
 
-ADD "http://download.byzer.org/byzer/misc/jdk/jdk8/openjdk-8u292-b10-linux-x64.tar.gz" /work/
-ADD "https://archive.apache.org/dist/spark/spark-${SPARK_VERSION}/spark-${SPARK_VERSION}-bin-hadoop3.2.tgz" /work
-#
-### Byzer-lang comes with higher version of velocity, so delete velocity-1.5.jar
-#RUN rm /work/spark-${SPARK_VERSION}-bin-hadoop3.2/jars/velocity-1.5.jar
-#COPY docker/byzer-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
-#
-#WORKDIR /home/deploy
-#
-### Byzer-lang. Byzer-lang is downloaded , untarred , renamed in mlsql-functions.sh
-#ADD lib/byzer-lang ${WORKDIR}/byzer-lang
-#
-#COPY lib/ansj_seg-5.1.6.jar lib/nlp-lang-1.7.8.jar lib/juicefs-hadoop-0.17.5-linux-amd64.jar ${BYZER_HOME}/libs/
-#
-#COPY  lib/mlsql-assert-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-#  lib/mlsql-excel-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-#  lib/mlsql-ext-ets-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-#  lib/mlsql-shell-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-#  lib/mlsql-mllib-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-#  ${MLSQL_HOME}/plugin/
+COPY lib/"spark-${SPARK_VERSION}-bin-hadoop3.2" /work/spark-${SPARK_VERSION}-bin-hadoop3.2
+COPY lib/jdk8 /work/jdk8
+COPY docker/byzer-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
+
+WORKDIR /home/deploy
+
+# Byzer-lang. Byzer-lang is downloaded , untarred , renamed in mlsql-functions.sh
+COPY lib/byzer-lang ${BYZER_HOME}
+
+COPY lib/ansj_seg-5.1.6.jar lib/nlp-lang-1.7.8.jar lib/juicefs-hadoop-${JUICEFS_VERSION}-linux-amd64.jar \
+ ${BYZER_HOME}/libs/
+
+COPY lib/mlsql-assert-3.0_2.12-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-excel-3.0_2.12-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-ext-ets-3.0_2.12-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-shell-3.0_2.12-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-mllib-3.0_2.12-0.1.0-SNAPSHOT.jar \
+  ${BYZER_HOME}/plugin/
