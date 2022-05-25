@@ -41,20 +41,18 @@ ENV PATH=$PATH:${BYZER_LANG_HOME}/bin:${SPARK_HOME}/sbin:${SPARK_HOME}/bin
 RUN mkdir -p /work/logs /work/user /byzer/_delta
 
 ## Spark
-ADD lib/${SPARK_TGZ_NAME}.tgz /work
+COPY lib/${SPARK_TGZ_NAME} /work/${SPARK_TGZ_NAME}
 COPY docker/byzer-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
 
 WORKDIR ${BASE_DIR}
 
 ## Byzer-lang
-ADD lib/"byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ${BASE_DIR}/
-RUN mv "byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}" byzer-lang && \
-    rm ${SPARK_HOME}/jars/velocity-1.5.jar
+COPY lib/byzer-lang ${BASE_DIR}/byzer-lang
 
 COPY lib/ansj_seg-5.1.6.jar \
   lib/nlp-lang-1.7.8.jar \
-  lib/${AZURE_BLOB_NAME} \
   ${BYZER_LANG_HOME}/libs/
+
 COPY lib/mlsql-assert-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
      lib/mlsql-excel-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
      lib/mlsql-ext-ets-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \

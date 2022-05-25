@@ -53,10 +53,10 @@ RUN mkdir -p /work/logs /work/user /byzer/_delta
 COPY ${BYZER_COMPOSE_PATH}/start-byzer-lang.sh $BASE_DIR/
 
 ## Spark
-ADD lib/${SPARK_TGZ_NAME}.tgz /work
-RUN rm /work/${SPARK_TGZ_NAME}/jars/velocity-1.5.jar
+COPY lib/${SPARK_TGZ_NAME} /work/${SPARK_TGZ_NAME}
+
 ADD lib/${HADOOP_TGZ_NAME}.tar.gz /work
-ADD lib/${SCALA_TGZ_NAME}.tgz /work
+
 COPY ${BYZER_COMPOSE_PATH}/log4j.properties ${BYZER_COMPOSE_PATH}/spark-env.sh ${SPARK_HOME}/conf/
 COPY ${BYZER_COMPOSE_PATH}/hadoop/core-site.xml \
      ${BYZER_COMPOSE_PATH}/hadoop/hdfs-site.xml \
@@ -66,8 +66,8 @@ COPY ${BYZER_COMPOSE_PATH}/hadoop/core-site.xml \
 WORKDIR ${BASE_DIR}
 
 ## byzer-lang
-ADD lib/"byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ${BASE_DIR}/
-RUN mv "byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}" byzer-lang
+COPY lib/byzer-lang ${BASE_DIR}/byzer-lang
+
 COPY lib/ansj_seg-5.1.6.jar \
   lib/nlp-lang-1.7.8.jar \
   lib/${AZURE_BLOB_NAME} \

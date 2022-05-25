@@ -46,7 +46,7 @@ export BYZER_LANG_VERSION=2.3.0-SNAPSHOT
 export SPARK_VERSION=3.1.1
 ## Run the script on dev directory, or it fails
 cd dev
-./bin/build-spark3-image.sh
+./bin/build-byzer-lang-k8s-azure-image.sh
 ```
 
 **Directory structure**
@@ -83,9 +83,9 @@ cd dev
 
 ```
 
-## Byzer CLI
-To install and run the CLI, please visit [CLI doc](https://docs.byzer.org/#/byzer-lang/zh-cn/installation/cli-installation) .
-Tar ball naming convention is `byzer-lang-<os>-<byzer_spark_version>-<byzer_lang_version>.tar.gz`.
+## Byzer all-in-one
+To install and run the all-in-one, please visit [all-in-one doc](https://docs.byzer.org/#/byzer-lang/zh-cn/installation/server/byzer-all-in-one-deployment) .
+Tar ball naming convention is `byzer-lang-all-in-one-<os>-amd64-<byzer_spark_version>-<byzer_lang_version>.tar.gz`.
 
 | Parameter           | Explanation                                                             |
 |---------------------|-------------------------------------------------------------------------|
@@ -93,13 +93,14 @@ Tar ball naming convention is `byzer-lang-<os>-<byzer_spark_version>-<byzer_lang
 | byzer_spark_version | 3.0 for Spark 3.1.1 2.4 for Spark 2.4.3                                 |
 | os                  | linux darwin(mac) win                                                   |
 
-To build the Byzer CLI
+To build the Byzer all-in-one
 ```shell
-./dev/bin/app/build-byzer-cli-release.sh <byzer_spark_version> <byzer_lang_version> <os>
-```
-For instance, to build Byzer CLI for linux spark 3.1.1 byzer-lang 2.2.0, run
-```shell
-./dev/bin/app/build-byzer-cli-release.sh 3.0 2.2.0 linux
+export JUICEFS_VERSION=0.17.5
+export SPARK_VERSION=3.1.1
+export BYZER_LANG_VERSION=2.3.0-SNAPSHOT
+export OS=linux
+# darwin for MacOS, win for Windows
+./dev/bin/app/build-byzer-cli-release.sh
 ```
 
 ## Multi-container deployment
