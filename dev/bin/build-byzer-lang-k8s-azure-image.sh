@@ -27,11 +27,17 @@ set -o pipefail
 base_dir=$(cd "$(dirname $0)/../.." && pwd)
 echo "Project base dir ${base_dir}"
 export BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-latest}
+export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
 export AZURE_BLOB_NAME=${AZURE_BLOB_NAME:-azure-blob_3.2-1.0-SNAPSHOT.jar}
-echo "BYZER_LANG_VERSION ${BYZER_LANG_VERSION}"
 
-docker build -t byzer/byzer-lang-k8s-azure:3.1.1-${BYZER_LANG_VERSION:-latest} \
+cat << EOF
+BYZER_LANG_VERSION ${BYZER_LANG_VERSION}
+AZURE_BLOB_NAME ${AZURE_BLOB_NAME}
+SPARK_VERSION ${SPARK_VERSION}
+EOF
+
+docker build -t byzer/byzer-lang-k8s-azure:"${SPARK_VERSION}-${BYZER_LANG_VERSION:-latest}" \
 --build-arg AZURE_BLOB_NAME="${AZURE_BLOB_NAME}" \
---build-arg TAG="${BYZER_LANG_VERSION}" \
+--build-arg TAG="${SPARK_VERSION}-${BYZER_LANG_VERSION}" \
 -f "${base_dir}/dev/k8s/azure/Dockerfile" \
 "${base_dir}/dev/k8s/azure"

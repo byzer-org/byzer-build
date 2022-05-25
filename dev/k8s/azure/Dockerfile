@@ -34,8 +34,8 @@
 # |-------- bin
 # |-------- logs
 
-ARG TAG=latest
-FROM byzer-k8s-base:$TAG
+ARG TAG
+FROM byzer-lang-k8s-base:$TAG
 
 ARG AZURE_BLOB_NAME=azure-blob_3.2-1.0-SNAPSHOT.jar
 
