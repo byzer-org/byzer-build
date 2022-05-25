@@ -42,7 +42,9 @@
 # export SPARK_VERSION=3.1.1
 # export BYZER_LANG_VERSION=2.3.0-SNAPSHOT
 # export OS=linux
+# export JUICEFS_VERSION=0.17.5
 # dev/bin/build-byzer-cli-release.sh
+
 ##############################################################################
 
 set -e
@@ -55,60 +57,45 @@ download_base_url="https://download.byzer.org/"
 ## linux darwin win
 os=${OS:-linux}
 
-# Download open JDK8 from download.byzer.org
-function download_jdk8 {
-  echo "Downloading jdk8"
-  if [[ ${os} == "linux" ]]
+function cp_jdk {
+
+  if [[ ! -d "${base_dir}"/dev/lib/jdk8 ]]
   then
-    wget --no-check-certificate --no-verbose \
-      "http://download.byzer.org/byzer/misc/jdk/jdk8/openjdk-8u292-b10-linux-x64.tar.gz" \
-      --directory-prefix "${target_dir}/tmp"
-    tar -xf "${target_dir}/tmp/openjdk-8u292-b10-linux-x64.tar.gz" -C ${target_dir}
-    mv ${target_dir}/openlogic-openjdk-8u292-b10-linux-x64 ${target_dir}/jdk8
-    rm -f ${target_dir}/tmp/openjdk-8u292-b10-linux-x64.tar.gz
-  elif [[ ${os} == "win" ]]
-  then
-    wget --no-check-certificate --no-verbose "${download_base_url}/byzer/misc/jdk/jdk8/jdk8_win.zip" \
-      --directory-prefix "${target_dir}/tmp"
-    unzip -q -o "${target_dir}/tmp/jdk8_win.zip" -d ${target_dir}/
-    rm -f "${target_dir}/tmp/jdk8_win.zip"
-  else
-    ## MacOS
-    wget --no-check-certificate --no-verbose "${download_base_url}/byzer/misc/jdk/jdk8/jdk8_mac.zip" \
-          --directory-prefix "${target_dir}/tmp"
-    unzip -q -o "${target_dir}/tmp/jdk8_mac.zip" -d ${target_dir}/
-    chmod +x ${target_dir}/jdk8/bin/java
-    rm -f "${target_dir}/tmp/jdk8_mac.zip"
+    echo "jdk8 is missing from ${base_dir}/dev/lib"
+    exit 1
   fi
-  echo "JDK8 download succeed"
+
+  cp -R "${base_dir}"/dev/lib/jdk8 ${target_dir}/jdk8
+
 }
 
 function cp_plugins {
   [[ -z ${plugins} ]] && echo "plugins variable is not defined" && exit 1
   for p in "${plugins[@]}"
   do
-    cp ${base_dir}/dev/lib/${p}-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar ${target_dir}/plugin/
+    cp "${base_dir}/dev/lib/${p}-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar" ${target_dir}/plugin/
   done
   echo "plugin copy succeed"
 }
 
+## Assuming byzer-lang binary tar has been downloaded, untarred in dev/lib/byzer-lang
+## The function copies byzer-lang main jar , scripts and config files to ${target_dir}/
 function cp_byzer_lang {
-
-  if [[ ! -f "${base_dir}/dev/lib/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ]]
+  if [[ ! -d "${base_dir}/dev/lib/byzer-lang" ]]
   then
-    echo "${base_dir}/dev/lib/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz does not exist"
+    echo "${base_dir}/dev/lib/byzer-lang does not exist"
     exit 1
   fi
-  tar -xf "${base_dir}/dev/lib/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" -C "${target_dir}/tmp"
-  cp "${target_dir}/tmp/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}/main/byzer-lang-${SPARK_VERSION}-${SCALA_BINARY_VERSION}-${BYZER_LANG_VERSION}.jar" \
+  cp "${base_dir}"/dev/lib/byzer-lang/main/byzer-lang-${SPARK_VERSION}-${SCALA_BINARY_VERSION}-${BYZER_LANG_VERSION}.jar \
   "${target_dir}/main/"
+
   ## Copy start and stop script
-  cp "${target_dir}/tmp/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}/bin/"* "${target_dir}/bin/"
-  cp "${target_dir}/tmp/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}/conf/"* "${target_dir}/conf/"
+  cp "${base_dir}"/dev/lib/byzer-lang/bin/* "${target_dir}/bin/"
+  cp "${base_dir}"/dev/lib/byzer-lang/conf/* "${target_dir}/conf/"
   cp "${target_dir}/conf/byzer.properties.all-in-one.example" "${target_dir}/conf/byzer.properties.override"
-  cp "${target_dir}/tmp/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}/LICENSE" "${target_dir}/"
-  cp "${target_dir}/tmp/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}/README.md" "${target_dir}/"
-  cp "${target_dir}/tmp/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}/RELEASES.md" "${target_dir}/"
+  cp "${base_dir}"/dev/lib/byzer-lang/LICENSE "${target_dir}/"
+  cp "${base_dir}"/dev/lib/byzer-lang/README.md "${target_dir}/"
+  cp "${base_dir}"/dev/lib/byzer-lang/RELEASES.md "${target_dir}/"
 
   echo "byzer-lang copy succeed"
 
@@ -134,8 +121,10 @@ function download_cli {
 function cp_3rd_party_jars {
   [[ ! -f "${base_dir}/dev/lib/ansj_seg-5.1.6.jar" ]] && echo "${base_dir}/dev/lib/ansj_seg-5.1.6.jar does not exist" && exit 1
   [[ ! -f "${base_dir}/dev/lib/nlp-lang-1.7.8.jar" ]] && echo "${base_dir}/dev/lib/nlp-lang-1.7.8.jar does not exist" && exit 1
-  cp ${base_dir}/dev/lib/ansj_seg-5.1.6.jar ${target_dir}/libs/
-  cp ${base_dir}/dev/lib/nlp-lang-1.7.8.jar ${target_dir}/libs/
+  [[ ! -f "${base_dir}"/dev/lib/"${juice_jar_name}" ]] && echo "${base_dir}/dev/lib/${juice_jar_name} does not exist" && exit 1
+  cp "${base_dir}/dev/lib/ansj_seg-5.1.6.jar" "${target_dir}/libs/"
+  cp "${base_dir}/dev/lib/nlp-lang-1.7.8.jar" "${target_dir}/libs/"
+  cp "${base_dir}"/dev/lib/"${juice_jar_name}" "${target_dir}/libs/"
 
   echo  "Download 3rd-party jars succeed"
 }
@@ -143,10 +132,10 @@ function cp_3rd_party_jars {
 function download_hadoop_win_lib {
   if [[ ! -f ${base_dir}/dev/lib/hadoop-3.0.0.tar.gz ]]
     then
-      wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/misc/hadoop/hadoop-3.0.0.tar.gz" --directory-prefix "${base_dir}/dev/lib/"
+      wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/misc/hadoop/hadoop-3.0.0.tar.gz" \
+        --directory-prefix "${base_dir}/dev/lib/"
     fi
-    tar -xf ${base_dir}/dev/lib/hadoop-3.0.0.tar.gz -C ${target_dir}/
-
+    tar -xf "${base_dir}/dev/lib/hadoop-3.0.0.tar.gz" -C "${target_dir}/"
     echo  "Download hadoop win libs succeed"
 }
 
@@ -156,11 +145,7 @@ function cp_spark_jars {
 
   if [[ ${BYZER_SPARK_VERSION} == "3.0" ]]
   then
-    cp ${base_dir}/dev/lib/spark-3.1.1-bin-hadoop3.2.tgz "${target_dir}/tmp/"
-    tar -xf "${target_dir}/tmp/spark-3.1.1-bin-hadoop3.2.tgz" -C "${target_dir}/tmp/"
-    cp "${target_dir}/tmp/spark-3.1.1-bin-hadoop3.2/jars/"* "${target_dir}/spark/"
-    rm "${target_dir}/spark/velocity-1.5.jar"
-
+    cp "${base_dir}/dev/lib/spark-3.1.1-bin-hadoop3.2/jars/"* "${target_dir}/spark/"
     if [[ ! -f "${target_dir}/spark/spark-core_2.12-3.1.1.jar" ]]
     then
       echo "Failed to copy spark 3.1.1"
@@ -170,14 +155,7 @@ function cp_spark_jars {
 
   if [[ ${BYZER_SPARK_VERSION} == "2.4" ]]
   then
-    if [[ ! -f "${base_dir}/dev/lib/spark-2.4.3-bin-hadoop2.7.tgz" ]]
-    then
-      wget --no-check-certificate --no-verbose https://archive.apache.org/dist/spark/spark-2.4.3/spark-2.4.3-bin-hadoop2.7.tgz \
-      --directory-prefix ${base_dir}/dev/lib
-    fi
-    cp ${base_dir}/dev/lib/spark-2.4.3-bin-hadoop2.7.tgz "${target_dir}/tmp/"
-    tar -xf "${target_dir}/tmp/spark-2.4.3-bin-hadoop2.7.tgz" -C "${target_dir}/tmp/"
-    cp "${target_dir}/tmp/spark-2.4.3-bin-hadoop2.7.tgz/jars/"* "${target_dir}/spark/"
+    cp "${base_dir}/dev/lib/spark-2.4.3-bin-hadoop2.7/jars/"* "${target_dir}/spark/"
     if [[ ! -f "${target_dir}/spark/spark-core_2.11-2.4.3.jar" ]]
     then
       echo "Failed to copy spark 2.4.3"
@@ -210,7 +188,7 @@ mkdir -p "${target_dir}/conf"
 ## This function is defined in mlsql-function.sh
 download_byzer_lang_related_jars
 
-download_jdk8
+cp_jdk
 
 download_cli
 
