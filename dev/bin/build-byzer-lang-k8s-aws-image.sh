@@ -31,11 +31,17 @@ set -o pipefail
 base_dir=$(cd "$(dirname $0)/../.." && pwd)
 echo "Project base dir ${base_dir}"
 export BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-latest}
+export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
 export HADOOP_S3_SHADE_JAR=${HADOOP_S3_SHADE_JAR:-aws-s3_3.3.1-1.0.1-SNAPSHOT.jar}
-echo "BYZER_LANG_VERSION ${BYZER_LANG_VERSION}"
 
-docker build -t byzer/byzer-lang-k8s-aws:3.1.1-${BYZER_LANG_VERSION:-latest} \
+cat << EOF
+BYZER_LANG_VERSION ${BYZER_LANG_VERSION}
+HADOOP_S3_SHADE_JAR ${HADOOP_S3_SHADE_JAR}
+SPARK_VERSION ${SPARK_VERSION}
+EOF
+
+docker build -t byzer/byzer-lang-k8s-aws:"${SPARK_VERSION}-${BYZER_LANG_VERSION}" \
 --build-arg HADOOP_S3_SHADE_JAR="${HADOOP_S3_SHADE_JAR}" \
---build-arg TAG="${BYZER_LANG_VERSION}" \
+--build-arg TAG="${SPARK_VERSION}-${BYZER_LANG_VERSION}" \
 -f "${base_dir}/dev/k8s/azure/Dockerfile" \
 "${base_dir}/dev/k8s/azure"
