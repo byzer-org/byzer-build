@@ -52,6 +52,7 @@ RUN set -ex \
    && rm -rf /var/lib/apt/lists/* \
    && mkdir -p /work/logs \
    && mkdir -p /work/user \
+   && mkdir -p /work/bin \
    && mkdir -p /home/deploy/byzer-lang
 
 COPY lib/"spark-${SPARK_VERSION}-bin-hadoop3.2" /work/spark-${SPARK_VERSION}-bin-hadoop3.2
@@ -72,3 +73,7 @@ COPY lib/mlsql-assert-3.0_2.12-0.1.0-SNAPSHOT.jar \
   lib/mlsql-shell-3.0_2.12-0.1.0-SNAPSHOT.jar \
   lib/mlsql-mllib-3.0_2.12-0.1.0-SNAPSHOT.jar \
   ${BYZER_HOME}/plugin/
+
+COPY k8s/base/entrypoint.sh /work/bin/
+
+ENTRYPOINT [ "/work/bin/entrypoint.sh" ]
