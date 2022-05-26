@@ -2,7 +2,7 @@
 FROM ubuntu-baseimage
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 DEBIAN_FRONTEND=noninteractive \
-    JAVA_HOME=/work/openjdk-8u292 \
+    JAVA_HOME=/work/openjdk-8u332 \
     CONDA_HOME=/opt/conda
 ## To make CONDA_HOME & JAVA_HOME evaluated, we need another ENV command.
 ENV PATH=$CONDA_HOME/bin:$PATH:${JAVA_HOME}/bin
@@ -24,10 +24,10 @@ RUN rm -rf /var/lib/apt/lists/*  \
    localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8 && \
    rm -rf /var/lib/apt/lists/* && \
    mkdir -p /work && \
-   wget --quiet "http://download.byzer.org/byzer/misc/jdk/jdk8/openjdk-8u292-b10-linux-x64.tar.gz" && \
-   tar -xf openjdk-8u292-b10-linux-x64.tar.gz -C /work/ && \
-   mv /work/openlogic-openjdk-8u292-b10-linux-x64 /work/openjdk-8u292 && \
-   rm openjdk-8u292-b10-linux-x64.tar.gz
+   wget --quiet "http://download.byzer.org/byzer/misc/jdk/jdk8/openjdk-8u332-b09-linux-x64.tar.gz" && \
+   tar -xf openjdk-8u332-b09-linux-x64.tar.gz -C /work/ && \
+   mv /work/openlogic-openjdk-8u332-b09-linux-x64 /work/openjdk-8u332 && \
+   rm openjdk-8u332-b09-linux-x64.tar.gz
 
 ## Install Conda Ray
 ## Activate Ray 1.8.0 by default

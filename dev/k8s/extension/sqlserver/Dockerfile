@@ -15,7 +15,7 @@
 # limitations under the License.
 #
 
-# The Dockerfile for Byzer-lang K8S aws image, adding s3-hadoop jar. This image includes
+# The Dockerfile for Byzer-lang K8S aws image, adding s3-hadoop jar and SQL Server JDBCjar. This image includes
 # OpenJDK8
 # Spark 3.1.1-bin-hadoop3.2
 # Byzer-lang
@@ -35,7 +35,6 @@
 # |-------- logs
 
 ARG TAG=latest
-FROM byzer/byzer-lang-k8s-base:$TAG
-ARG HADOOP_S3_SHADE_JAR=aws-s3_3.3.1-1.0.1-SNAPSHOT.jar
+FROM byzer/byzer-lang-k8s-aws:$TAG
 
-ADD https://download.byzer.org/byzer/misc/cloud/s3/${HADOOP_S3_SHADE_JAR} /home/deploy/byzer-lang/libs/
+ADD https://repo1.maven.org/maven2/com/microsoft/sqlserver/mssql-jdbc/10.2.1.jre8/mssql-jdbc-10.2.1.jre8.jar /home/deploy/byzer-lang/libs/

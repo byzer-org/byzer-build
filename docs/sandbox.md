@@ -38,7 +38,7 @@ byzer-sandbox   3.1.1-latest           c24583e8fe47   34 minutes ago   2.61GB
 
 ## Environment Variables
 ````shell
-export JAVA_HOME=/work/openjdk-8u292
+export JAVA_HOME=/work/openjdk-8u332
 export SPARK_VERSION=<2.4.3 || 3.1.1>
 export SPARK_HOME=/work/spark-${SPARK_VERSION}
 export BYZER_LANG_HOME=/home/deploy/byzer-lang

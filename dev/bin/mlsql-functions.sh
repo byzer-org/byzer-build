@@ -26,7 +26,7 @@ mlsql_console_path="${base_dir}/console"
 byzer_notebook_path="${base_dir}/byzer-notebook"
 base_image_path="${base_dir}/dev/docker/base"
 byzer_sandbox_path="${base_dir}/dev/docker/byzer-sandbox"
-lib_path=${base_dir}/dev/lib
+lib_path="${base_dir}"/dev/lib
 declare array plugins=(mlsql-excel mlsql-shell mlsql-assert mlsql-language-server mlsql-ext-ets mlsql-mllib )
 
 # Many environment variables are inferred from SPARK_VERSION
@@ -36,7 +36,6 @@ export BYZER_NOTEBOOK_HOME=$byzer_notebook_path
 export JUICEFS_VERSION=${JUICEFS_VERSION:-0.17.5}
 juice_jar_name="juicefs-hadoop-${JUICEFS_VERSION}-linux-amd64.jar"
 os=${OS:-linux}
-
 
 if [[ ${SPARK_VERSION} == "2.4.3" ]]
 then
@@ -73,70 +72,81 @@ SPARK_TGZ_NAME ${SPARK_TGZ_NAME}
 HADOOP_TGZ_NAME ${HADOOP_TGZ_NAME}
 SCALA_BINARY_VERSION ${SCALA_BINARY_VERSION}
 BYZER_NOTEBOOK_VERSION ${BYZER_NOTEBOOK_VERSION}
+juice_jar_name ${juice_jar_name}
 os ${os}
 EOF
 
+function clean_lib_path {
+  echo "lib_path ${lib_path}"
+  [[ -z "${lib_path}" ]] && echo "lib_path is undefined, exit" && exit 1
+  rm -rf "${lib_path:?}"/*
+}
+
 ## Download byzer-lang, spark, hadoop, nlp , ansj , plugin
 function download_byzer_lang_related_jars {
-    echo "lib_path ${lib_path}"
-    [[ -z "${lib_path}" ]] && echo "lib_path is undefined, exit" && exit 1
+    clean_lib_path || exit 1
 
     echo "Download open JDK8 from download.byzer.org"
-    rm -rf "${lib_path}"/jdk8
     if [[ "${os}" == "linux" ]]
     then
-      wget --no-check-certificate --no-verbose \
-        "http://download.byzer.org/byzer/misc/jdk/jdk8/openjdk-8u292-b10-linux-x64.tar.gz" \
-        --directory-prefix "${lib_path}/"
-      tar -xf "${lib_path}/openjdk-8u292-b10-linux-x64.tar.gz" -C "${lib_path}" &&
-      mv "${lib_path}"/openlogic-openjdk-8u292-b10-linux-x64 "${lib_path}"/jdk8 &&
-      rm -f "${lib_path}"/openjdk-8u292-b10-linux-x64.tar.gz
+      (
+        local jdk_name="openjdk-8u332-b09-linux-x64"
+        wget --no-check-certificate --no-verbose \
+          "http://download.byzer.org/byzer/misc/jdk/jdk8/${jdk_name}.tar.gz" \
+          --directory-prefix "${lib_path}/"
+        tar -xf "${lib_path}/${jdk_name}.tar.gz" -C "${lib_path}" &&
+        mv "${lib_path}"/openlogic-${jdk_name} "${lib_path}"/jdk8
+      ) || exit 1
     elif [[ "${os}" == "win" ]]
     then
-      wget --no-check-certificate --no-verbose "http://download.byzer.org/byzer/misc/jdk/jdk8/jdk8_win.zip" \
-        --directory-prefix "${lib_path}"
-      unzip -q -o "${lib_path}/jdk8_win.zip" -d "${lib_path}/"
-      rm -f "${lib_path}/jdk8_win.zip"
+      (
+        wget --no-check-certificate --no-verbose "http://download.byzer.org/byzer/misc/jdk/jdk8/openjdk-8u332-b09-windows-x64.zip" \
+          --directory-prefix "${lib_path}" &&
+        unzip -q -o "${lib_path}/openjdk-8u332-b09-windows-x64.zip" -d "${lib_path}/" &&
+        mv "${lib_path}"/openlogic-openjdk-8u332-b09-windows-64 "${lib_path}"/jdk8
+      ) || exit 1
     elif [[ "${os}" == "darwin" ]]
     then
       ## MacOS
-      wget --no-check-certificate --no-verbose "http://download.byzer.org/byzer/misc/jdk/jdk8/jdk8_mac.zip" \
-            --directory-prefix "${lib_path}/"
-      unzip -q -o "${lib_path}/jdk8_mac.zip" -d "${lib_path}/"
-      chmod +x ${lib_path}/jdk8/bin/java
-      rm -f "${lib_path}/jdk8_mac.zip"
+      (
+        wget --no-check-certificate --no-verbose "http://download.byzer.org/byzer/misc/jdk/jdk8/openjdk-8u332-b09-mac-x64.zip" \
+            --directory-prefix "${lib_path}/" &&
+        unzip -q -o "${lib_path}/openjdk-8u332-b09-mac-x64.zip" -d "${lib_path}/" &&
+        mv "${lib_path}"/openlogic-openjdk-8u332-b09-mac-x64 "${lib_path}"/jdk8 &&
+        chmod +x "${lib_path}"/jdk8/Contents/Home/bin/java
+      ) || exit 1
     else
       echo "No need to download jdk for ${os}"
     fi
     echo "JDK8 download succeed"
 
-    ## Download jars & packages if needed
-    if [[ ! -d "${lib_path}/${SPARK_TGZ_NAME}" && ${SPARK_VERSION} == "3.1.1" ]]
+    ## Download Spark
+    if [[ ${SPARK_VERSION} == "3.1.1" ]]
     then
       (
         ### Byzer-lang comes with higher version of velocity, so delete velocity-1.5.jar from Spark
-        echo "Downloading Spark 3.1.1"
-        wget --no-check-certificate --no-verbose \
-          https://archive.apache.org/dist/spark/spark-3.1.1/spark-3.1.1-bin-hadoop3.2.tgz \
-          --directory-prefix "${lib_path}/"
+        echo "Downloading Spark 3.1.1" &&
+        wget --no-check-certificate --no-verbose --progress=dot \
+          http://download.byzer.org/byzer/misc/spark/3.1.1/spark-3.1.1-bin-hadoop3.2.tgz \
+          --directory-prefix "${lib_path}/" &&
         tar -zxf "${lib_path}"/spark-3.1.1-bin-hadoop3.2.tgz -C "${lib_path}" &&
-        rm -f "${lib_path}"/spark-3.1.1-bin-hadoop3.2.tgz &&
         rm -f "${lib_path}"/spark-3.1.1-bin-hadoop3.2/jars/velocity-1.5.jar
       ) || exit 1
     fi
 
-    if [[ ! -d "${lib_path}/${SPARK_TGZ_NAME}" && ${SPARK_VERSION} == "2.4.3" ]]
+    if [[ ${SPARK_VERSION} == "2.4.3" ]]
     then
         (
           echo "Downloading Spark 2.4.3"
+          rm -rf "${lib_path}"/spark-2.4.3-bin-hadoop2.7
           wget --no-check-certificate --no-verbose https://archive.apache.org/dist/spark/spark-2.4.3/spark-2.4.3-bin-hadoop2.7.tgz \
-            --directory-prefix "${lib_path}/"
+            --directory-prefix "${lib_path}/" || exit 1
           tar -zxf "${lib_path}"/spark-2.4.3-bin-hadoop2.7.tgz -C "${lib_path}" &&
           rm -f "${lib_path}"/spark-2.4.3-bin-hadoop2.7.tgz
         ) || exit 1
     fi
 
-    if [[ ! -f "${lib_path}/${HADOOP_TGZ_NAME}.tar.gz" && ${SPARK_VERSION} == "3.1.1" ]]
+    if [[ ${SPARK_VERSION} == "3.1.1" ]]
     then
       (
         echo "Downloading hadoop 3.2.3" &&
@@ -144,7 +154,7 @@ function download_byzer_lang_related_jars {
         local times_tried=0
         while [ $times_tried -le 3 ]; do
           echo "Downloading $times_tried"
-          if curl -O https://dlcdn.apache.org/hadoop/common/hadoop-3.2.3/hadoop-3.2.3.tar.gz && tar -zxf hadoop-3.2.3.tar.gz; then
+          if wget --no-check-certificate --no-verbose https://download.byzer.org/byzer/misc/hadoop/hadoop-3.2.3.tar.gz && tar -zxf hadoop-3.2.3.tar.gz; then
             rm -rf "${lib_path}"/hadoop-3.2.3
             break
           fi
@@ -156,8 +166,8 @@ function download_byzer_lang_related_jars {
         done
       ) || exit 1
     fi
-
-    if [[ ! -f "${lib_path}/${HADOOP_TGZ_NAME}.tar.gz" && ${SPARK_VERSION} == "2.4.3" ]]
+    ## Download Hadoop 2.7.0
+    if [[ ${SPARK_VERSION} == "2.4.3" ]]
     then
       (
         echo "Downloading hadoop 2.6.5" &&
@@ -178,31 +188,44 @@ function download_byzer_lang_related_jars {
       ) || exit 1
     fi
 
-    if [[ ! -f "${lib_path}/ansj_seg-5.1.6.jar" ]]
+    ( cd "${lib_path}" && curl -O https://download.byzer.org/byzer/misc/ansj_seg-5.1.6.jar ) || exit 1
+
+    ( cd "${lib_path}" && curl -O https://download.byzer.org/byzer/misc/nlp-lang-1.7.8.jar ) || exit 1
+
+    if [[ ${SPARK_VERSION} == "2.4.3" ]]
     then
-      ( cd "${lib_path}" && curl -O https://download.byzer.org/byzer/misc/ansj_seg-5.1.6.jar ) || exit 1
+      (
+        wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/misc/cloud/azure/azure-blob_2.7-1.0-SNAPSHOT.jar" \
+          --directory-prefix "${lib_path}/"
+      ) || exit 1
     fi
 
-    if [[ ! -f "${lib_path}/nlp-lang-1.7.8.jar" ]]
+    if [[ ${SPARK_VERSION} == "3.1.1" ]]
     then
-      ( cd "${lib_path}" && curl -O https://download.byzer.org/byzer/misc/nlp-lang-1.7.8.jar ) || exit 1
+      (
+        wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/misc/cloud/azure/azure-blob_3.2-1.0-SNAPSHOT.jar" \
+          --directory-prefix "${lib_path}/"
+      ) || exit 1
     fi
 
-    if [[ ${SPARK_VERSION} == "2.4.3" && ! -f "${lib_path}/azure-blob_2.7-1.0-SNAPSHOT.jar" ]]
-    then
-      wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/misc/cloud/azure/azure-blob_2.7-1.0-SNAPSHOT.jar" \
-        --directory-prefix "${lib_path}/"
-    fi
 
-    if [[ ${SPARK_VERSION} == "3.1.1" && ! -f "${lib_path}/azure-blob_3.2-1.0-SNAPSHOT.jar" ]]
-    then
-      wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/misc/cloud/azure/azure-blob_3.2-1.0-SNAPSHOT.jar" \
-        --directory-prefix "${lib_path}/"
-    fi
+    download_untar_byzer_lang || exit 1
 
+    download_byzer_plugin_jars || exit 1
+
+    (
+    echo "Downloading juicefs-${JUICEFS_VERSION}" &&
+    rm -f "${lib_path}"/"${juice_jar_name}" &&
+    wget --no-check-certificate --no-verbose \
+     "https://download.byzer.org/byzer/misc/juicefs/${juice_jar_name}" \
+     --directory-prefix "${lib_path}/"
+    ) || exit 1
+
+}
+
+function download_untar_byzer_lang {
     ## Download byzer-lang tar ball and extract it to dev/lib
-    if [[ ! -f "${lib_path}/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" ]]
-    then
+    (
       echo "Downloading Byzer-lang tar ball from download.byzer.org"
       if [[ ${BYZER_LANG_VERSION} == *"-SNAPSHOT" ]]
       then
@@ -212,16 +235,18 @@ function download_byzer_lang_related_jars {
         wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/${BYZER_LANG_VERSION}/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" \
           --directory-prefix "${lib_path}"
       fi
-    fi
+    ) || exit 1
     ## In Dockerfile,  ADD byzer-lang.tar and mv byzer-lang... byzer-lang would result in two layers,
     ## making image size large. here, untar byzer-lang and rename its directory to byzer-lang.
-    rm -rf "${lib_path}/byzer-lang"
-    tar -xf "${lib_path}/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" -C ${lib_path} && \
-    mv "${lib_path}/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}" "${lib_path}/byzer-lang"
-    rm "${lib_path}/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz"
+    (
+      tar -xf "${lib_path}/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" -C "${lib_path}" &&
+      mv "${lib_path}/byzer-lang-${SPARK_VERSION}-${BYZER_LANG_VERSION}" "${lib_path}/byzer-lang"
+    ) || exit 1
+}
 
+function download_byzer_plugin_jars {
     ## Download plugins from download.byzer.org
-    for p in ${plugins[@]}
+    for p in "${plugins[@]}"
     do
       if [[ ! -f "${lib_path}/${p}-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar" ]]
       then
@@ -229,19 +254,9 @@ function download_byzer_lang_related_jars {
         wget --no-check-certificate \
           --no-verbose \
           https://download.byzer.org/byzer-extensions/nightly-build/${p}-${BYZER_SPARK_VERSION}_${SCALA_BINARY_VERSION}-0.1.0-SNAPSHOT.jar \
-          --directory-prefix "${lib_path}/"
+          --directory-prefix "${lib_path}/" || exit 1
       fi
     done
-
-    if [[ ! -f "${lib_path}/${juice_jar_name}" ]]
-    then
-      (
-      echo "Downloading juicefs-${JUICEFS_VERSION}" &&
-      wget --no-check-certificate --no-verbose \
-       "https://github.com/juicedata/juicefs/releases/download/v${JUICEFS_VERSION}/${juice_jar_name}" \
-       --directory-prefix "${lib_path}/"
-      ) || exit 1
-    fi
 }
 
 ## Builds mlsql-api-console shade jar
@@ -255,7 +270,7 @@ function build_mlsql_api_console {
     echo "Failed to generate mlsql-api-console jar file, exit"
     exit 1
     fi
-    cp ${mlsql_console_path}/target/mlsql-api-console-${MLSQL_CONSOLE_VERSION}.jar ${lib_path}/
+    cp "${mlsql_console_path}"/target/mlsql-api-console-${MLSQL_CONSOLE_VERSION}.jar ${lib_path}/
 }
 
 ## Builds byzer_notebook distribution package
@@ -276,7 +291,7 @@ function build_byzer_notebook {
     if [[ ! -z ${lib_path} && -d "${lib_path}/byzer-notebook" ]]
     then
       echo "Remove ${lib_path}/byzer-notebook"
-      rm -rf ${lib_path}/byzer-notebook
+      rm -rf "${lib_path}"/byzer-notebook
     fi
     # Get rid of BYZER_NOTEBOOK_VERSION from path; because human-set BYZER_NOTEBOOK_VERSION sometimes is incorrect
     echo "Copy byzer-notebook to ${lib_path}/byzer-notebook"
