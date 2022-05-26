@@ -35,7 +35,7 @@
 # |-------- logs
 
 ARG TAG
-FROM byzer-lang-k8s-base:$TAG
+FROM byzer/byzer-lang-k8s-base:$TAG
 
 ARG AZURE_BLOB_NAME=azure-blob_3.2-1.0-SNAPSHOT.jar
 

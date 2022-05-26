@@ -35,7 +35,7 @@
 # |-------- logs
 
 ARG TAG=latest
-FROM byzer-lang-k8s-base:$TAG
+FROM byzer/byzer-lang-k8s-base:$TAG
 ARG HADOOP_S3_SHADE_JAR=aws-s3_3.3.1-1.0.1-SNAPSHOT.jar
 
 ADD https://download.byzer.org/byzer/misc/cloud/s3/${HADOOP_S3_SHADE_JAR} /home/deploy/byzer-lang/libs/
