@@ -36,7 +36,7 @@ AZURE_BLOB_NAME ${AZURE_BLOB_NAME}
 SPARK_VERSION ${SPARK_VERSION}
 EOF
 
-docker build -t byzer/byzer-lang-k8s-azure:"${SPARK_VERSION}-${BYZER_LANG_VERSION:-latest}" \
+docker build --no-cache -t byzer/byzer-lang-k8s-azure:"${SPARK_VERSION}-${BYZER_LANG_VERSION:-latest}" \
 --build-arg AZURE_BLOB_NAME="${AZURE_BLOB_NAME}" \
 --build-arg TAG="${SPARK_VERSION}-${BYZER_LANG_VERSION}" \
 -f "${base_dir}/dev/k8s/azure/Dockerfile" \
