@@ -43,5 +43,5 @@ EOF
 docker build --no-cache -t byzer/byzer-lang-k8s-aws:"${SPARK_VERSION}-${BYZER_LANG_VERSION}" \
 --build-arg HADOOP_S3_SHADE_JAR="${HADOOP_S3_SHADE_JAR}" \
 --build-arg TAG="${SPARK_VERSION}-${BYZER_LANG_VERSION}" \
--f "${base_dir}/dev/k8s/azure/Dockerfile" \
-"${base_dir}/dev/k8s/azure"
+-f "${base_dir}/dev/k8s/aws/Dockerfile" \
+"${base_dir}/dev/k8s/aws"
