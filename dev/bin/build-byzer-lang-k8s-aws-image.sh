@@ -24,9 +24,18 @@
 # export SPARK_VERSION=3.1.1
 # export HADOOP_S3_SHADE_JAR=aws-s3_3.3.1-1.0.1-SNAPSHOT.jar
 # ./dev/bin/build-byzer-lang-k8s-aws-image.sh
-set -u
+# If you want to build with hadoop-aws 3.3.1-glue , run script
+# export HADOOP_S3_SHADE_JAR=aws-s3_3.3.1-glue-1.0.1-SNAPSHOT.jar
+# ./dev/bin/build-byzer-lang-k8s-aws-image.sh glue
+
 set -e
 set -o pipefail
+
+if [[ $# -ge 1 ]]
+then
+  tag_suffix="-$1"
+  echo "byzer-lang-k8s-aws tag suffix ${tag_suffix}"
+fi
 
 base_dir=$(cd "$(dirname $0)/../.." && pwd)
 echo "Project base dir ${base_dir}"
@@ -40,7 +49,7 @@ HADOOP_S3_SHADE_JAR ${HADOOP_S3_SHADE_JAR}
 SPARK_VERSION ${SPARK_VERSION}
 EOF
 
-docker build --no-cache -t byzer/byzer-lang-k8s-aws:"${SPARK_VERSION}-${BYZER_LANG_VERSION}" \
+docker build --no-cache -t byzer/byzer-lang-k8s-aws:"${SPARK_VERSION}-${BYZER_LANG_VERSION}${tag_suffix}" \
 --build-arg HADOOP_S3_SHADE_JAR="${HADOOP_S3_SHADE_JAR}" \
 --build-arg TAG="${SPARK_VERSION}-${BYZER_LANG_VERSION}" \
 -f "${base_dir}/dev/k8s/aws/Dockerfile" \
