@@ -93,7 +93,7 @@ function download_byzer_lang_related_jars {
         local jdk_name="openjdk-8u332-b09-linux-x64"
         wget --no-check-certificate --no-verbose \
           "http://download.byzer.org/byzer/misc/jdk/jdk8/${jdk_name}.tar.gz" \
-          --directory-prefix "${lib_path}/"
+          --directory-prefix "${lib_path}/" &&
         tar -xf "${lib_path}/${jdk_name}.tar.gz" -C "${lib_path}" &&
         mv "${lib_path}"/openlogic-${jdk_name} "${lib_path}"/jdk8
       ) || exit 1

@@ -136,6 +136,39 @@ function download_hadoop_win_lib() {
   ) || exit 1
 }
 
+function download_cp_byzer_shell {
+  echo "Download byzer-shell from download.byzer.org"
+    if [[ "${os}" == "linux" ]]
+    then
+      (
+        wget --no-check-certificate --no-verbose \
+          https://download.byzer.org/byzer/misc/byzer-shell/1.0.0/byzer-shell-linux \
+          --directory-prefix "${lib_path}/" &&
+        cp "${lib_path}"/byzer-shell-linux "${target_dir}"/bin/
+        chmod +x "${target_dir}"/bin/byzer-shell-linux
+      ) || exit 1
+    elif [[ "${os}" == "win" ]]
+    then
+      (
+        wget --no-check-certificate --no-verbose https://download.byzer.org/byzer/misc/byzer-shell/1.0.0/byzer-shell.exe \
+          --directory-prefix "${lib_path}" &&
+        cp "${lib_path}"/byzer-shell.exe "${target_dir}"/bin/
+      ) || exit 1
+    elif [[ "${os}" == "darwin" ]]
+    then
+      ## MacOS
+      (
+        wget --no-check-certificate --no-verbose https://download.byzer.org/byzer/misc/byzer-shell/1.0.0/byzer-shell-darwin \
+            --directory-prefix "${lib_path}/" &&
+        mv "${lib_path}"/byzer-shell-darwin "${target_dir}"/bin/ &&
+        chmod +x "${target_dir}"/bin/byzer-shell-darwin
+      ) || exit 1
+    else
+      echo "No need to download byzer-shell for ${os}"
+    fi
+    echo "Byzer-shell download & copy succeed"
+}
+
 function cp_spark_jars() {
 
   [[ ! -d "${target_dir}/tmp/" ]] && mkdir -p "${target_dir}/tmp/"
@@ -182,11 +215,12 @@ mkdir -p "${target_dir}/conf"
 
 (
   cp_jdk &&
-    download_cli &&
-    cp_plugins &&
-    cp_byzer_lang &&
-    cp_3rd_party_jars &&
-    cp_spark_jars
+  download_cli &&
+  cp_plugins &&
+  cp_byzer_lang &&
+  cp_3rd_party_jars &&
+  cp_spark_jars &&
+  download_cp_byzer_shell
 ) || exit 1
 
 [[ ${os} == "win" ]] && download_hadoop_win_lib
@@ -196,8 +230,8 @@ cp "${base_dir}/dev/bin/app/hello.byzer" "${target_dir}/bin/" || exit 1
 
 (
   cd "${target_dir}/.." &&
-    rm -f "byzer-lang-all-in-one-${os}-amd64-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" &&
-    tar -czf "byzer-lang-all-in-one-${os}-amd64-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" "./byzer-lang-all-in-one-${os}-amd64-${SPARK_VERSION}-${BYZER_LANG_VERSION}"
+  rm -f "byzer-lang-all-in-one-${os}-amd64-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" &&
+  tar -czf "byzer-lang-all-in-one-${os}-amd64-${SPARK_VERSION}-${BYZER_LANG_VERSION}.tar.gz" "./byzer-lang-all-in-one-${os}-amd64-${SPARK_VERSION}-${BYZER_LANG_VERSION}"
 ) || exit 1
 
 cat <<EOF
