@@ -16,7 +16,6 @@ services:
       interval: 2s
       timeout: 300s
       retries: 600
-      start_period: 70s
     security_opt:
       - seccomp:unconfined
 
@@ -41,7 +40,6 @@ services:
       interval: 2s
       timeout: 600s
       retries: 1600
-      start_period: 150s
 
   byzer-notebook:
     image: "byzer/byzer-notebook:${BYZER_NOTEBOOK_VERSION:-latest}"
@@ -72,7 +70,6 @@ services:
       interval: 2s
       timeout: 600s
       retries: 800
-      start_period: 70s
 
 networks:
   byzer-network:
