@@ -62,16 +62,17 @@ if [[ $@ == *"help"* ]]; then
     exit_with_usage
 fi
 
-SKIP_BUILDING_NOTEBOOK=${SKIP_BUILDING_NOTEBOOK:-false}
-
-echo "SKIP_BUILDING_NOTEBOOK ${SKIP_BUILDING_NOTEBOOK}"
-if [[ "${SKIP_BUILDING_NOTEBOOK}" == "true" ]]
-then
-  echo "Skip building Byzer-notebook"
-else
-  build_byzer_notebook
-fi
-
+function build_notebook {
+  SKIP_BUILDING_NOTEBOOK=${SKIP_BUILDING_NOTEBOOK:-false}
+  echo "SKIP_BUILDING_NOTEBOOK ${SKIP_BUILDING_NOTEBOOK}"
+  if [[ "${SKIP_BUILDING_NOTEBOOK}" == "true" ]]
+  then
+    echo "Skip building Byzer-notebook"
+  else
+    build_byzer_notebook
+  fi
+}
 download_byzer_lang_related_jars &&
+build_notebook &&
 build_image &&
 exit 0
