@@ -1,4 +1,5 @@
 ## ubuntu-baseimage: ubuntu20 with MySQL 8
+# repo mysql-python:8.0-3.6
 FROM ubuntu-baseimage
 
 ENV LANG=C.UTF-8 LC_ALL=C.UTF-8 DEBIAN_FRONTEND=noninteractive \

@@ -41,10 +41,13 @@ ARG JUICEFS_VERSION=0.17.5
 ENV SPARK_VERSION=3.1.1 \
     LANG=C.UTF-8 LC_ALL=C.UTF-8 \
     JAVA_HOME=/work/jdk8 \
-    BYZER_HOME=/home/deploy/byzer-lang
+    BYZER_HOME=/home/deploy/byzer-lang \
+    CONDA_HOME=/work/conda
 ENV SPARK_HOME=/work/spark-${SPARK_VERSION}-bin-hadoop3.2
 ENV PATH=$PATH:${JAVA_HOME}/bin:${SPARK_HOME}/bin:${BYZER_HOME}/bin
 
+
+## Install Conda and linux commands. Create directories
 RUN set -ex \
    && apt-get update \
    && apt-get install -y locales tini wget vim curl \
@@ -53,7 +56,14 @@ RUN set -ex \
    && mkdir -p /work/logs \
    && mkdir -p /work/user \
    && mkdir -p /work/bin \
-   && mkdir -p /home/deploy/byzer-lang
+   && mkdir -p /home/deploy/byzer-lang \
+   && wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.10.3-Linux-x86_64.sh -O ~/miniconda.sh && \
+   /bin/bash ~/miniconda.sh -b -p $CONDA_HOME && \
+   rm ~/miniconda.sh && \
+   ln -s $CONDA_HOME/etc/profile.d/conda.sh /etc/profile.d/conda.sh && \
+   echo ". $CONDA_HOME/etc/profile.d/conda.sh" >> /etc/profile && \
+   echo ". $CONDA_HOME/etc/profile.d/conda.sh" >> ~/.bashrc && \
+   . /etc/profile
 
 COPY lib/"spark-${SPARK_VERSION}-bin-hadoop3.2" /work/spark-${SPARK_VERSION}-bin-hadoop3.2
 COPY lib/jdk8 /work/jdk8
