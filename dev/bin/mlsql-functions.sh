@@ -51,8 +51,15 @@ then
     export HADOOP_TGZ_NAME="hadoop-3.2.3"
     export SCALA_BINARY_VERSION=2.12
     export BYZER_SPARK_VERSION=3.0
+elif [[ ${SPARK_VERSION} == "3.3.0" ]]
+then
+    export SPARK_TGZ_NAME="spark-${SPARK_VERSION}-bin-hadoop3"
+    export AZURE_BLOB_NAME="azure-blob_3.2-1.0-SNAPSHOT.jar"
+    export HADOOP_TGZ_NAME="hadoop-3.2.3"
+    export SCALA_BINARY_VERSION=2.12
+    export BYZER_SPARK_VERSION=3.0
 else
-    echo "Only Spark 2.4.3 or 3.1.1 is supported"
+    echo "Only Spark 2.4.3/3.1.1/3.3.0 is supported"
     exit 1
 fi
 
@@ -146,6 +153,18 @@ function download_byzer_lang_related_jars {
         ) || exit 1
     fi
 
+    if [[ ${SPARK_VERSION} == "3.3.0" ]]
+    then
+        (
+          echo "Downloading Spark 3.3.0"
+          rm -rf "${lib_path}"/spark-3.3.0-bin-hadoop3
+          wget --no-check-certificate --no-verbose https://download.byzer.org/byzer/misc/spark/3.3.0/spark-3.3.0-bin-hadoop3.tgz \
+            --directory-prefix "${lib_path}/" || exit 1
+          tar -zxf "${lib_path}"/spark-3.3.0-bin-hadoop3.tgz -C "${lib_path}" &&
+          rm -f "${lib_path}"/spark-3.3.0-bin-hadoop3.tgz
+        ) || exit 1
+    fi
+    ## Download Hadoop
     if [[ ${SPARK_VERSION} == "3.1.1" ]]
     then
       (
