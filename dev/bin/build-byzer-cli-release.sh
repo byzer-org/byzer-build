@@ -116,11 +116,11 @@ function download_cli() {
 function cp_3rd_party_jars() {
   [[ ! -f "${lib_path}"/ansj_seg-5.1.6.jar ]] && echo "${lib_path}/ansj_seg-5.1.6.jar does not exist" && exit 1
   [[ ! -f "${lib_path}"/nlp-lang-1.7.8.jar ]] && echo "${lib_path}/nlp-lang-1.7.8.jar does not exist" && exit 1
-  [[ ! -f "${lib_path}"/"${juice_jar_name}" ]] && echo "${lib_path}/${juice_jar_name} does not exist" && exit 1
+  [[ ! -f "${lib_path}"/"${JUICEFS_JAR}" ]] && echo "${lib_path}/${JUICEFS_JAR} does not exist" && exit 1
   (
     cp "${lib_path}/ansj_seg-5.1.6.jar" \
        "${lib_path}/nlp-lang-1.7.8.jar" \
-       "${lib_path}"/"${juice_jar_name}" \
+       "${lib_path}"/"${JUICEFS_JAR}" \
        "${target_dir}/libs/"
   ) || exit 1
 
@@ -173,7 +173,7 @@ function cp_spark_jars() {
 
   [[ ! -d "${target_dir}/tmp/" ]] && mkdir -p "${target_dir}/tmp/"
 
-  if [[ ${BYZER_SPARK_VERSION} == "3.0" ]]; then
+  if [[ ${SPARK_VERSION} == "3.1.1" ]]; then
     cp "${lib_path}/spark-3.1.1-bin-hadoop3.2/jars/"* "${target_dir}/spark/"
     if [[ ! -f "${target_dir}/spark/spark-core_2.12-3.1.1.jar" ]]; then
       echo "Failed to copy spark 3.1.1"
@@ -181,10 +181,18 @@ function cp_spark_jars() {
     fi
   fi
 
-  if [[ ${BYZER_SPARK_VERSION} == "2.4" ]]; then
+  if [[ ${SPARK_VERSION} == "2.4.3" ]]; then
     cp "${lib_path}/spark-2.4.3-bin-hadoop2.7/jars/"* "${target_dir}/spark/"
     if [[ ! -f "${target_dir}/spark/spark-core_2.11-2.4.3.jar" ]]; then
       echo "Failed to copy spark 2.4.3"
+      exit 1
+    fi
+  fi
+
+  if [[ ${SPARK_VERSION} == "3.3.0" ]]; then
+    cp "${lib_path}/spark-3.3.0-bin-hadoop3/jars/"* "${target_dir}/spark/"
+    if [[ ! -f "${target_dir}/spark/spark-core_2.12-3.3.0.jar" ]]; then
+      echo "Failed to copy spark 3.3.0"
       exit 1
     fi
   fi

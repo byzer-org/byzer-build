@@ -19,7 +19,7 @@
 # run example:
 # export BYZER_LANG_VERSION=2.3.0.1
 # export OS=linux
-# export JUICEFS_VERSION=0.17.5
+# export JUICEFS_JAR=0.17.5
 # ./dev/bin/build-byzer-lang-k8s-base-image.sh
 
 set -u
@@ -28,7 +28,8 @@ set -o pipefail
 
 export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
 export BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-2.3.0-SNAPSHOT}
-export JUICEFS_VERSION=${JUICEFS_VERSION:-0.17.5}
+export JUICEFS_JAR=${JUICEFS_JAR:-juicefs-hadoop-0.17.5-linux-amd64.jar}
+export SPARK_TGZ_NAME=${SPARK_TGZ_NAME:-spark-3.1.1-bin-hadoop3.2}
 self=$(cd "$(dirname $0)" && pwd)
 source "${self}/mlsql-functions.sh"
 
@@ -37,8 +38,9 @@ function exit_with_usage {
 Usage: build-byzer-lang-k8s-base-image.sh
 Arguments are specified with the following environment variable:
 BYZER_LANG_VERSION      - Byzer-lang version  default 2.3.0-SNAPSHOT
-JUICEFS_VERSION         - JuiceFS version     default 0.17.5
+JUICEFS_JAR             - JuiceFS jar         default juicefs-hadoop-0.17.5-linux-amd64.jar
 SPARK_VERSION           - Spark version       default 3.1.1
+SPARK_TGZ_NAME          - Spark tar ball      default spark-3.1.1-bin-hadoop3.2
 EOF
   exit 1
 }
@@ -51,7 +53,8 @@ fi
 download_byzer_lang_related_jars &&
 docker build -t byzer/byzer-lang-k8s-base:"${SPARK_VERSION}-${BYZER_LANG_VERSION}" \
  --build-arg SPARK_VERSION="${SPARK_VERSION}" \
- --build-arg JUICEFS_VERSION="${JUICEFS_VERSION}" \
+ --build-arg SPARK_TGZ_NAME="${SPARK_TGZ_NAME}" \
+ --build-arg JUICEFS_JAR="${JUICEFS_JAR}" \
  -f "${base_dir}"/dev/k8s/base/Dockerfile \
  "${base_dir}"/dev &&
 exit 0

@@ -47,6 +47,7 @@ function build_image {
     docker build -t ubuntu-baseimage -f "${base_dir}"/dev/docker/mysql/Dockerfile "${base_dir}"/dev/docker/mysql &&
     ## Adding python 3 conda and Ray
     docker build -t mysql-python:8.0-3.6 -f "${base_image_path}"/Dockerfile "${base_image_path}" &&
+    ## Building sandbox
     docker build --build-arg SPARK_VERSION=${SPARK_VERSION} \
     --build-arg BYZER_SPARK_VERSION=${BYZER_SPARK_VERSION} \
     --build-arg BYZER_LANG_VERSION=${BYZER_LANG_VERSION} \

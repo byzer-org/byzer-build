@@ -33,8 +33,8 @@ declare array plugins=(mlsql-excel mlsql-shell mlsql-assert mlsql-language-serve
 export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
 export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-1.0.2-SNAPSHOT}
 export BYZER_NOTEBOOK_HOME=$byzer_notebook_path
-export JUICEFS_VERSION=${JUICEFS_VERSION:-0.17.5}
-juice_jar_name="juicefs-hadoop-${JUICEFS_VERSION}-linux-amd64.jar"
+export JUICEFS_JAR=${JUICEFS_JAR:-juicefs-hadoop-0.17.5-linux-amd64.jar}
+
 os=${OS:-linux}
 
 if [[ ${SPARK_VERSION} == "2.4.3" ]]
@@ -62,7 +62,7 @@ then
     ## For byzer-extension jar name
     export BYZER_SPARK_VERSION=3.3
 else
-    echo "Only Spark 2.4.3 or 3.1.1 or 3.3.0 is supported"
+    echo "Only Spark 2.4.3/3.1.1/3.3.0 is supported"
     exit 1
 fi
 
@@ -82,7 +82,7 @@ SPARK_TGZ_NAME ${SPARK_TGZ_NAME}
 HADOOP_TGZ_NAME ${HADOOP_TGZ_NAME}
 SCALA_BINARY_VERSION ${SCALA_BINARY_VERSION}
 BYZER_NOTEBOOK_VERSION ${BYZER_NOTEBOOK_VERSION}
-juice_jar_name ${juice_jar_name}
+JUICEFS_JAR ${JUICEFS_JAR}
 os ${os}
 EOF
 
@@ -161,14 +161,13 @@ function download_byzer_lang_related_jars {
         (
           echo "Downloading Spark 3.3.0"
           rm -rf "${lib_path}"/spark-3.3.0-bin-hadoop3
-          wget --no-check-certificate --no-verbose --progress=dot \
-            https://download.byzer.org/byzer/misc/spark/3.3.0/spark-3.3.0-bin-hadoop3.tgz \
+          wget --no-check-certificate --no-verbose https://download.byzer.org/byzer/misc/spark/3.3.0/spark-3.3.0-bin-hadoop3.tgz \
             --directory-prefix "${lib_path}/" || exit 1
           tar -zxf "${lib_path}"/spark-3.3.0-bin-hadoop3.tgz -C "${lib_path}" &&
           rm -f "${lib_path}"/spark-3.3.0-bin-hadoop3.tgz
         ) || exit 1
     fi
-
+    ## Download Hadoop
     if [[ ${SPARK_VERSION} == "3.1.1" ]]
     then
       (
@@ -237,10 +236,10 @@ function download_byzer_lang_related_jars {
     download_byzer_plugin_jars || exit 1
 
     (
-    echo "Downloading juicefs-${JUICEFS_VERSION}" &&
-    rm -f "${lib_path}"/"${juice_jar_name}" &&
+    echo "Downloading ${JUICEFS_JAR}" &&
+    rm -f "${lib_path}"/"${JUICEFS_JAR}" &&
     wget --no-check-certificate --no-verbose \
-     "https://download.byzer.org/byzer/misc/juicefs/${juice_jar_name}" \
+     "https://download.byzer.org/byzer/misc/juicefs/${JUICEFS_JAR}" \
      --directory-prefix "${lib_path}/"
     ) || exit 1
 
