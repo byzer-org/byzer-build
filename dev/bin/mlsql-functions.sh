@@ -43,6 +43,7 @@ then
     export HADOOP_TGZ_NAME="hadoop-2.7.0"
     export AZURE_BLOB_NAME="azure-blob_2.7-1.0-SNAPSHOT.jar"
     export SCALA_BINARY_VERSION=2.11
+    ## For byzer-extension jar name
     export BYZER_SPARK_VERSION=2.4
 elif [[ ${SPARK_VERSION} == "3.1.1" ]]
 then
@@ -50,6 +51,7 @@ then
     export AZURE_BLOB_NAME="azure-blob_3.2-1.0-SNAPSHOT.jar"
     export HADOOP_TGZ_NAME="hadoop-3.2.3"
     export SCALA_BINARY_VERSION=2.12
+    ## For byzer-extension jar name
     export BYZER_SPARK_VERSION=3.0
 elif [[ ${SPARK_VERSION} == "3.3.0" ]]
 then
@@ -57,7 +59,8 @@ then
     export AZURE_BLOB_NAME="azure-blob_3.2-1.0-SNAPSHOT.jar"
     export HADOOP_TGZ_NAME="hadoop-3.2.3"
     export SCALA_BINARY_VERSION=2.12
-    export BYZER_SPARK_VERSION=3.0
+    ## For byzer-extension jar name
+    export BYZER_SPARK_VERSION=3.3
 else
     echo "Only Spark 2.4.3/3.1.1/3.3.0 is supported"
     exit 1
@@ -189,7 +192,7 @@ function download_byzer_lang_related_jars {
     if [[ ${SPARK_VERSION} == "2.4.3" ]]
     then
       (
-        echo "Downloading hadoop 2.6.5" &&
+        echo "Downloading hadoop 2.7.0" &&
           cd "${lib_path}" &&
           local times_tried=0
         while [ $times_tried -le 3 ]; do
@@ -219,7 +222,7 @@ function download_byzer_lang_related_jars {
       ) || exit 1
     fi
 
-    if [[ ${SPARK_VERSION} == "3.1.1" ]]
+    if [[ ${SPARK_VERSION} == "3.1.1" || ${SPARK_VERSION} == "3.3.0" ]]
     then
       (
         wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/misc/cloud/azure/azure-blob_3.2-1.0-SNAPSHOT.jar" \
