@@ -36,6 +36,7 @@
 
 FROM ubuntu:20.04
 ARG SPARK_VERSION=3.1.1
+ARG BYZER_SPARK_VERSION=3.0
 ARG SPARK_TGZ_NAME=spark-3.1.1-bin-hadoop3.2
 ARG JUICEFS_JAR=juicefs-hadoop-0.17.5-linux-amd64.jar
 
@@ -76,11 +77,11 @@ COPY lib/byzer-lang ${BYZER_HOME}
 
 COPY lib/ansj_seg-5.1.6.jar lib/nlp-lang-1.7.8.jar lib/${JUICEFS_JAR} ${BYZER_HOME}/libs/
 
-COPY lib/mlsql-assert-3.0_2.12-0.1.0-SNAPSHOT.jar \
-  lib/mlsql-excel-3.0_2.12-0.1.0-SNAPSHOT.jar \
-  lib/mlsql-ext-ets-3.0_2.12-0.1.0-SNAPSHOT.jar \
-  lib/mlsql-shell-3.0_2.12-0.1.0-SNAPSHOT.jar \
-  lib/mlsql-mllib-3.0_2.12-0.1.0-SNAPSHOT.jar \
+COPY lib/mlsql-assert-${BYZER_SPARK_VERSION}_2.12-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-excel-${BYZER_SPARK_VERSION}_2.12-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-ext-ets-${BYZER_SPARK_VERSION}_2.12-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-shell-${BYZER_SPARK_VERSION}_2.12-0.1.0-SNAPSHOT.jar \
+  lib/mlsql-mllib-${BYZER_SPARK_VERSION}_2.12-0.1.0-SNAPSHOT.jar \
   ${BYZER_HOME}/plugin/
 
 COPY k8s/base/entrypoint.sh /work/bin/

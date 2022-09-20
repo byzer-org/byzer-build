@@ -67,7 +67,7 @@ then
     export AZURE_BLOB_NAME="azure-blob_3.2-1.0-SNAPSHOT.jar"
     export HADOOP_TGZ_NAME="hadoop-3.2.3"
     export SCALA_BINARY_VERSION=2.12
-    export BYZER_SPARK_VERSION=3.0
+    export BYZER_SPARK_VERSION=3.3
 else
     echo "Only Spark 2.4.3/3.1.1/3.3.0 is supported"
     exit 1
