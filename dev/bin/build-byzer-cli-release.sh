@@ -116,11 +116,11 @@ function download_cli() {
 function cp_3rd_party_jars() {
   [[ ! -f "${lib_path}"/ansj_seg-5.1.6.jar ]] && echo "${lib_path}/ansj_seg-5.1.6.jar does not exist" && exit 1
   [[ ! -f "${lib_path}"/nlp-lang-1.7.8.jar ]] && echo "${lib_path}/nlp-lang-1.7.8.jar does not exist" && exit 1
-  [[ ! -f "${lib_path}"/"${juice_jar_name}" ]] && echo "${lib_path}/${juice_jar_name} does not exist" && exit 1
+  [[ ! -f "${lib_path}"/"${JUICEFS_JAR}" ]] && echo "${lib_path}/${JUICEFS_JAR} does not exist" && exit 1
   (
     cp "${lib_path}/ansj_seg-5.1.6.jar" \
        "${lib_path}/nlp-lang-1.7.8.jar" \
-       "${lib_path}"/"${juice_jar_name}" \
+       "${lib_path}"/"${JUICEFS_JAR}" \
        "${target_dir}/libs/"
   ) || exit 1
 
