@@ -43,6 +43,7 @@ then
     export HADOOP_TGZ_NAME="hadoop-2.7.0"
     export AZURE_BLOB_NAME="azure-blob_2.7-1.0-SNAPSHOT.jar"
     export SCALA_BINARY_VERSION=2.11
+    ## For byzer-extension jar name
     export BYZER_SPARK_VERSION=2.4
 elif [[ ${SPARK_VERSION} == "3.1.1" ]]
 then
@@ -50,9 +51,18 @@ then
     export AZURE_BLOB_NAME="azure-blob_3.2-1.0-SNAPSHOT.jar"
     export HADOOP_TGZ_NAME="hadoop-3.2.3"
     export SCALA_BINARY_VERSION=2.12
+    ## For byzer-extension jar name
     export BYZER_SPARK_VERSION=3.0
+elif [[ ${SPARK_VERSION} == "3.3.0" ]]
+then
+    export SPARK_TGZ_NAME="spark-${SPARK_VERSION}-bin-hadoop3"
+    export AZURE_BLOB_NAME="azure-blob_3.2-1.0-SNAPSHOT.jar"
+    export HADOOP_TGZ_NAME="hadoop-3.2.3"
+    export SCALA_BINARY_VERSION=2.12
+    ## For byzer-extension jar name
+    export BYZER_SPARK_VERSION=3.3
 else
-    echo "Only Spark 2.4.3 or 3.1.1 is supported"
+    echo "Only Spark 2.4.3 or 3.1.1 or 3.3.0 is supported"
     exit 1
 fi
 
@@ -146,6 +156,19 @@ function download_byzer_lang_related_jars {
         ) || exit 1
     fi
 
+    if [[ ${SPARK_VERSION} == "3.3.0" ]]
+    then
+        (
+          echo "Downloading Spark 3.3.0"
+          rm -rf "${lib_path}"/spark-3.3.0-bin-hadoop3
+          wget --no-check-certificate --no-verbose --progress=dot \
+            https://download.byzer.org/byzer/misc/spark/3.3.0/spark-3.3.0-bin-hadoop3.tgz \
+            --directory-prefix "${lib_path}/" || exit 1
+          tar -zxf "${lib_path}"/spark-3.3.0-bin-hadoop3.tgz -C "${lib_path}" &&
+          rm -f "${lib_path}"/spark-3.3.0-bin-hadoop3.tgz
+        ) || exit 1
+    fi
+
     if [[ ${SPARK_VERSION} == "3.1.1" ]]
     then
       (
@@ -170,7 +193,7 @@ function download_byzer_lang_related_jars {
     if [[ ${SPARK_VERSION} == "2.4.3" ]]
     then
       (
-        echo "Downloading hadoop 2.6.5" &&
+        echo "Downloading hadoop 2.7.0" &&
           cd "${lib_path}" &&
           local times_tried=0
         while [ $times_tried -le 3 ]; do
@@ -200,7 +223,7 @@ function download_byzer_lang_related_jars {
       ) || exit 1
     fi
 
-    if [[ ${SPARK_VERSION} == "3.1.1" ]]
+    if [[ ${SPARK_VERSION} == "3.1.1" || ${SPARK_VERSION} == "3.3.0" ]]
     then
       (
         wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/misc/cloud/azure/azure-blob_3.2-1.0-SNAPSHOT.jar" \
