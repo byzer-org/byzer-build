@@ -33,9 +33,19 @@ declare array plugins=(mlsql-excel mlsql-shell mlsql-assert mlsql-language-serve
 export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
 export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-1.0.2-SNAPSHOT}
 export BYZER_NOTEBOOK_HOME=$byzer_notebook_path
-export JUICEFS_JAR=${JUICEFS_JAR:-juicefs-hadoop-0.17.5-linux-amd64.jar}
+export JUICEFS_VERSION=${JUICEFS_VERSION:-0.17.5}
+
+
 
 os=${OS:-linux}
+
+if [[ ${JUICEFS_VERSION} == "0.17.5" ]]
+then
+  export JUICEFS_JAR=juicefs-hadoop-0.17.5-linux-amd64.jar
+elif [[ ${JUICEFS_VERSION} == "1.0.0" ]]
+then
+  export JUICEFS_JAR=juicefs-hadoop-1.0.0.jar
+fi
 
 if [[ ${SPARK_VERSION} == "2.4.3" ]]
 then
