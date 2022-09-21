@@ -36,6 +36,8 @@ RUN set -ex \
 
 ADD lib/openjdk-14_linux-x64_bin.tar.gz /work/
 
+COPY conf/environment.yml ${CONDA_HOME}/
+
 ## Install Conda Ray
 ## Activate Ray 1.8.0 by default
 ## ray/issues/19938: In ray>=1.8.0 version, python3.6.11 or python3.7.10 should be used.
@@ -46,16 +48,11 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.10.3-Linu
     echo ". /opt/conda/etc/profile.d/conda.sh" >> /etc/profile && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     . /etc/profile && \
-    pip config set global.trusted-host mirrors.aliyun.com && \
-    pip config set global.index-url http://mirrors.aliyun.com/pypi/simple/ && \
-    conda create -y --name ray1.8.0 python=3.6.13 && \
-    conda activate ray1.8.0 && \
-    pip install --upgrade pip && \
-    pip install --upgrade --no-cache-dir pyarrow==4.0.1 "ray[default]==1.8.0" aiohttp==3.7.4 "pandas~=1.0.5" requests  \
-             "matplotlib~=3.3.4" "uuid~=1.30" pyjava opencv-python pyecharts matplotlib seaborn sklearn keras tensorflow && \
+    conda env create --file ${CONDA_HOME}/environment.yml && \
+    conda activate ray-1.12.0 && \
     $CONDA_HOME/bin/conda clean -tipsy -a && \
-    echo "conda activate ray1.8.0" >> /etc/profile && \
-    echo "conda activate ray1.8.0" >> ~/.bashrc && \
+    echo "conda activate ray-1.12.0" >> /etc/profile && \
+    echo "conda activate ray-1.12.0" >> ~/.bashrc && \
     . /etc/profile && \
     ln -fs /bin/bash /bin/sh
 
