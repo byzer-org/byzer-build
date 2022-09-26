@@ -21,6 +21,7 @@ FROM byzer/python-jdk:3.6-8
 
 ## Input arguments
 ARG SPARK_VERSION
+## For byzer-extension jar name
 ARG BYZER_SPARK_VERSION
 ARG BYZER_LANG_VERSION
 ARG SPARK_TGZ_NAME
