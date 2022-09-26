@@ -30,7 +30,7 @@ RUN rm -rf /var/lib/apt/lists/*  \
    mv /work/openlogic-openjdk-8u332-b09-linux-x64 /work/openjdk-8u332 && \
    rm openjdk-8u332-b09-linux-x64.tar.gz
 
-COPY conf/environment.yml ${CONDA_HOME}/
+COPY environment.yml /work/
 
 ## Install Conda Ray
 ## Activate Ray 1.8.0 by default
@@ -42,7 +42,7 @@ RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.10.3-Linu
     echo ". /opt/conda/etc/profile.d/conda.sh" >> /etc/profile && \
     echo ". /opt/conda/etc/profile.d/conda.sh" >> ~/.bashrc && \
     . /etc/profile && \
-    conda env create --file ${CONDA_HOME}/environment.yml && \
+    conda env create --file /work/environment.yml && \
     conda activate ray-1.12.0 && \
     $CONDA_HOME/bin/conda clean -tipsy -a && \
     echo "conda activate ray-1.12.0" >> /etc/profile && \

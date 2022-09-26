@@ -36,7 +36,7 @@ RUN set -ex \
 
 ADD lib/openjdk-14_linux-x64_bin.tar.gz /work/
 
-COPY conf/environment.yml ${CONDA_HOME}/
+COPY docker/base/environment.yml ${CONDA_HOME}/
 
 ## Install Conda Ray
 ## Activate Ray 1.8.0 by default
