@@ -28,7 +28,7 @@ echo "Calling byzer.sh to run Byzer-lang as daemon"
 ${BYZER_LANG_HOME}/bin/byzer.sh start
 
 ## Start Ray
-$CONDA_HOME/envs/ray1.8.0/bin/ray start --head --include-dashboard=false
+$CONDA_HOME/envs/ray1.12.0/bin/ray start --head --include-dashboard=false
 sleep 30
 echo 'Waiting for MySQL and Byzer-lang to be ready.'
 while ! mysqladmin ping -h"${DB_HOST:-127.0.0.1}" --silent; do
