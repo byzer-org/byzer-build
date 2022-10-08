@@ -45,5 +45,6 @@ docker run -d \
 -p 9003:9003 \
 -e MYSQL_ROOT_HOST=% \
 -e MYSQL_ROOT_PASSWORD="${MYSQL_PASSWORD}" \
+--memory 4g \
 --name byzer-sandbox-${SPARK_VERSION}-${BYZER_LANG_VERSION:-latest} \
 byzer/byzer-sandbox:${SPARK_VERSION}-${BYZER_LANG_VERSION:-latest}
