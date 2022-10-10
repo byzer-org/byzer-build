@@ -67,6 +67,7 @@ RUN set -ex \
    . /etc/profile
 
 COPY lib/${SPARK_TGZ_NAME} /work/${SPARK_TGZ_NAME}
+COPY k8s/base/fairscheduler.xml /work/${SPARK_TGZ_NAME}/conf/
 COPY lib/jdk8 /work/jdk8
 COPY docker/byzer-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
 
@@ -84,6 +85,7 @@ COPY lib/mlsql-assert-${BYZER_SPARK_VERSION}_2.12-0.1.0-SNAPSHOT.jar \
   lib/mlsql-mllib-${BYZER_SPARK_VERSION}_2.12-0.1.0-SNAPSHOT.jar \
   ${BYZER_HOME}/plugin/
 
+COPY k8s/base/spark-kubernetes_2.12-3.3.0.jar /work/${SPARK_TGZ_NAME}/jars/
 COPY k8s/base/entrypoint.sh /work/bin/
 
 ENTRYPOINT [ "/work/bin/entrypoint.sh" ]

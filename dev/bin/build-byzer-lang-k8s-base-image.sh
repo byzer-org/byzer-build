@@ -50,6 +50,15 @@ if [[ $@ == *"help"* ]]; then
     exit_with_usage
 fi
 
+if [[ $BYZER_SPARK_VERSION == "3.3" ]]
+then
+  cp "${base_dir}"/dev/k8s/base/entrypoint-3.3.sh "${base_dir}"/dev/k8s/base/entrypoint.sh &&
+  chmod +x "${base_dir}"/dev/k8s/base/entrypoint.sh
+else
+  cp "${base_dir}"/dev/k8s/base/entrypoint-3.1.sh "${base_dir}"/dev/k8s/base/entrypoint.sh &&
+  chmod +x "${base_dir}"/dev/k8s/base/entrypoint.sh
+fi
+
 # base_dir is assigned in mlsql-functions.sh, it refers to this project base dir
 download_byzer_lang_related_jars &&
 docker build -t byzer/byzer-lang-k8s-base:"${SPARK_VERSION}-${BYZER_LANG_VERSION}" \
