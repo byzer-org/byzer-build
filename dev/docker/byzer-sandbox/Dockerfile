@@ -42,6 +42,7 @@ RUN mkdir -p /work/logs /work/user /byzer/_delta
 
 ## Spark
 COPY lib/${SPARK_TGZ_NAME} /work/${SPARK_TGZ_NAME}
+COPY docker/byzer-sandbox/conf/fairscheduler.xml /work/${SPARK_TGZ_NAME}/conf/
 COPY docker/byzer-sandbox/conf/log4j.properties ${SPARK_HOME}/conf/
 
 WORKDIR ${BASE_DIR}
