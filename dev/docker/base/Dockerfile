@@ -33,7 +33,7 @@ RUN rm -rf /var/lib/apt/lists/*  \
 COPY environment.yml /work/
 
 ## Install Conda Ray
-## Activate Ray 1.8.0 by default
+## Activate Ray 1.12.0 by default
 ## ray/issues/19938: In ray>=1.8.0 version, python3.6.11 or python3.7.10 should be used.
 RUN wget --quiet https://repo.anaconda.com/miniconda/Miniconda3-py37_4.10.3-Linux-x86_64.sh -O ~/miniconda.sh && \
     /bin/bash ~/miniconda.sh -b -p $CONDA_HOME && \
