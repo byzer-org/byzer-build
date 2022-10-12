@@ -178,7 +178,7 @@ function download_byzer_lang_related_jars {
         ) || exit 1
     fi
     ## Download Hadoop
-    if [[ ${SPARK_VERSION} == "3.1.1" ]]
+    if [[ ${SPARK_VERSION} == "3.1.1" || ${SPARK_VERSION} == "3.3.0" ]]
     then
       (
         echo "Downloading hadoop 3.2.3" &&
