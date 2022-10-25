@@ -38,7 +38,7 @@ ARG TAG
 FROM byzer/byzer-lang-k8s-base:$TAG
 
 ARG AZURE_BLOB_NAME=azure-blob_3.2-1.0-SNAPSHOT.jar
-ARG HADOOP_S3_SHADE_JAR=aws-s3_3.3.1-1.0.1-SNAPSHOT.jar
+ARG HADOOP_S3_SHADE_JAR=byzer-objectstore-s3-3.3_2.12-0.1.0-SNAPSHOT.jar
 
 ADD https://download.byzer.org/byzer/misc/cloud/azure/${AZURE_BLOB_NAME} /home/deploy/byzer-lang/libs/
 ADD https://download.byzer.org/byzer/misc/cloud/s3/${HADOOP_S3_SHADE_JAR} /home/deploy/byzer-lang/libs/
