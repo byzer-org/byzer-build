@@ -29,7 +29,7 @@ echo "Project base dir ${base_dir}"
 export BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-latest}
 export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
 export AZURE_BLOB_NAME=${AZURE_BLOB_NAME:-azure-blob_3.2-1.0-SNAPSHOT.jar}
-export HADOOP_S3_SHADE_JAR=${HADOOP_S3_SHADE_JAR:-aws-s3_3.3.1-1.0.1-SNAPSHOT.jar}
+export HADOOP_S3_SHADE_JAR=${HADOOP_S3_SHADE_JAR:-byzer-objectstore-s3-3.3_2.12-0.1.0-SNAPSHOT.jar}
 
 
 cat << EOF
