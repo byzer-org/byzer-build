@@ -28,9 +28,9 @@ base_dir=$(cd "$(dirname $0)/../.." && pwd)
 echo "Project base dir ${base_dir}"
 export BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-latest}
 export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
-export AZURE_BLOB_NAME=${AZURE_BLOB_NAME:-azure-blob_3.2-1.0-SNAPSHOT.jar}
+export AZURE_BLOB_NAME=${AZURE_BLOB_NAME:-byzer-objectstore-blob-3.3_2.12-0.1.0-SNAPSHOT.jar}
 export HADOOP_S3_SHADE_JAR=${HADOOP_S3_SHADE_JAR:-byzer-objectstore-s3-3.3_2.12-0.1.0-SNAPSHOT.jar}
-
+export OBS_SHADE_JAR=${OBS_SHADE_JAR:-byzer-objectstore-obs-3.3_2.12-0.1.0-SNAPSHOT.jar}
 
 cat << EOF
 BYZER_LANG_VERSION ${BYZER_LANG_VERSION}
@@ -41,6 +41,7 @@ EOF
 docker build --no-cache -t byzer/byzer-lang-k8s:"${SPARK_VERSION}-${BYZER_LANG_VERSION:-latest}" \
 --build-arg AZURE_BLOB_NAME="${AZURE_BLOB_NAME}" \
 --build-arg HADOOP_S3_SHADE_JAR="${HADOOP_S3_SHADE_JAR}" \
+--build-arg OBS_SHADE_JAR="${OBS_SHADE_JAR}" \
 --build-arg TAG="${SPARK_VERSION}-${BYZER_LANG_VERSION}" \
 -f "${base_dir}/dev/k8s/all-in-one/Dockerfile" \
 "${base_dir}/dev/k8s/all-in-one"
