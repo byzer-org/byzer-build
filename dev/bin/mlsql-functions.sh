@@ -35,6 +35,9 @@ export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-1.0.2-SNAPSHOT}
 export BYZER_NOTEBOOK_HOME=$byzer_notebook_path
 export JUICEFS_VERSION=${JUICEFS_VERSION:-0.17.5}
 
+export AUTO_DOWNLOAD_BYZER_LANG=${AUTO_DOWNLOAD_BYZER_LANG:-false}
+export AUTO_DOWNLOAD_BYZER_RESOURCE=${AUTO_DOWNLOAD_BYZER_RESOURCE:-false}
+export AUTO_DOWNLOAD_BYZER_PLUGINS=${AUTO_DOWNLOAD_BYZER_PLUGINS:-false}
 
 
 os=${OS:-linux}
@@ -94,6 +97,10 @@ SCALA_BINARY_VERSION ${SCALA_BINARY_VERSION}
 BYZER_NOTEBOOK_VERSION ${BYZER_NOTEBOOK_VERSION}
 JUICEFS_JAR ${JUICEFS_JAR}
 os ${os}
+
+AUTO_DOWNLOAD_BYZER_LANG ${AUTO_DOWNLOAD_BYZER_LANG}
+AUTO_DOWNLOAD_BYZER_RESOURCE ${AUTO_DOWNLOAD_BYZER_RESOURCE}
+AUTO_DOWNLOAD_BYZER_PLUGINS ${AUTO_DOWNLOAD_BYZER_PLUGINS}
 EOF
 
 function clean_lib_path {
@@ -104,7 +111,7 @@ function clean_lib_path {
 
 ## Download byzer-lang, spark, hadoop, nlp , ansj , plugin
 function download_byzer_lang_related_jars {
-    clean_lib_path || exit 1
+    # clean_lib_path || exit 1
 
     echo "Download open JDK8 from download.byzer.org"
     if [[ "${os}" == "linux" ]]
@@ -241,9 +248,9 @@ function download_byzer_lang_related_jars {
     fi
 
 
-    download_untar_byzer_lang || exit 1
+    # download_untar_byzer_lang || exit 1
 
-    download_byzer_plugin_jars || exit 1
+    # download_byzer_plugin_jars || exit 1
 
     (
     echo "Downloading ${JUICEFS_JAR}" &&

@@ -39,10 +39,13 @@
 #└── spark                  ## Spark jars
 #
 # To for Spark 3.1.1 byzer-lang 2.3.0-SNAPSHOT linux
-# export SPARK_VERSION=3.1.1
-# export BYZER_LANG_VERSION=2.3.0-SNAPSHOT
+# export SPARK_VERSION=3.3.0
+# export BYZER_LANG_VERSION=2.4.0-SNAPSHOT
 # export OS=linux
-# export JUICEFS_VERSION=0.17.5
+# export JUICEFS_VERSION=1.0.0
+# export AUTO_DOWNLOAD_BYZER_LANG=false
+# export AUTO_DOWNLOAD_BYZER_RESOURCE=false
+# export AUTO_DOWNLOAD_BYZER_PLUGINS=false
 # dev/bin/build-byzer-cli-release.sh
 
 ##############################################################################
@@ -207,7 +210,18 @@ self=$(cd -P -- "$(dirname -- "$0")" && pwd -P)
 ## Import function and environment variables
 source "${self}"/mlsql-functions.sh
 ## This function is defined in mlsql-function.sh
-download_byzer_lang_related_jars
+
+if [[ $AUTO_DOWNLOAD_BYZER_RESOURCE == "true" ]];then
+  download_byzer_lang_related_jars || (echo "Fail to doawload resource e.g. JDK, Hadoop, Spark" && exit 1)
+fi
+
+if [[ $AUTO_DOWNLOAD_BYZER_LANG == "true" ]];then
+   download_untar_byzer_lang || (echo "Fail to download Byzer-lang" && exit 1)
+fi
+
+if [[ $AUTO_DOWNLOAD_BYZER_PLUGINS == "true" ]];then
+   download_byzer_plugin_jars || (echo "Fail to download Byzer-lang plugins" && exit 1)
+fi   
 
 target_dir="${lib_path}/byzer-lang-all-in-one-${os}-amd64-${SPARK_VERSION}-${BYZER_LANG_VERSION}"
 rm -rf "${target_dir:?}/"

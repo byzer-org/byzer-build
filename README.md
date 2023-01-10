@@ -42,8 +42,8 @@ The image is built on Ubuntu 20.04, and packaged with
 An example to build the image
 
 ```shell
-export BYZER_LANG_VERSION=2.3.0-SNAPSHOT
-export SPARK_VERSION=3.1.1
+export BYZER_LANG_VERSION=2.4.0-SNAPSHOT
+export SPARK_VERSION=3.3.0
 ## Run the script on dev directory, or it fails
 cd dev
 ./bin/build-byzer-lang-k8s-azure-image.sh
@@ -90,14 +90,14 @@ Tar ball naming convention is `byzer-lang-all-in-one-<os>-amd64-<byzer_spark_ver
 | Parameter           | Explanation                                                             |
 |---------------------|-------------------------------------------------------------------------|
 | byzer_lang_version  | The [Byzer Lang](https://github.com/byzer-org/byzer-lang/pulls) version |
-| byzer_spark_version | 3.0 for Spark 3.1.1 2.4 for Spark 2.4.3                                 |
+| byzer_spark_version | 3.3 for Spark 3.3.0, 3.0 for Spark 3.1.1 2.4 for Spark 2.4.3                                 |
 | os                  | linux darwin(mac) win                                                   |
 
 To build the Byzer all-in-one
 ```shell
-export JUICEFS_VERSION=0.17.5
-export SPARK_VERSION=3.1.1
-export BYZER_LANG_VERSION=2.3.0-SNAPSHOT
+export JUICEFS_VERSION=1.0.0
+export SPARK_VERSION=3.3.0
+export BYZER_LANG_VERSION=2.4.0-SNAPSHOT
 export OS=linux
 # darwin for MacOS, win for Windows
 ./dev/bin/app/build-byzer-cli-release.sh

@@ -60,7 +60,7 @@ else
 fi
 
 # base_dir is assigned in mlsql-functions.sh, it refers to this project base dir
-download_byzer_lang_related_jars &&
+# download_byzer_lang_related_jars &&
 docker build -t byzer/byzer-lang-k8s-base:"${SPARK_VERSION}-${BYZER_LANG_VERSION}" \
  --build-arg BYZER_SPARK_VERSION="${BYZER_SPARK_VERSION}" \
  --build-arg SPARK_VERSION="${SPARK_VERSION}" \
