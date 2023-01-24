@@ -19,11 +19,17 @@ docker run -d --name sandbox -p 9002:9002 -p 9003:9003 -e MYSQL_ROOT_PASSWORD=ro
 
 ```
 
+Based on spark 3.3.0:
+
+```
+docker run -d --name sandbox -p 9002:9002 -p 9003:9003 -e MYSQL_ROOT_PASSWORD=root byzer/byzer-sandbox:3.3.0-latest
+```
+
 ### Building Sandbox
 [Click for details](./docs/sandbox.md)
 
 ## Byzer-lang Container
-`docker run -d --name byzer-lang -e DRIVER_MEMORY=8g -e MASTER=local[*] -p9003:9003 byzer/byzer-lang:3.1.1-latest`
+`docker run -d --name byzer-lang -e DRIVER_MEMORY=8g -e MASTER=local[*] -p9003:9003 byzer/byzer-lang:3.3.0-latest`
 This command launches byzre-lang container with
 - heap size of 8GB
 - byzer-lang on local mode
