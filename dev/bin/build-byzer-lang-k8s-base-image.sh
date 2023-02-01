@@ -30,6 +30,8 @@ export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
 export BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-2.3.0-SNAPSHOT}
 export JUICEFS_JAR=${JUICEFS_JAR:-juicefs-hadoop-0.17.5-linux-amd64.jar}
 export SPARK_TGZ_NAME=${SPARK_TGZ_NAME:-spark-3.1.1-bin-hadoop3.2}
+export KYLIN_BASE_IMAGE=${1:-"none"}
+
 self=$(cd "$(dirname $0)" && pwd)
 source "${self}/mlsql-functions.sh"
 
@@ -42,6 +44,7 @@ JUICEFS_JAR             - JuiceFS jar         default juicefs-hadoop-0.17.5-linu
 SPARK_VERSION           - Spark version       default 3.1.1
 SPARK_TGZ_NAME          - Spark tar ball      default spark-3.1.1-bin-hadoop3.2
 BYZER_SPARK_VERSION     - Spark major version default 3.0
+KYLIN_BASE_IMAGE        - kylin OS base image default none
 EOF
   exit 1
 }
@@ -61,11 +64,25 @@ fi
 
 # base_dir is assigned in mlsql-functions.sh, it refers to this project base dir
 # download_byzer_lang_related_jars &&
-docker build -t byzer/byzer-lang-k8s-base:"${SPARK_VERSION}-${BYZER_LANG_VERSION}" \
- --build-arg BYZER_SPARK_VERSION="${BYZER_SPARK_VERSION}" \
- --build-arg SPARK_VERSION="${SPARK_VERSION}" \
- --build-arg SPARK_TGZ_NAME="${SPARK_TGZ_NAME}" \
- --build-arg JUICEFS_JAR="${JUICEFS_JAR}" \
- -f "${base_dir}"/dev/k8s/base/Dockerfile \
- "${base_dir}"/dev &&
-exit 0
+if [[ $KYLIN_BASE_IMAGE == "none" ]]
+then
+  docker build -t byzer/byzer-lang-k8s-base:"${SPARK_VERSION}-${BYZER_LANG_VERSION}" \
+   --build-arg BYZER_SPARK_VERSION="${BYZER_SPARK_VERSION}" \
+   --build-arg SPARK_VERSION="${SPARK_VERSION}" \
+   --build-arg SPARK_TGZ_NAME="${SPARK_TGZ_NAME}" \
+   --build-arg JUICEFS_JAR="${JUICEFS_JAR}" \
+   -f "${base_dir}"/dev/k8s/base/Dockerfile \
+   "${base_dir}"/dev &&
+   exit 0
+else
+  #替换基础镜像
+  sed -i "s/KYLIN_BASE_IMAGE/${KYLIN_BASE_IMAGE}/g" "${base_dir}"/dev/k8s/base/Dockerfile.kylin-amd64
+  docker build -t byzer/byzer-lang-k8s-base:"${SPARK_VERSION}-${BYZER_LANG_VERSION}" \
+   --build-arg BYZER_SPARK_VERSION="${BYZER_SPARK_VERSION}" \
+   --build-arg SPARK_VERSION="${SPARK_VERSION}" \
+   --build-arg SPARK_TGZ_NAME="${SPARK_TGZ_NAME}" \
+   --build-arg JUICEFS_JAR="${JUICEFS_JAR}" \
+   -f "${base_dir}"/dev/k8s/base/Dockerfile.kylin-amd64 \
+   "${base_dir}"/dev &&
+   exit 0
+fi
