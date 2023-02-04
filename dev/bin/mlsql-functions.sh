@@ -122,7 +122,7 @@ function download_byzer_lang_related_jars {
           "http://download.byzer.org/byzer/misc/jdk/jdk8/${jdk_name}.tar.gz" \
           --directory-prefix "${lib_path}/" &&
         tar -xf "${lib_path}/${jdk_name}.tar.gz" -C "${lib_path}" &&
-        mv "${lib_path}"/openlogic-${jdk_name} "${lib_path}"/jdk8
+        mv "${lib_path}"/openlogic-${jdk_name} "${lib_path}"/jdk8-${os}
       ) || exit 1
     elif [[ "${os}" == "win" ]]
     then
@@ -130,7 +130,7 @@ function download_byzer_lang_related_jars {
         wget --no-check-certificate --no-verbose "http://download.byzer.org/byzer/misc/jdk/jdk8/openjdk-8u332-b09-windows-x64.zip" \
           --directory-prefix "${lib_path}" &&
         unzip -q -o "${lib_path}/openjdk-8u332-b09-windows-x64.zip" -d "${lib_path}/" &&
-        mv "${lib_path}"/openlogic-openjdk-8u332-b09-windows-64 "${lib_path}"/jdk8
+        mv "${lib_path}"/openlogic-openjdk-8u332-b09-windows-64 "${lib_path}"/jdk8-${os}
       ) || exit 1
     elif [[ "${os}" == "darwin" ]]
     then
@@ -139,8 +139,8 @@ function download_byzer_lang_related_jars {
         wget --no-check-certificate --no-verbose "http://download.byzer.org/byzer/misc/jdk/jdk8/openjdk-8u332-b09-mac-x64.zip" \
             --directory-prefix "${lib_path}/" &&
         unzip -q -o "${lib_path}/openjdk-8u332-b09-mac-x64.zip" -d "${lib_path}/" &&
-        mv "${lib_path}"/openlogic-openjdk-8u332-b09-mac-x64 "${lib_path}"/jdk8 &&
-        chmod +x "${lib_path}"/jdk8/Contents/Home/bin/java
+        mv "${lib_path}"/openlogic-openjdk-8u332-b09-mac-x64 "${lib_path}"/jdk8-${os} &&
+        chmod +x "${lib_path}"/jdk8-${os}/Contents/Home/bin/java
       ) || exit 1
     else
       echo "No need to download jdk for ${os}"

@@ -62,12 +62,12 @@ os=${OS:-linux}
 
 function cp_jdk() {
 
-  if [[ ! -d "${lib_path}"/jdk8 ]]; then
-    echo "jdk8 is missing from ${lib_path}"
+  if [[ ! -d "${lib_path}"/jdk8-${os} ]]; then
+    echo "jdk8-${os} is missing from ${lib_path}"
     exit 1
   fi
 
-  cp -R "${lib_path}"/jdk8 "${target_dir}"/jdk8
+  cp -R "${lib_path}"/jdk8-${os} "${target_dir}"/jdk8
 
 }
 
@@ -97,13 +97,13 @@ function cp_byzer_lang() {
   cp "${lib_path}"/byzer-lang/README.md "${target_dir}/"
   cp "${lib_path}"/byzer-lang/RELEASES.md "${target_dir}/"
 
-  echo "byzer-lang copy succeed"
+  echo "byzer-lang-${os} copy succeed"
 
 }
 
 function download_cli() {
   local url="${download_base_url}/byzer/misc/byzer-cli"
-  echo "Downloading byzer-cli"
+  echo "Downloading byzer-cli-${os}"
   if [[ ${os} == "linux" ]]; then
     wget --no-check-certificate --no-verbose "${url}/byzer-lang-linux-amd64" --output-document "${target_dir}/bin/byzer"
     chmod 755 "${target_dir}/bin/byzer"
@@ -113,7 +113,7 @@ function download_cli() {
     wget --no-check-certificate --no-verbose "${url}/byzer-lang-darwin-amd64" --output-document "${target_dir}/bin/byzer"
     chmod 755 "${target_dir}/bin/byzer"
   fi
-  echo "Byzer-cli download succeed"
+  echo "Byzer-cli-${os} download succeed"
 }
 
 function cp_3rd_party_jars() {
