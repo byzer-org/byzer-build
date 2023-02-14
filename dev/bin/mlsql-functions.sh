@@ -33,7 +33,7 @@ declare array plugins=(mlsql-excel mlsql-shell mlsql-assert mlsql-language-serve
 export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
 export BYZER_NOTEBOOK_VERSION=${BYZER_NOTEBOOK_VERSION:-1.0.2-SNAPSHOT}
 export BYZER_NOTEBOOK_HOME=$byzer_notebook_path
-export JUICEFS_VERSION=${JUICEFS_VERSION:-0.17.5}
+export JUICEFS_VERSION=${JUICEFS_VERSION:-1.0.0}
 
 export AUTO_DOWNLOAD_BYZER_LANG=${AUTO_DOWNLOAD_BYZER_LANG:-false}
 export AUTO_DOWNLOAD_BYZER_RESOURCE=${AUTO_DOWNLOAD_BYZER_RESOURCE:-false}

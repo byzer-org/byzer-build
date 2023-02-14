@@ -26,10 +26,11 @@ set -u
 set -e
 set -o pipefail
 
-export SPARK_VERSION=${SPARK_VERSION:-3.1.1}
-export BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-2.3.0-SNAPSHOT}
-export JUICEFS_JAR=${JUICEFS_JAR:-juicefs-hadoop-0.17.5-linux-amd64.jar}
-export SPARK_TGZ_NAME=${SPARK_TGZ_NAME:-spark-3.1.1-bin-hadoop3.2}
+export SPARK_VERSION=${SPARK_VERSION:-3.3.0}
+export BYZER_LANG_VERSION=${BYZER_LANG_VERSION:-2.4.0-SNAPSHOT}
+# export JUICEFS_JAR=${JUICEFS_JAR:-juicefs-hadoop-1.0.0.jar}
+export JUICEFS_VERSION="1.0.0"
+export SPARK_TGZ_NAME=${SPARK_TGZ_NAME:-spark-3.3.0-bin-hadoop3}
 export KYLIN_BASE_IMAGE=${1:-"none"}
 
 self=$(cd "$(dirname $0)" && pwd)
@@ -39,11 +40,11 @@ function exit_with_usage {
   cat << EOF
 Usage: build-byzer-lang-k8s-base-image.sh
 Arguments are specified with the following environment variable:
-BYZER_LANG_VERSION      - Byzer-lang version  default 2.3.0-SNAPSHOT
-JUICEFS_JAR             - JuiceFS jar         default juicefs-hadoop-0.17.5-linux-amd64.jar
-SPARK_VERSION           - Spark version       default 3.1.1
-SPARK_TGZ_NAME          - Spark tar ball      default spark-3.1.1-bin-hadoop3.2
-BYZER_SPARK_VERSION     - Spark major version default 3.0
+BYZER_LANG_VERSION      - Byzer-lang version  default 2.4.0-SNAPSHOT
+JUICEFS_JAR             - JuiceFS jar         default juicefs-hadoop-1.0.0.jar
+SPARK_VERSION           - Spark version       default 3.3.0
+SPARK_TGZ_NAME          - Spark tar ball      default spark-3.3.0-bin-hadoop3
+BYZER_SPARK_VERSION     - Spark major version default 3.3
 KYLIN_BASE_IMAGE        - kylin OS base image default none
 EOF
   exit 1

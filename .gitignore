@@ -19,3 +19,6 @@ Byzer-Notebook-*/*
 dev/docker/engine/metastore_db/
 dev/docker/engine/logs/
 dev/bin/app/spark/**
+
+dev/k8s/byzer-python/miniconda.sh
+dev/k8s/byzer-python/jdk8-linux
