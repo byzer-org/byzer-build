@@ -155,7 +155,7 @@ function download_cp_byzer_shell {
     shellName="byzer-shell.exe"
  fi
   
- if [[ -f "${target_dir}/bin/${shellName}" ]]; then
+ if [[ -f "${lib_path}/${shellName}" ]]; then
     echo "${shellName} is already downloaded and copied"
     return 0
   fi  
