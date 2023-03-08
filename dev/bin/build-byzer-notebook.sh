@@ -16,7 +16,7 @@ EOF
 
 rm -rf ${base_dir}/dev/k8s/notebook/byzer-notebook
 
-cp -r ${base_dir}/lib/byzer-notebook ${base_dir}/dev/k8s/notebook/
+cp -r ${base_dir}/dev/lib/byzer-notebook ${base_dir}/dev/k8s/notebook/
 
 docker build -t byzer/byzer-notebook:${BYZER_NOTEBOOK_VERSION} \
 -f "${base_dir}/dev/k8s/notebook/Dockerfile" \
