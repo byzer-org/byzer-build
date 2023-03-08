@@ -131,6 +131,15 @@ function cp_3rd_party_jars() {
 }
 
 function download_hadoop_win_lib() {
+  if [[ "${os}" != "win" ]]; then
+    return 0
+  fi
+
+  if [[ -f "${target_dir}"/hadoop-3.0.0.tar.gz ]]; then
+    echo "hadoop win libs is already downloaded"
+    return 0
+  fi
+
   (
     wget --no-check-certificate --no-verbose "https://download.byzer.org/byzer/misc/hadoop/hadoop-3.0.0.tar.gz" \
       --directory-prefix "${lib_path}/" &&
@@ -140,6 +149,17 @@ function download_hadoop_win_lib() {
 }
 
 function download_cp_byzer_shell {
+  ## ignore if byzer-shell is already downloaded and copied
+ shellName="byzer-shell-${os}"
+ if [[ "${os}" == "win" ]];then
+    shellName="byzer-shell.exe"
+ fi
+  
+ if [[ -f "${target_dir}/bin/${shellName}" ]]; then
+    echo "${shellName} is already downloaded and copied"
+    return 0
+  fi  
+
   echo "Download byzer-shell from download.byzer.org"
     if [[ "${os}" == "linux" ]]
     then
