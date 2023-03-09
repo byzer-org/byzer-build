@@ -42,4 +42,5 @@ ADD https://download.byzer.org/byzer/misc/cloud/obs/byzer-objectstore-obs-3.3_2.
 ADD https://download.byzer.org/byzer/misc/cloud/s3/byzer-objectstore-s3-3.3_2.12-0.1.0-SNAPSHOT.jar /home/deploy/byzer-lang/libs/
 ADD https://download.byzer.org/byzer/misc/cloud/cos/byzer-objectstore-cos-3.3_2.12-0.1.0-SNAPSHOT.jar /home/deploy/byzer-lang/libs/
 ADD https://download.byzer.org/byzer/misc/cloud/oss/byzer-objectstore-oss-3.3_2.12-0.1.0-SNAPSHOT.jar /home/deploy/byzer-lang/libs/
+ADD https://download.byzer.org/byzer-extensions/nightly-build/byzer-simple-auth-3.3_2.12-0.1.0-SNAPSHOT.jar /home/deploy/byzer-lang/libs/
 ADD https://download.byzer.org/byzer/misc/rss-shuffle-manager-1.0.0-shaded.jar $SPARK_HOME/jars
