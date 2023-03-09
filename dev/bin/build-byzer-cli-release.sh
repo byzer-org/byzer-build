@@ -135,7 +135,7 @@ function download_hadoop_win_lib() {
     return 0
   fi
 
-  if [[ -f "${target_dir}"/hadoop-3.0.0.tar.gz ]]; then
+  if [[ -f "${lib_path}"/hadoop-3.0.0.tar.gz ]]; then
     echo "hadoop win libs is already downloaded"
     return 0
   fi
