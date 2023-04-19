@@ -44,3 +44,4 @@ ADD https://download.byzer.org/byzer/misc/cloud/cos/byzer-objectstore-cos-3.3_2.
 ADD https://download.byzer.org/byzer/misc/cloud/oss/byzer-objectstore-oss-3.3_2.12-0.1.0-SNAPSHOT.jar /home/deploy/byzer-lang/libs/
 ADD https://download.byzer.org/byzer-extensions/nightly-build/byzer-simple-auth-3.3_2.12-0.1.0-SNAPSHOT.jar /home/deploy/byzer-lang/libs/
 ADD https://download.byzer.org/byzer/misc/celeborn-client-spark-3-shaded_2.12-0.3.0-SNAPSHOT.jar $SPARK_HOME/jars
+COPY ./lib/hive-jdbc-uber-2.6.5.0-292.jar $SPARK_HOME/jars

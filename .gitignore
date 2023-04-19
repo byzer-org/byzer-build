@@ -25,3 +25,4 @@ dev/k8s/byzer-python/jdk8-linux
 
 dev/k8s/notebook/byzer-notebook
 
+dev/k8s/full/hive-jdbc-uber-2.6.5.0-292.jar
